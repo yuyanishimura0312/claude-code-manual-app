@@ -89,6 +89,40 @@
     .search-box { padding:12px 16px; border-bottom:1px solid var(--border); }
     .search-box input { width:100%; padding:7px 10px; border:1px solid var(--border); border-radius:6px; font-size:12.5px; background:var(--surface); font-family:inherit; }
     .search-box input:focus { outline:none; border-color:var(--accent); }
+
+    /* Copy button on code blocks */
+    .code-wrapper { position:relative; }
+    .copy-btn {
+      position:absolute; top:8px; right:8px; padding:4px 10px; border:1px solid var(--border);
+      border-radius:5px; background:var(--surface); font-size:11px; font-family:inherit;
+      color:var(--text-2); cursor:pointer; transition:all .15s; z-index:2; opacity:.7;
+    }
+    .copy-btn:hover { opacity:1; border-color:var(--accent); color:var(--accent); }
+    .copy-btn.copied { background:var(--accent); color:#fff; border-color:var(--accent); opacity:1; }
+
+    /* Glossary tooltip */
+    .term {
+      border-bottom:1.5px dashed var(--accent); cursor:help; position:relative;
+      color:inherit; font-weight:inherit;
+    }
+    .term-popup {
+      display:none; position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%);
+      width:280px; padding:14px 16px; background:var(--text); color:#fff; border-radius:8px;
+      font-size:12.5px; line-height:1.7; font-weight:400; z-index:1000;
+      box-shadow:0 4px 20px rgba(0,0,0,.25); pointer-events:none;
+    }
+    .term-popup::after {
+      content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%);
+      border:6px solid transparent; border-top-color:var(--text);
+    }
+    .term-popup b { color:var(--accent); font-weight:600; display:block; margin-bottom:4px; font-size:11px; letter-spacing:.05em; }
+    .term.show .term-popup { display:block; pointer-events:auto; }
+
+    /* Popup position fix for right edge */
+    .term-popup.flip-left { left:auto; right:0; transform:none; }
+    .term-popup.flip-left::after { left:auto; right:16px; transform:none; }
+    .term-popup.flip-bottom { bottom:auto; top:calc(100% + 8px); }
+    .term-popup.flip-bottom::after { top:auto; bottom:100%; border-top-color:transparent; border-bottom-color:var(--text); }
   </style>
 </head>
 <body>
@@ -168,11 +202,13 @@
 
       // Render content
       const main = document.getElementById('main-content');
-      const contentHtml = renderMarkdown(chData.content);
+      let contentHtml = renderMarkdown(chData.content);
+      contentHtml = applyGlossary(contentHtml);
       main.innerHTML = `<div class="chapter active">
         <div class="part-label">${partData.title}</div>
         ${contentHtml}
       </div>`;
+      addCopyButtons();
       window.scrollTo(0, 0);
       currentChapter = chId;
 
@@ -247,6 +283,114 @@
 
     function escapeHtml(s) {
       return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    // =========================================================
+    // Glossary — term definitions for popup tooltips
+    // =========================================================
+    const GLOSSARY = {
+      'Homebrew': 'Macにソフトウェアを簡単にインストールするためのツール。App Storeのターミナル版。',
+      'Node.js': 'Webアプリを動かすためのソフトウェア。アプリの「エンジン」にあたる。',
+      'Python': 'データ処理やAI連携でよく使われるプログラミング言語。',
+      'Git': 'ファイルの変更履歴を自動で記録・管理するツール。「報告書_ver1」「報告書_ver2」の管理を自動化する。',
+      'GitHub': '作ったコードをインターネット上に保管する場所。開発者のDropbox。変更履歴も自動で記録される。',
+      'Vercel': '作ったアプリをインターネットに公開してくれるサービス。GitHubと連携し、自動でURLを発行する。',
+      'Anthropic': 'Claude（AI）を開発している会社。AIの機能を使うための「APIキー」を発行している。',
+      'APIキー': '外部サービスを使うための「鍵」。パスワードのようなもの。漏洩すると悪用されるリスクがある。',
+      'API': '異なるサービス同士をつなぐ「仲介役」。アプリが外部サービスに「注文」を出す窓口。',
+      'リポジトリ': 'GitHub上の保管フォルダ。1つのアプリにつき1つ作る。変更履歴もここに記録される。',
+      'コミット': 'ファイルの変更を記録すること。「上書き保存」に似ているが、過去の状態にいつでも戻せる。',
+      'プッシュ': '記録した変更をGitHubに送信すること。ファイルをクラウドにアップロードするのと同じ。',
+      'プル': 'GitHubから最新のファイルを自分のパソコンに取得すること。',
+      'デプロイ': 'アプリをインターネットに公開すること。「本の原稿を印刷して書店に並べる」ようなもの。',
+      'ローカル': '自分のパソコンの中だけで動いている状態。他の人からはアクセスできない。',
+      'リモート': 'インターネット上にある状態。GitHubやVercelなどのクラウドサービス。',
+      'localhost': '自分のパソコンを指すアドレス。「localhost:3000」は自分のPC内のアプリにアクセスするためのURL。',
+      'ポート': 'パソコン内の「部屋番号」。複数のアプリを同時に動かすとき、それぞれ別の番号を使う。',
+      'npm': 'Node.js用のパッケージ（部品）管理ツール。「npm install」でアプリに必要な部品をダウンロードする。',
+      'ターミナル': '文字を入力してパソコンに指示を出すアプリ。アイコンクリックの代わりにコマンドで操作する。',
+      '環境変数': 'アプリに渡す「秘密の設定値」。コードには書かず、別の場所に保管してアプリ実行時に参照する。',
+      'Keychain': 'macOSの暗号化された保管庫。APIキーやパスワードを安全に保存できる。Macのログインで保護されている。',
+      'Supabase': 'データベース＋ユーザーログイン機能を提供するサービス。会員制アプリに最適。',
+      'Firebase': 'Googleが提供するバックエンドサービス。データのリアルタイム同期が特徴。',
+      'Turso': 'SQLiteをクラウド化した軽量データベースサービス。無料枠が大きい。',
+      'SQLite': 'ファイル1つで動く軽量データベース。アカウント作成不要。自分のPC内だけで使うアプリに適している。',
+      'SendGrid': 'アプリからメールを自動送信するためのサービス。',
+      'Stripe': 'アプリでクレジットカード決済を受け付けるためのサービス。',
+      'HTML': 'Webページの「骨格」を定義する言語。見出し・文章・画像の配置を決める。',
+      'CSS': 'Webページの「見た目」を定義する言語。色・フォント・余白を設定する。',
+      'Next.js': 'Webアプリを作るためのフレームワーク（枠組み）。React（UI構築ツール）をベースにしている。',
+      'Flask': 'Pythonで軽量なWebアプリを作るためのフレームワーク。',
+      'HTTPS': 'セキュリティ付きの通信方式。URLが「https://」で始まる。Vercelが自動で設定してくれる。',
+      '.gitignore': 'GitHubにアップロードしないファイルを指定するリスト。APIキーを含むファイルはここに登録する。',
+      '.env': 'アプリの環境変数を記載するファイル。APIキーなどの秘密情報を保管する。GitHubにはアップロードしない。',
+      'ハルシネーション': 'AIが事実と異なることをもっともらしく生成してしまう現象。AIの出力は必ず確認が必要。',
+      'CLAUDE.md': 'AIが毎回の会話で最初に読み込む設定ファイル。業務ルールや組織情報を書いておく場所。',
+      'Cursor': 'AIと対話しながらファイルを作成・編集できるアプリ。ChatGPTのようなチャット画面がある。',
+    };
+
+    function applyGlossary(html) {
+      // Sort terms by length (longest first) to avoid partial matches
+      const terms = Object.keys(GLOSSARY).sort((a, b) => b.length - a.length);
+      for (const term of terms) {
+        const def = GLOSSARY[term].replace(/"/g, '&quot;');
+        // Only replace terms in text content (not inside tags, code blocks, or existing terms)
+        // Use a regex that avoids matching inside HTML tags or <code>/<pre> blocks
+        const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(
+          `(?<![<\\/\\w])(?<!<code>)(?<!<pre>)(${escapedTerm})(?![^<]*>)(?!</code>)(?!</pre>)`,
+          ''  // only first occurrence per render
+        );
+        html = html.replace(regex, `<span class="term" onclick="toggleTerm(this)">$1<span class="term-popup"><b>${term}</b>${GLOSSARY[term]}</span></span>`);
+      }
+      return html;
+    }
+
+    function toggleTerm(el) {
+      // Close any other open terms
+      document.querySelectorAll('.term.show').forEach(t => { if (t !== el) t.classList.remove('show'); });
+      el.classList.toggle('show');
+      // Position fix: if popup goes off screen
+      const popup = el.querySelector('.term-popup');
+      if (popup) {
+        popup.classList.remove('flip-left','flip-bottom');
+        const rect = popup.getBoundingClientRect();
+        if (rect.right > window.innerWidth - 16) popup.classList.add('flip-left');
+        if (rect.top < 8) popup.classList.add('flip-bottom');
+      }
+    }
+
+    // Close popups when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.term')) {
+        document.querySelectorAll('.term.show').forEach(t => t.classList.remove('show'));
+      }
+    });
+
+    // =========================================================
+    // Copy buttons for code blocks
+    // =========================================================
+    function addCopyButtons() {
+      document.querySelectorAll('pre').forEach(pre => {
+        if (pre.querySelector('.copy-btn')) return; // already has button
+        const wrapper = document.createElement('div');
+        wrapper.className = 'code-wrapper';
+        pre.parentNode.insertBefore(wrapper, pre);
+        wrapper.appendChild(pre);
+
+        const btn = document.createElement('button');
+        btn.className = 'copy-btn';
+        btn.textContent = 'コピー';
+        btn.onclick = () => {
+          const code = pre.querySelector('code') ? pre.querySelector('code').textContent : pre.textContent;
+          navigator.clipboard.writeText(code).then(() => {
+            btn.textContent = 'コピーしました';
+            btn.classList.add('copied');
+            setTimeout(() => { btn.textContent = 'コピー'; btn.classList.remove('copied'); }, 1500);
+          });
+        };
+        wrapper.appendChild(btn);
+      });
     }
 
     function filterNav(q) {
