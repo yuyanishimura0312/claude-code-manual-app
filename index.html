@@ -8,27 +8,32 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #fafbfc; --surface: #fff; --text: #1a1a1a; --text-2: #5a6270;
-      --text-3: #8b95a5; --border: #e8ebef; --accent: #c44b2b;
-      --accent-bg: rgba(196,75,43,0.06);
+      --bg: #FDFAF7; --surface: #fff; --surface-2: #F5EFE8;
+      --text: #3D2E22; --text-2: #6B5445; --text-3: #9A918A;
+      --border: #E6D5C4; --brown: #7A4033; --brown-dark: #5C2E24;
+      --brown-light: #FAE8DC; --terra: #A86B50; --gold: #CEA26F;
+      --accent: var(--brown); --accent-bg: var(--brown-light);
+      --shadow-sm: 0 0 0 1px rgba(61,46,34,.04), 0 1px 3px rgba(61,46,34,.06);
+      --shadow-md: 0 0 0 1px rgba(61,46,34,.04), 0 4px 8px rgba(61,46,34,.06), 0 12px 20px rgba(61,46,34,.04);
     }
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family:'Noto Sans JP',-apple-system,sans-serif; background:var(--bg); color:var(--text); line-height:1.85; font-size:15px; -webkit-font-smoothing:antialiased; font-feature-settings:"palt"; }
-    a { color:var(--accent); text-decoration:none; }
+    body { font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN',-apple-system,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; font-size:17px; -webkit-font-smoothing:antialiased; font-feature-settings:"palt"; letter-spacing:.01em; }
+    a { color:var(--brown); text-decoration:none; }
     a:hover { text-decoration:underline; }
+    ::selection { background:var(--brown-light); color:var(--brown-dark); }
 
     /* Hero */
     .hero {
       max-width:840px; margin:0 auto; padding:80px 32px 48px;
     }
     .hero-label {
-      font-size:11px; font-weight:600; color:var(--accent); letter-spacing:.15em; text-transform:uppercase;
+      font-size:12px; font-weight:600; color:var(--brown); letter-spacing:.12em;
     }
     .hero h1 {
-      font-family:'Noto Serif JP',serif; font-size:36px; font-weight:600; line-height:1.35; margin:12px 0 20px;
+      font-family:'Noto Serif JP','Hiragino Mincho ProN',Georgia,serif; font-size:34px; font-weight:600; line-height:1.35; margin:12px 0 24px; color:var(--text);
     }
     .hero-lead {
-      font-size:16px; color:var(--text-2); line-height:1.9; max-width:640px;
+      font-size:17px; color:var(--text-2); line-height:1.8; max-width:640px;
     }
 
     /* Map */
@@ -51,11 +56,11 @@
     }
     .flow-num {
       width:48px; height:48px; border-radius:50%; background:var(--surface); border:2px solid var(--border);
-      display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; color:var(--accent);
+      display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; color:var(--brown);
       flex-shrink:0; z-index:1;
     }
     .flow-step.active .flow-num {
-      background:var(--accent); border-color:var(--accent); color:#fff;
+      background:var(--brown); border-color:var(--brown); color:#fff;
     }
     .flow-body {
       flex:1; padding:8px 0 40px;
@@ -71,11 +76,12 @@
     }
     .flow-chip {
       display:inline-flex; align-items:center; gap:6px;
-      padding:6px 14px; border-radius:6px; background:var(--surface); border:1px solid var(--border);
-      font-size:12.5px; color:var(--text-2); transition:all .15s; cursor:pointer; text-decoration:none;
+      padding:7px 14px; border-radius:6px; background:var(--surface); border:1px solid var(--border);
+      font-size:13px; color:var(--text-2); transition:all .18s; cursor:pointer; text-decoration:none;
+      box-shadow: var(--shadow-sm);
     }
     .flow-chip:hover {
-      border-color:var(--accent); color:var(--accent); text-decoration:none; background:var(--accent-bg);
+      border-color:var(--brown); color:var(--brown); text-decoration:none; background:var(--accent-bg);
     }
     .flow-chip .arrow { font-size:10px; color:var(--text-3); }
 
@@ -90,10 +96,10 @@
       display:grid; grid-template-columns:1fr 1fr; gap:16px;
     }
     .card {
-      background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:24px; transition:all .15s;
-      text-decoration:none; color:inherit; display:block;
+      background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:24px; transition:all .18s;
+      text-decoration:none; color:inherit; display:block; box-shadow: var(--shadow-sm);
     }
-    .card:hover { border-color:var(--accent); box-shadow:0 2px 12px rgba(196,75,43,0.08); text-decoration:none; }
+    .card:hover { border-color:var(--brown); box-shadow:var(--shadow-md); text-decoration:none; transform:translateY(-2px); }
     .card-icon { font-size:24px; margin-bottom:12px; }
     .card h3 { font-size:15px; font-weight:600; margin-bottom:6px; }
     .card p { font-size:13px; color:var(--text-2); margin:0; line-height:1.7; }
@@ -105,14 +111,14 @@
     .status-title {
       font-size:12px; font-weight:700; color:var(--text-3); letter-spacing:.1em; text-transform:uppercase; margin-bottom:20px;
     }
-    table { width:100%; border-collapse:collapse; font-size:13.5px; }
-    th { background:#f5f6f8; font-weight:600; font-size:12px; letter-spacing:.03em; text-align:left; padding:10px 14px; border-bottom:2px solid var(--border); }
-    td { padding:10px 14px; border-bottom:1px solid var(--border); }
-    tr:hover td { background:rgba(0,0,0,.015); }
-    .tag { display:inline-block; padding:2px 8px; border-radius:3px; font-size:11px; font-weight:500; }
-    .tag-required { background:#fde8e8; color:#b03030; }
-    .tag-optional { background:#e8f0fe; color:#3060a0; }
-    .tag-free { background:#e8f8e8; color:#208020; }
+    table { width:100%; border-collapse:collapse; font-size:14.5px; }
+    th { background:var(--surface-2); font-weight:600; font-size:12px; letter-spacing:.04em; text-align:left; padding:10px 14px; border:1px solid var(--border); color:var(--text-2); }
+    td { padding:10px 14px; border:1px solid var(--border); }
+    tr:hover td { background:var(--bg); }
+    .tag { display:inline-block; padding:3px 10px; border-radius:4px; font-size:11px; font-weight:600; letter-spacing:.03em; }
+    .tag-required { background:var(--brown-light); color:var(--brown); }
+    .tag-optional { background:#EDE8E2; color:var(--text-2); }
+    .tag-free { background:#e2eddf; color:#5a7a52; }
 
     /* Footer */
     .footer {
