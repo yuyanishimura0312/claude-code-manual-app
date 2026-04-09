@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Code 実務マニュアル | 完全版</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%23111'/><text x='50%25' y='55%25' text-anchor='middle' dominant-baseline='central' font-family='Georgia,serif' font-size='20' fill='white'>e</text></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Noto+Serif+JP:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fafbfc; --surface: #fff; --text: #1a1a1a; --text-2: #5a6270;
+      --text-3: #8b95a5; --border: #e8ebef; --accent: #c44b2b;
+      --accent-bg: rgba(196,75,43,0.06); --sidebar-bg: #f5f6f8;
+      --code-bg: #f0f2f5; --warn-bg: #fff8f0; --warn-border: #f0c060;
+      --info-bg: #f0f6ff; --info-border: #6090d0;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Noto Sans JP',-apple-system,sans-serif; background:var(--bg); color:var(--text); line-height:1.85; font-size:15px; -webkit-font-smoothing:antialiased; font-feature-settings:"palt"; }
+
+    .layout { display:flex; min-height:100vh; }
+
+    /* Sidebar */
+    .sidebar { width:300px; background:var(--sidebar-bg); border-right:1px solid var(--border); position:fixed; top:0; left:0; height:100vh; overflow-y:auto; z-index:100; transition:transform .3s; }
+    .sidebar-header { padding:24px 20px 16px; border-bottom:1px solid var(--border); }
+    .sidebar-header h1 { font-size:14px; font-weight:700; letter-spacing:.05em; }
+    .sidebar-header p { font-size:11px; color:var(--text-3); margin-top:4px; }
+    .sidebar-header .ver { display:inline-block; background:var(--accent); color:#fff; font-size:10px; padding:1px 6px; border-radius:3px; margin-left:6px; }
+    .nav-section { padding:4px 12px; margin-top:10px; }
+    .nav-part { font-size:11px; font-weight:700; color:var(--accent); letter-spacing:.1em; padding:8px 8px 4px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; }
+    .nav-part:hover { opacity:.8; }
+    .nav-part .arrow { transition:transform .2s; font-size:10px; }
+    .nav-part .arrow.open { transform:rotate(90deg); }
+    .nav-chapters { overflow:hidden; transition: max-height .3s ease; }
+    .nav-item { display:block; padding:6px 12px 6px 16px; font-size:12.5px; color:var(--text-2); text-decoration:none; border-radius:5px; cursor:pointer; border:none; background:none; width:100%; text-align:left; font-family:inherit; transition:all .15s; }
+    .nav-item:hover { background:rgba(0,0,0,.04); color:var(--text); }
+    .nav-item.active { background:var(--accent-bg); color:var(--accent); font-weight:600; }
+
+    /* Main */
+    .main { flex:1; margin-left:300px; max-width:820px; padding:40px 48px 80px; }
+    .chapter { display:none; animation:fadeIn .25s ease; }
+    .chapter.active { display:block; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+    /* Typography */
+    .part-label { font-size:11px; font-weight:600; color:var(--accent); letter-spacing:.12em; }
+    h2 { font-family:'Noto Serif JP',serif; font-size:24px; font-weight:600; line-height:1.4; margin:4px 0 28px; padding-bottom:14px; border-bottom:2px solid var(--text); }
+    h3 { font-size:17px; font-weight:600; margin:36px 0 14px; padding-left:12px; border-left:3px solid var(--accent); }
+    h4 { font-size:14.5px; font-weight:600; margin:24px 0 10px; }
+    p { margin-bottom:14px; }
+    ul,ol { margin-bottom:14px; padding-left:20px; }
+    li { margin-bottom:6px; }
+
+    /* Tables */
+    table { width:100%; border-collapse:collapse; margin:14px 0 22px; font-size:13px; }
+    th { background:var(--sidebar-bg); font-weight:600; font-size:11.5px; letter-spacing:.03em; text-align:left; padding:8px 12px; border-bottom:2px solid var(--border); }
+    td { padding:8px 12px; border-bottom:1px solid var(--border); vertical-align:top; }
+    tr:hover td { background:rgba(0,0,0,.015); }
+
+    /* Code */
+    pre { background:var(--code-bg); border-radius:8px; padding:16px 20px; overflow-x:auto; margin:14px 0 20px; font-size:12.5px; line-height:1.7; border:1px solid var(--border); font-family:'JetBrains Mono',monospace; }
+    code { font-family:'JetBrains Mono',monospace; font-size:.88em; }
+    p code, td code, li code { background:var(--code-bg); padding:2px 5px; border-radius:3px; }
+
+    /* Callouts */
+    .callout { border-radius:8px; padding:14px 18px; margin:16px 0 20px; font-size:13.5px; }
+    .callout-warn { background:var(--warn-bg); border-left:4px solid var(--warn-border); }
+    .callout-info { background:var(--info-bg); border-left:4px solid var(--info-border); }
+    .callout b { display:block; font-size:12.5px; margin-bottom:4px; }
+
+    /* Responsive */
+    .hamburger { display:none; position:fixed; top:12px; left:12px; z-index:200; background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:8px 10px; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,.08); }
+    .hamburger svg { display:block; }
+    .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.3); z-index:90; }
+    @media(max-width:900px) {
+      .sidebar { transform:translateX(-100%); }
+      .sidebar.open { transform:translateX(0); }
+      .hamburger { display:block; }
+      .overlay.open { display:block; }
+      .main { margin-left:0; padding:60px 20px 80px; }
+    }
+    @media print {
+      .sidebar,.hamburger,.overlay { display:none!important; }
+      .main { margin-left:0; max-width:100%; padding:20px; }
+      .chapter { display:block!important; page-break-before:always; }
+      .chapter:first-child { page-break-before:auto; }
+    }
+
+    /* Search */
+    .search-box { padding:12px 16px; border-bottom:1px solid var(--border); }
+    .search-box input { width:100%; padding:7px 10px; border:1px solid var(--border); border-radius:6px; font-size:12.5px; background:var(--surface); font-family:inherit; }
+    .search-box input:focus { outline:none; border-color:var(--accent); }
+  </style>
+</head>
+<body>
+  <button class="hamburger" onclick="toggleSidebar()">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/></svg>
+  </button>
+  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+  <div class="layout">
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h1>Claude Code 実務マニュアル <span class="ver">完全版</span></h1>
+        <p>ミラツク / エッセンス | 2026年4月</p>
+      </div>
+      <div class="search-box"><input type="text" id="search" placeholder="検索..." oninput="filterNav(this.value)"></div>
+      <div id="nav-container"></div>
+    </nav>
+    <div class="main" id="main-content"></div>
+  </div>
+
+  <script src="manual-data.js"></script>
+  <script>
+    let currentChapter = null;
+    const openParts = new Set();
+
+    function buildNav() {
+      const container = document.getElementById('nav-container');
+      let html = '';
+      for (const part of MANUAL.parts) {
+        html += `<div class="nav-section" data-part="${part.id}">`;
+        html += `<div class="nav-part" onclick="togglePart('${part.id}')">
+          <span>${part.title}</span>
+          <span class="arrow" id="arrow-${part.id}">&#9654;</span>
+        </div>`;
+        html += `<div class="nav-chapters" id="chapters-${part.id}" style="max-height:0">`;
+        for (const ch of part.chapters) {
+          html += `<button class="nav-item" id="nav-${ch.id}" onclick="showChapter('${ch.id}')" data-title="${ch.title}">${ch.title}</button>`;
+        }
+        html += `</div></div>`;
+      }
+      container.innerHTML = html;
+    }
+
+    function togglePart(partId) {
+      const el = document.getElementById('chapters-' + partId);
+      const arrow = document.getElementById('arrow-' + partId);
+      if (openParts.has(partId)) {
+        openParts.delete(partId);
+        el.style.maxHeight = '0';
+        arrow.classList.remove('open');
+      } else {
+        openParts.add(partId);
+        el.style.maxHeight = el.scrollHeight + 'px';
+        arrow.classList.add('open');
+      }
+    }
+
+    function showChapter(chId) {
+      // Find chapter data
+      let chData = null, partData = null;
+      for (const p of MANUAL.parts) {
+        for (const c of p.chapters) {
+          if (c.id === chId) { chData = c; partData = p; break; }
+        }
+        if (chData) break;
+      }
+      if (!chData) return;
+
+      // Open parent part
+      if (!openParts.has(partData.id)) togglePart(partData.id);
+
+      // Update nav
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      const navEl = document.getElementById('nav-' + chId);
+      if (navEl) navEl.classList.add('active');
+
+      // Render content
+      const main = document.getElementById('main-content');
+      const contentHtml = renderMarkdown(chData.content);
+      main.innerHTML = `<div class="chapter active">
+        <div class="part-label">${partData.title}</div>
+        ${contentHtml}
+      </div>`;
+      window.scrollTo(0, 0);
+      currentChapter = chId;
+
+      if (window.innerWidth <= 900) toggleSidebar();
+    }
+
+    function renderMarkdown(md) {
+      // Simple markdown-to-HTML converter
+      let html = md.trim();
+
+      // Code blocks
+      html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (_, lang, code) => {
+        return `<pre><code>${escapeHtml(code.trim())}</code></pre>`;
+      });
+
+      // Inline code (must come after code blocks)
+      html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+      // Headers
+      html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+      html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+      html = html.replace(/^#### (.+)$/gm, '<h4>$1</h4>');
+
+      // Bold
+      html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+      // Tables
+      html = html.replace(/((?:\|.+\|\n)+)/g, (match) => {
+        const rows = match.trim().split('\n');
+        if (rows.length < 2) return match;
+        let table = '<table>';
+        const headerCells = rows[0].split('|').filter(c => c.trim());
+        table += '<thead><tr>' + headerCells.map(c => `<th>${c.trim()}</th>`).join('') + '</tr></thead>';
+        const startIdx = rows[1].trim().match(/^[\|\-\s]+$/) ? 2 : 1;
+        table += '<tbody>';
+        for (let i = startIdx; i < rows.length; i++) {
+          const cells = rows[i].split('|').filter(c => c.trim() !== '');
+          if (cells.length === 0) continue;
+          table += '<tr>' + cells.map(c => `<td>${c.trim()}</td>`).join('') + '</tr>';
+        }
+        table += '</tbody></table>';
+        return table;
+      });
+
+      // Callout blocks (custom syntax: lines starting with > )
+      // Not implementing full callout for now
+
+      // Paragraphs - wrap remaining text
+      html = html.replace(/^(?!<[hptuo]|<li|<table|<thead|<tbody|<tr|<div|<pre|<code)((?:(?!<[hptuo]|<li|<table|<pre).+\n?)+)/gm, (match) => {
+        const trimmed = match.trim();
+        if (!trimmed || trimmed.startsWith('<')) return match;
+        return `<p>${trimmed}</p>\n`;
+      });
+
+      // Ordered lists
+      html = html.replace(/((?:^\d+\..+\n?)+)/gm, (match) => {
+        const items = match.trim().split('\n').map(l => l.replace(/^\d+\.\s*/, ''));
+        return '<ol>' + items.map(i => `<li>${i}</li>`).join('') + '</ol>';
+      });
+
+      // Unordered lists
+      html = html.replace(/((?:^- .+\n?)+)/gm, (match) => {
+        const items = match.trim().split('\n').map(l => l.replace(/^- /, ''));
+        return '<ul>' + items.map(i => `<li>${i}</li>`).join('') + '</ul>';
+      });
+
+      // Horizontal rules
+      html = html.replace(/^---$/gm, '<hr style="border:none;border-top:1px solid var(--border);margin:28px 0">');
+
+      return html;
+    }
+
+    function escapeHtml(s) {
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function filterNav(q) {
+      q = q.toLowerCase();
+      document.querySelectorAll('.nav-item').forEach(item => {
+        const title = item.dataset.title.toLowerCase();
+        item.style.display = !q || title.includes(q) ? '' : 'none';
+      });
+      if (q) {
+        MANUAL.parts.forEach(p => { if (!openParts.has(p.id)) togglePart(p.id); });
+      }
+    }
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('overlay').classList.toggle('open');
+    }
+
+    // Init
+    buildNav();
+    // Open first part and show first chapter
+    const firstPart = MANUAL.parts[0];
+    togglePart(firstPart.id);
+    showChapter(firstPart.chapters[0].id);
+  </script>
+</body>
+</html>
