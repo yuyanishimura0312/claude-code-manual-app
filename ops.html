@@ -115,6 +115,11 @@
       body { font-size:12pt; }
     }
 
+    /* Links in content */
+    .chapter a { color:var(--brown); text-decoration:underline; text-decoration-color:var(--border); text-underline-offset:3px; transition:all .15s; }
+    .chapter a:hover { color:var(--brown-dark); text-decoration-color:var(--brown); }
+    .chapter a[target="_blank"]::after { content:' \2197'; font-size:.8em; }
+
     /* Focus & Accessibility */
     :focus-visible { outline:2px solid var(--terra); outline-offset:2px; }
     ::selection { background:var(--brown-light); color:var(--brown-dark); }
