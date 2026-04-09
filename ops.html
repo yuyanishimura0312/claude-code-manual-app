@@ -100,8 +100,9 @@
   <div class="layout">
     <nav class="sidebar" id="sidebar">
       <div class="sidebar-header">
-        <h1>Claude Code 実務マニュアル <span class="ver">完全版</span></h1>
-        <p>ミラツク / エッセンス | 2026年4月</p>
+        <a href="index.html" style="font-size:11px;color:var(--accent);text-decoration:none;">&larr; 概要に戻る</a>
+        <h1 style="margin-top:6px;">Claude Code 実務マニュアル <span class="ver">完全版</span></h1>
+        <p>2026年4月</p>
       </div>
       <div class="search-box"><input type="text" id="search" placeholder="検索..." oninput="filterNav(this.value)"></div>
       <div id="nav-container"></div>
@@ -266,10 +267,18 @@
 
     // Init
     buildNav();
-    // Open first part and show first chapter
-    const firstPart = MANUAL.parts[0];
-    togglePart(firstPart.id);
-    showChapter(firstPart.chapters[0].id);
+
+    // Check if navigated from index.html with a target chapter
+    const targetChapter = sessionStorage.getItem('openChapter') || location.hash.replace('#','');
+    if (targetChapter) {
+      sessionStorage.removeItem('openChapter');
+      sessionStorage.removeItem('openPart');
+      showChapter(targetChapter);
+    } else {
+      const firstPart = MANUAL.parts[0];
+      togglePart(firstPart.id);
+      showChapter(firstPart.chapters[0].id);
+    }
   </script>
 </body>
 </html>

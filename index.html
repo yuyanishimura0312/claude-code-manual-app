@@ -3,1386 +3,358 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Claude Code 活用マニュアル | ミラツク</title>
+  <title>Claude Code 活用マニュアル</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%23111'/><text x='50%25' y='55%25' text-anchor='middle' dominant-baseline='central' font-family='Georgia,serif' font-size='20' fill='white'>e</text></svg>">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #fafbfc;
-      --surface: #ffffff;
-      --text: #1a1a1a;
-      --text-secondary: #5a6270;
-      --text-muted: #8b95a5;
-      --border: #e8ebef;
-      --accent: #c44b2b;
-      --accent-light: rgba(196, 75, 43, 0.08);
-      --sidebar-bg: #f5f6f8;
-      --sidebar-w: 280px;
-      --code-bg: #f0f2f5;
-      --warning-bg: #fff8f0;
-      --warning-border: #f0c060;
-      --info-bg: #f0f6ff;
-      --info-border: #6090d0;
+      --bg: #fafbfc; --surface: #fff; --text: #1a1a1a; --text-2: #5a6270;
+      --text-3: #8b95a5; --border: #e8ebef; --accent: #c44b2b;
+      --accent-bg: rgba(196,75,43,0.06);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Noto Sans JP',-apple-system,sans-serif; background:var(--bg); color:var(--text); line-height:1.85; font-size:15px; -webkit-font-smoothing:antialiased; font-feature-settings:"palt"; }
+    a { color:var(--accent); text-decoration:none; }
+    a:hover { text-decoration:underline; }
+
+    /* Hero */
+    .hero {
+      max-width:840px; margin:0 auto; padding:80px 32px 48px;
+    }
+    .hero-label {
+      font-size:11px; font-weight:600; color:var(--accent); letter-spacing:.15em; text-transform:uppercase;
+    }
+    .hero h1 {
+      font-family:'Noto Serif JP',serif; font-size:36px; font-weight:600; line-height:1.35; margin:12px 0 20px;
+    }
+    .hero-lead {
+      font-size:16px; color:var(--text-2); line-height:1.9; max-width:640px;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.85;
-      font-size: 15px;
-      -webkit-font-smoothing: antialiased;
-      font-feature-settings: "palt";
+    /* Map */
+    .map {
+      max-width:840px; margin:0 auto; padding:0 32px 64px;
+    }
+    .map-title {
+      font-size:12px; font-weight:700; color:var(--text-3); letter-spacing:.1em; text-transform:uppercase; margin-bottom:20px;
     }
 
-    /* ===== Layout ===== */
-    .layout {
-      display: flex;
-      min-height: 100vh;
+    /* Flow */
+    .flow {
+      display:flex; flex-direction:column; gap:0; position:relative;
+    }
+    .flow::before {
+      content:''; position:absolute; left:23px; top:24px; bottom:24px; width:2px; background:var(--border);
+    }
+    .flow-step {
+      display:flex; gap:20px; align-items:flex-start; position:relative;
+    }
+    .flow-num {
+      width:48px; height:48px; border-radius:50%; background:var(--surface); border:2px solid var(--border);
+      display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; color:var(--accent);
+      flex-shrink:0; z-index:1;
+    }
+    .flow-step.active .flow-num {
+      background:var(--accent); border-color:var(--accent); color:#fff;
+    }
+    .flow-body {
+      flex:1; padding:8px 0 40px;
+    }
+    .flow-body h3 {
+      font-size:17px; font-weight:600; margin-bottom:6px;
+    }
+    .flow-body p {
+      font-size:14px; color:var(--text-2); margin-bottom:12px;
+    }
+    .flow-chapters {
+      display:flex; flex-wrap:wrap; gap:8px;
+    }
+    .flow-chip {
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 14px; border-radius:6px; background:var(--surface); border:1px solid var(--border);
+      font-size:12.5px; color:var(--text-2); transition:all .15s; cursor:pointer; text-decoration:none;
+    }
+    .flow-chip:hover {
+      border-color:var(--accent); color:var(--accent); text-decoration:none; background:var(--accent-bg);
+    }
+    .flow-chip .arrow { font-size:10px; color:var(--text-3); }
+
+    /* Cards grid */
+    .cards {
+      max-width:840px; margin:0 auto; padding:0 32px 64px;
+    }
+    .cards-title {
+      font-size:12px; font-weight:700; color:var(--text-3); letter-spacing:.1em; text-transform:uppercase; margin-bottom:20px;
+    }
+    .cards-grid {
+      display:grid; grid-template-columns:1fr 1fr; gap:16px;
+    }
+    .card {
+      background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:24px; transition:all .15s;
+      text-decoration:none; color:inherit; display:block;
+    }
+    .card:hover { border-color:var(--accent); box-shadow:0 2px 12px rgba(196,75,43,0.08); text-decoration:none; }
+    .card-icon { font-size:24px; margin-bottom:12px; }
+    .card h3 { font-size:15px; font-weight:600; margin-bottom:6px; }
+    .card p { font-size:13px; color:var(--text-2); margin:0; line-height:1.7; }
+
+    /* Status table */
+    .status {
+      max-width:840px; margin:0 auto; padding:0 32px 64px;
+    }
+    .status-title {
+      font-size:12px; font-weight:700; color:var(--text-3); letter-spacing:.1em; text-transform:uppercase; margin-bottom:20px;
+    }
+    table { width:100%; border-collapse:collapse; font-size:13.5px; }
+    th { background:#f5f6f8; font-weight:600; font-size:12px; letter-spacing:.03em; text-align:left; padding:10px 14px; border-bottom:2px solid var(--border); }
+    td { padding:10px 14px; border-bottom:1px solid var(--border); }
+    tr:hover td { background:rgba(0,0,0,.015); }
+    .tag { display:inline-block; padding:2px 8px; border-radius:3px; font-size:11px; font-weight:500; }
+    .tag-required { background:#fde8e8; color:#b03030; }
+    .tag-optional { background:#e8f0fe; color:#3060a0; }
+    .tag-free { background:#e8f8e8; color:#208020; }
+
+    /* Footer */
+    .footer {
+      max-width:840px; margin:0 auto; padding:32px; border-top:1px solid var(--border);
+      font-size:12px; color:var(--text-3);
     }
 
-    /* ===== Sidebar ===== */
-    .sidebar {
-      width: var(--sidebar-w);
-      background: var(--sidebar-bg);
-      border-right: 1px solid var(--border);
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 100vh;
-      overflow-y: auto;
-      z-index: 100;
-      transition: transform 0.3s ease;
-    }
-
-    .sidebar-header {
-      padding: 24px 20px 16px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .sidebar-header h1 {
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      color: var(--text);
-    }
-
-    .sidebar-header p {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-
-    .sidebar-nav {
-      padding: 12px 0;
-    }
-
-    .nav-section {
-      padding: 4px 16px;
-      margin-top: 8px;
-    }
-
-    .nav-section-title {
-      font-size: 10px;
-      font-weight: 600;
-      color: var(--text-muted);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 4px 0;
-    }
-
-    .nav-item {
-      display: block;
-      padding: 7px 12px;
-      margin: 1px 0;
-      font-size: 13px;
-      color: var(--text-secondary);
-      text-decoration: none;
-      border-radius: 6px;
-      transition: all 0.15s;
-      cursor: pointer;
-      border: none;
-      background: none;
-      width: 100%;
-      text-align: left;
-      font-family: inherit;
-    }
-
-    .nav-item:hover { background: rgba(0,0,0,0.04); color: var(--text); }
-    .nav-item.active { background: var(--accent-light); color: var(--accent); font-weight: 600; }
-
-    /* ===== Main ===== */
-    .main {
-      flex: 1;
-      margin-left: var(--sidebar-w);
-      max-width: 800px;
-      padding: 40px 48px 80px;
-    }
-
-    /* ===== Hamburger ===== */
-    .hamburger {
-      display: none;
-      position: fixed;
-      top: 12px;
-      left: 12px;
-      z-index: 200;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 8px 10px;
-      cursor: pointer;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-    }
-
-    .hamburger svg { display: block; }
-
-    .overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.3);
-      z-index: 90;
-    }
-
-    /* ===== Typography ===== */
-    .chapter {
-      display: none;
-      animation: fadeIn 0.3s ease;
-    }
-
-    .chapter.active { display: block; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .chapter-label {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--accent);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-
-    h2 {
-      font-family: 'Noto Serif JP', serif;
-      font-size: 26px;
-      font-weight: 600;
-      line-height: 1.4;
-      margin-bottom: 32px;
-      padding-bottom: 16px;
-      border-bottom: 2px solid var(--text);
-    }
-
-    h3 {
-      font-size: 18px;
-      font-weight: 600;
-      margin: 40px 0 16px;
-      padding-left: 12px;
-      border-left: 3px solid var(--accent);
-    }
-
-    h4 {
-      font-size: 15px;
-      font-weight: 600;
-      margin: 28px 0 12px;
-      color: var(--text);
-    }
-
-    p { margin-bottom: 16px; }
-
-    /* ===== Tables ===== */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 16px 0 24px;
-      font-size: 13.5px;
-    }
-
-    th {
-      background: var(--sidebar-bg);
-      font-weight: 600;
-      font-size: 12px;
-      letter-spacing: 0.03em;
-      text-align: left;
-      padding: 10px 14px;
-      border-bottom: 2px solid var(--border);
-    }
-
-    td {
-      padding: 10px 14px;
-      border-bottom: 1px solid var(--border);
-      vertical-align: top;
-    }
-
-    tr:hover td { background: rgba(0,0,0,0.015); }
-
-    /* ===== Code blocks ===== */
-    pre {
-      background: var(--code-bg);
-      border-radius: 8px;
-      padding: 20px 24px;
-      overflow-x: auto;
-      margin: 16px 0 24px;
-      font-size: 13px;
-      line-height: 1.7;
-      border: 1px solid var(--border);
-    }
-
-    code {
-      font-family: 'SF Mono', 'Menlo', monospace;
-      font-size: 0.9em;
-    }
-
-    p code, td code, li code {
-      background: var(--code-bg);
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 0.85em;
-    }
-
-    /* ===== Callouts ===== */
-    .callout {
-      border-radius: 8px;
-      padding: 16px 20px;
-      margin: 20px 0 24px;
-      font-size: 14px;
-    }
-
-    .callout-warning {
-      background: var(--warning-bg);
-      border-left: 4px solid var(--warning-border);
-    }
-
-    .callout-info {
-      background: var(--info-bg);
-      border-left: 4px solid var(--info-border);
-    }
-
-    .callout-title {
-      font-weight: 600;
-      font-size: 13px;
-      margin-bottom: 6px;
-    }
-
-    /* ===== Cards ===== */
-    .protocol-card {
-      background: var(--surface);
-      border: 2px solid var(--text);
-      border-radius: 12px;
-      padding: 28px 32px;
-      margin: 24px 0;
-    }
-
-    .protocol-card h4 {
-      margin-top: 0;
-      text-align: center;
-      font-size: 14px;
-      letter-spacing: 0.08em;
-      color: var(--text-muted);
-    }
-
-    .protocol-steps {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-top: 20px;
-    }
-
-    .protocol-step {
-      padding: 16px;
-      border-radius: 8px;
-      background: var(--sidebar-bg);
-    }
-
-    .protocol-step-num {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--accent);
-      letter-spacing: 0.08em;
-      margin-bottom: 4px;
-    }
-
-    .protocol-step-title {
-      font-weight: 600;
-      font-size: 15px;
-      margin-bottom: 6px;
-    }
-
-    .protocol-step-example {
-      font-size: 12.5px;
-      color: var(--text-secondary);
-      line-height: 1.6;
-    }
-
-    /* ===== Example blocks ===== */
-    .example-pair {
-      margin: 20px 0 28px;
-    }
-
-    .example-bad, .example-good {
-      border-radius: 8px;
-      padding: 16px 20px;
-      margin: 8px 0;
-    }
-
-    .example-bad {
-      background: #fdf0f0;
-      border: 1px solid #f0c0c0;
-    }
-
-    .example-good {
-      background: #f0fdf0;
-      border: 1px solid #c0e8c0;
-    }
-
-    .example-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      margin-bottom: 8px;
-    }
-
-    .example-bad .example-label { color: #b03030; }
-    .example-good .example-label { color: #208020; }
-
-    /* ===== Template blocks ===== */
-    .template-block {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      margin: 20px 0 28px;
-      overflow: hidden;
-    }
-
-    .template-header {
-      background: var(--sidebar-bg);
-      padding: 12px 20px;
-      font-size: 13px;
-      font-weight: 600;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .template-body {
-      padding: 20px;
-    }
-
-    .template-body pre {
-      margin: 0;
-      border: none;
-      background: var(--code-bg);
-    }
-
-    /* ===== Glossary ===== */
-    .glossary-item {
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      gap: 16px;
-    }
-
-    .glossary-term {
-      font-weight: 600;
-      min-width: 140px;
-      flex-shrink: 0;
-      font-size: 14px;
-    }
-
-    .glossary-def {
-      color: var(--text-secondary);
-      font-size: 14px;
-    }
-
-    /* ===== Print ===== */
-    .print-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: var(--text);
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-      z-index: 50;
-      font-family: inherit;
-    }
-
-    .print-btn:hover { opacity: 0.85; }
-
-    @media print {
-      .sidebar, .hamburger, .print-btn, .overlay { display: none !important; }
-      .main { margin-left: 0; max-width: 100%; padding: 20px; }
-      .chapter { display: block !important; page-break-before: always; }
-      .chapter:first-child { page-break-before: auto; }
-      h2 { page-break-after: avoid; }
-      pre, table { page-break-inside: avoid; }
-    }
-
-    /* ===== Responsive ===== */
-    @media (max-width: 860px) {
-      .sidebar { transform: translateX(-100%); }
-      .sidebar.open { transform: translateX(0); }
-      .hamburger { display: block; }
-      .overlay.open { display: block; }
-      .main { margin-left: 0; padding: 60px 24px 80px; }
-      .protocol-steps { grid-template-columns: 1fr; }
+    @media(max-width:640px) {
+      .hero { padding:48px 20px 32px; }
+      .hero h1 { font-size:26px; }
+      .map, .cards, .status, .footer { padding-left:20px; padding-right:20px; }
+      .cards-grid { grid-template-columns:1fr; }
+      .flow::before { left:19px; }
+      .flow-num { width:40px; height:40px; font-size:14px; }
     }
   </style>
 </head>
 <body>
 
-  <button class="hamburger" onclick="toggleSidebar()" aria-label="メニュー">
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8">
-      <line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/>
-    </svg>
-  </button>
-  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-label">Claude Code 活用マニュアル</div>
+    <h1>AIでアプリを作る。<br>プログラミングの知識は不要。</h1>
+    <p class="hero-lead">
+      Claude Codeは、日本語で「こういうものが欲しい」と伝えるだけで、実際に動くWebアプリを作れるAIツールです。このマニュアルでは、環境の準備からアプリの公開まで、すべての手順を解説します。
+    </p>
+  </div>
 
-  <div class="layout">
+  <!-- Learning Map -->
+  <div class="map">
+    <div class="map-title">学習マップ — ゼロから公開まで</div>
+    <div class="flow">
 
-    <!-- Sidebar -->
-    <nav class="sidebar" id="sidebar">
-      <div class="sidebar-header">
-        <h1>Claude Code 活用マニュアル</h1>
-        <p>ミラツク / エッセンス 社内向け</p>
-      </div>
-      <div class="sidebar-nav">
-        <div class="nav-section">
-          <div class="nav-section-title">はじめに</div>
-          <button class="nav-item active" onclick="showChapter('ch1', event)">Claude Code とは何か</button>
-          <button class="nav-item" onclick="showChapter('ch2', event)">安全に使うために</button>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-title">実践</div>
-          <button class="nav-item" onclick="showChapter('ch3', event)">最初の一歩</button>
-          <button class="nav-item" onclick="showChapter('ch4', event)">CLAUDE.md を設定する</button>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-title">活用</div>
-          <button class="nav-item" onclick="showChapter('ch5', event)">よくあるトラブル</button>
-          <button class="nav-item" onclick="showChapter('ch6', event)">上手な指示の作り方</button>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-title">応用</div>
-          <button class="nav-item" onclick="showChapter('ch7', event)">アプリを作る: 準備編</button>
-          <button class="nav-item" onclick="showChapter('ch8', event)">実際にアプリを作る</button>
-        </div>
-        <div class="nav-section">
-          <div class="nav-section-title">参考</div>
-          <button class="nav-item" onclick="showChapter('appendix', event)">用語集</button>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Main -->
-    <div class="main">
-
-      <!-- Chapter 1 -->
-      <div class="chapter active" id="ch1">
-        <div class="chapter-label">第1章</div>
-        <h2>Claude Code とは何か</h2>
-
-        <h3>これは何のツール？</h3>
-        <p>Claude Codeは、Anthropic社が開発したAIアシスタントです。ChatGPTのような対話型AIですが、決定的に違う点が一つあります。<strong>あなたのパソコンの中のファイルを直接読み書きできる</strong>ということです。</p>
-        <p>たとえば、ChatGPTでは「この文章を修正して」と頼んだら、修正後のテキストが画面に表示されるので、自分でコピーして貼り付ける必要がありました。Claude Codeでは、「この書類を修正して」と頼むだけで、AIが直接ファイルを開き、修正し、保存してくれます。</p>
-        <p>つまり、これまで「AIに聞く → 答えを見る → 自分で作業する」だった流れが、「AIに頼む → AIが作業する → 結果を確認する」に変わります。</p>
-
-        <h3>なぜミラツクで使うのか</h3>
-        <p>私たちの業務には、AIが得意とする作業がたくさんあります。</p>
-        <table>
-          <thead><tr><th>AI が得意な作業</th><th>具体例</th></tr></thead>
-          <tbody>
-            <tr><td>文書の整理・構造化</td><td>リサーチ結果のまとめ、議事録の作成</td></tr>
-            <tr><td>ドラフト作成</td><td>報告書、提案書、メールの下書き</td></tr>
-            <tr><td>データの集計・分析</td><td>アンケート集計、傾向分析</td></tr>
-            <tr><td>翻訳・要約</td><td>英語文献の翻訳、長文の要約</td></tr>
-            <tr><td>アイデア出し</td><td>企画のブレスト、構成案の複数パターン作成</td></tr>
-          </tbody>
-        </table>
-        <p>これらの作業をAIに任せることで、私たちは「考える仕事」「人と対話する仕事」——つまり、ミラツクの本質的な価値である対話と探究に、より多くの時間を使えるようになります。</p>
-
-        <h3>このマニュアルの使い方</h3>
-        <table>
-          <thead><tr><th>あなたの状態</th><th>読むところ</th></tr></thead>
-          <tbody>
-            <tr><td>まだ触ったことがない</td><td>第2章 → 第3章</td></tr>
-            <tr><td>一度は触ったが、うまく使えない</td><td>第3章 → 第5章</td></tr>
-            <tr><td>基本はわかるが、もっとうまく使いたい</td><td>第6章</td></tr>
-            <tr><td>CLAUDE.md って何？</td><td>第4章</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Chapter 2 -->
-      <div class="chapter" id="ch2">
-        <div class="chapter-label">第2章</div>
-        <h2>安全に使うために</h2>
-
-        <h3>絶対にAIに入力してはいけない情報</h3>
-        <p>以下の情報は、Claude Codeに絶対に入力しないでください。これは最も重要なルールです。</p>
-
-        <div class="callout callout-warning">
-          <div class="callout-title">入力禁止リスト</div>
-          <table>
-            <thead><tr><th>カテゴリ</th><th>具体例</th></tr></thead>
-            <tbody>
-              <tr><td>個人情報</td><td>氏名+住所+電話番号のセット、マイナンバー、パスポート番号</td></tr>
-              <tr><td>財務情報</td><td>クレジットカード番号、銀行口座番号、給与明細</td></tr>
-              <tr><td>認証情報</td><td>パスワード、APIキー、アクセストークン</td></tr>
-              <tr><td>契約・法務</td><td>未公開の契約書、NDA対象の情報、係争中の案件</td></tr>
-              <tr><td>他者の機密</td><td>クライアントの非公開資料、パートナー企業の内部情報</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="callout callout-info">
-          <div class="callout-title">判断に迷ったら</div>
-          <p style="margin:0">「この情報がインターネットに公開されたら問題があるか？」と自問してください。答えが「はい」なら入力しない。それでも判断できない場合は、西村に確認してください。</p>
-        </div>
-
-        <h3>安全に使えるもの</h3>
-        <p>以下は安全に入力・活用できます。</p>
-        <table>
-          <tbody>
-            <tr><td>公開済みの報告書・レポート</td></tr>
-            <tr><td>自分が書いた文章のドラフト</td></tr>
-            <tr><td>公開されている統計データ・調査結果</td></tr>
-            <tr><td>業務フローの整理・改善案</td></tr>
-            <tr><td>一般的な質問・相談</td></tr>
-            <tr><td>公開前だが機密性のない社内文書</td></tr>
-          </tbody>
-        </table>
-
-        <h3>困ったときの連絡先</h3>
-        <table>
-          <thead><tr><th>状況</th><th>連絡先</th></tr></thead>
-          <tbody>
-            <tr><td>AIの使い方で困ったとき</td><td>Slack #ざつだん で質問</td></tr>
-            <tr><td>セキュリティに関する懸念</td><td>西村</td></tr>
-            <tr><td>ツールの不具合</td><td>Slack #ざつだん</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Chapter 3 -->
-      <div class="chapter" id="ch3">
-        <div class="chapter-label">第3章</div>
-        <h2>最初の一歩</h2>
-
-        <h3>ステップ0: ツールを起動する</h3>
-        <p>Claude Codeは <strong>Cursor</strong> というアプリの中で使います。Cursorは、ChatGPTのようなチャット画面でAIとやりとりできるアプリです。ターミナル（黒い画面）を使う必要はありません。</p>
-        <ol style="margin-bottom:24px; padding-left:20px;">
-          <li style="margin-bottom:8px;">Cursorアプリを開く</li>
-          <li style="margin-bottom:8px;">フォルダを開く（自分の作業フォルダを選択）</li>
-          <li>画面右側のチャットパネルでAIに話しかける</li>
-        </ol>
-
-        <h3>ステップ1: 最初の成功体験を得る</h3>
-        <p>まずは「これは便利だ」と実感することが大切です。以下から、自分の業務に近いものを一つ選んで試してください。</p>
-
-        <h4>お題A: 議事録の構造化（事務・運営担当向け）</h4>
-        <p>打ち合わせのメモや走り書きを、きちんとした議事録に整えてもらいます。</p>
-        <div class="example-pair">
-          <div class="example-bad">
-            <div class="example-label">悪い例 — こう頼むと曖昧な結果になる</div>
-            <code>議事録を作って</code>
+      <div class="flow-step active">
+        <div class="flow-num">1</div>
+        <div class="flow-body">
+          <h3>環境を準備する</h3>
+          <p>Macに必要なソフトウェアをインストールし、外部サービスのアカウントを作成します。最初の1回だけの作業です。</p>
+          <div class="flow-chapters">
+            <a href="ops.html#env-mac" class="flow-chip" onclick="goTo('env','env-mac')">macOSの準備 <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#env-accounts" class="flow-chip" onclick="goTo('env','env-accounts')">アカウントを作る <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#env-cursor" class="flow-chip" onclick="goTo('env','env-cursor')">Cursorのセットアップ <span class="arrow">&#8599;</span></a>
           </div>
-          <div class="example-good">
-            <div class="example-label">良い例 — こう頼むと的確な結果が得られる</div>
-<pre style="margin:0;border:none;background:transparent;padding:0;">以下の打ち合わせメモから議事録を作成してください。
-
-【会議情報】
-- 会議名: 月次定例ミーティング
-- 日時: 2026年4月9日 10:00-11:00
-- 参加者: 西村、田中、佐藤
-
-【メモ内容】
-（ここにメモを貼り付ける）
-
-【議事録のフォーマット】
-1. 議題ごとに整理
-2. 各議題について「議論の要点」「決定事項」
-   「次のアクション（担当者・期限）」を記載
-3. 次回の予定を末尾に記載</pre>
-          </div>
-        </div>
-
-        <h4>お題B: リサーチの要約（リサーチ・コンサル担当向け）</h4>
-        <p>長い記事や報告書の要点をまとめてもらいます。</p>
-        <div class="example-pair">
-          <div class="example-bad">
-            <div class="example-label">悪い例</div>
-            <code>この記事をまとめて</code>
-          </div>
-          <div class="example-good">
-            <div class="example-label">良い例</div>
-<pre style="margin:0;border:none;background:transparent;padding:0;">以下の記事を読んで、要約を作成してください。
-
-【要約の構成】
-- 一言でいうと（1文）
-- 主要な論点（3-5個、各2-3文で説明）
-- ミラツクの事業との関連性（あれば）
-- 追加で調べるべきこと（あれば）
-
-【記事】
-（ここに記事の内容を貼り付ける）</pre>
-          </div>
-        </div>
-
-        <h4>お題C: メール・案内文の作成（全職種共通）</h4>
-        <div class="example-pair">
-          <div class="example-bad">
-            <div class="example-label">悪い例</div>
-            <code>メールを書いて</code>
-          </div>
-          <div class="example-good">
-            <div class="example-label">良い例</div>
-<pre style="margin:0;border:none;background:transparent;padding:0;">以下の情報をもとに、イベント参加者への
-案内メールを作成してください。
-
-【送信先】ワークショップ参加者（企業の
- CSR担当者 約30名）
-【トーン】丁寧だが堅すぎない、ミラツクらしい
- 温かみのある文体
-【含める情報】
-- 日時: 2026年5月15日 14:00-17:00
-- 場所: オンライン（Zoom）
-- テーマ: 社会課題と企業の接点を探る対話
-- 事前準備: 自社の取り組み事例を1つ準備</pre>
-          </div>
-        </div>
-
-        <h3>4ステップ思考プロトコル</h3>
-        <p>AIに何かを頼むときは、この4ステップを意識してください。これを習慣にするだけで、結果の質が大きく変わります。</p>
-
-        <div class="protocol-card">
-          <h4>AIへの依頼の基本形</h4>
-          <div class="protocol-steps">
-            <div class="protocol-step">
-              <div class="protocol-step-num">STEP 1</div>
-              <div class="protocol-step-title">調査</div>
-              <div class="protocol-step-example">まず現状を把握させる<br>「このフォルダの中身を確認して」<br>「この文書の構成を教えて」</div>
-            </div>
-            <div class="protocol-step">
-              <div class="protocol-step-num">STEP 2</div>
-              <div class="protocol-step-title">計画</div>
-              <div class="protocol-step-example">やることを整理させる<br>「どう進めるか計画を立てて」<br>「必要な手順をリストアップして」</div>
-            </div>
-            <div class="protocol-step">
-              <div class="protocol-step-num">STEP 3</div>
-              <div class="protocol-step-title">実行</div>
-              <div class="protocol-step-example">作業を依頼する<br>「では、その計画に沿って進めて」<br>「まず最初のステップだけやって」</div>
-            </div>
-            <div class="protocol-step">
-              <div class="protocol-step-num">STEP 4</div>
-              <div class="protocol-step-title">確認</div>
-              <div class="protocol-step-example">結果を検証させる<br>「内容を読み返して問題ないか確認して」<br>「抜け漏れがないかチェックして」</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="callout callout-info">
-          <div class="callout-title">特に重要なのは「調査」と「確認」</div>
-          <p style="margin:0">いきなり「実行」から始めると、AIが状況を誤解したまま作業を進めることがあります。また、AIの出力は必ず自分の目で確認してください。AIは事実と異なることをもっともらしく書くことがあります（ハルシネーション）。</p>
         </div>
       </div>
 
-      <!-- Chapter 4 -->
-      <div class="chapter" id="ch4">
-        <div class="chapter-label">第4章</div>
-        <h2>CLAUDE.md を設定する</h2>
-
-        <h3>CLAUDE.md とは</h3>
-        <p>CLAUDE.mdは、AIが作業を始める前に必ず読む「業務マニュアル」のようなファイルです。ここに組織のルールや自分の役割を書いておくと、毎回説明し直す手間がなくなります。</p>
-        <p>たとえば、CLAUDE.mdに「報告書はですます調で書く」と書いておけば、毎回「ですます調で書いて」と指示する必要がありません。</p>
-
-        <h3>設定方法</h3>
-        <ol style="margin-bottom:24px; padding-left:20px;">
-          <li style="margin-bottom:8px;">自分の作業フォルダの一番上の階層に <code>CLAUDE.md</code> というファイルを作る</li>
-          <li style="margin-bottom:8px;">以下のテンプレートをコピーして貼り付ける</li>
-          <li>【】の部分を自分の情報に書き換える</li>
-        </ol>
-
-        <div class="template-block">
-          <div class="template-header">CLAUDE.md テンプレート（コピーして使ってください）</div>
-          <div class="template-body">
-<pre># 業務コンテキスト
-
-## 自分について
-- 名前: 【あなたの名前】
-- 役割: 【例: リサーチアシスタント、事業推進担当】
-- 主な業務: 【例: ワークショップの企画運営、報告書作成】
-
-## 組織について
-- 組織名: NPO法人ミラツク / 株式会社エッセンス
-- 事業内容: 社会課題に取り組む多様なステークホルダーの
-  対話と協働を促進
-- 大切にしている価値: 対等な立場での探究、多様な知の統合
-
-## 文章のルール
-- 報告書: ですます調、地の文中心（箇条書きだけにしない）
-- メール: 丁寧だが堅すぎないトーン
-- 「参加者」より「ご参加くださる皆さま」を好む
-
-## 注意事項
-- 個人情報・機密情報は扱わない
-- 事実と推測は明確に区別する
-- 分からないことは「分かりません」と正直に答える</pre>
+      <div class="flow-step">
+        <div class="flow-num">2</div>
+        <div class="flow-body">
+          <h3>サービスを接続する</h3>
+          <p>アプリに必要な外部サービス（データベース、メール送信、決済など）の設定を行います。必要になったときにその都度参照してください。</p>
+          <div class="flow-chapters">
+            <a href="ops.html#svc-github" class="flow-chip" onclick="goTo('services','svc-github')">GitHub <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#svc-vercel" class="flow-chip" onclick="goTo('services','svc-vercel')">Vercel <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#svc-database" class="flow-chip" onclick="goTo('services','svc-database')">データベース <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#svc-email" class="flow-chip" onclick="goTo('services','svc-email')">SendGrid <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#svc-stripe" class="flow-chip" onclick="goTo('services','svc-stripe')">Stripe <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#svc-other" class="flow-chip" onclick="goTo('services','svc-other')">その他 <span class="arrow">&#8599;</span></a>
           </div>
-        </div>
-
-        <div class="callout callout-warning">
-          <div class="callout-title">CLAUDE.md に書いてはいけないもの</div>
-          <p style="margin:0">パスワード、APIキー、クライアントの機密情報、個人の住所・電話番号、銀行口座・カード番号。CLAUDE.mdはテキストファイルなので、見られても問題ない情報だけを書いてください。</p>
         </div>
       </div>
 
-      <!-- Chapter 5 -->
-      <div class="chapter" id="ch5">
-        <div class="chapter-label">第5章</div>
-        <h2>よくあるトラブルと対処法</h2>
-
-        <h3>Q1: AIの回答がだんだんおかしくなってきた</h3>
-        <p><strong>原因:</strong> AIには「一度に覚えていられる量」に限界があります。</p>
-        <p>ノートをイメージしてください。AIとの会話は、ノートにどんどん書き足していくようなものです。ノートのページがいっぱいになると、最初の方に書いたことが読めなくなります。これと同じことがAIにも起こります。</p>
-        <div class="callout callout-info">
-          <div class="callout-title">対処法</div>
-          <p style="margin:0">長い会話が続いたら、<strong>新しいセッション（会話）を始める</strong>。一つの会話で複数の話題を扱わず、話題ごとに会話を分ける。目安として、30分以上同じ会話を続けている場合は区切りを検討。</p>
-        </div>
-
-        <h3>Q2: AIが嘘をついている気がする</h3>
-        <p><strong>原因:</strong> AIは「もっともらしい回答」を生成する仕組みです。知らないことでも、それらしい答えを作ってしまうことがあります。これを<strong>ハルシネーション（幻覚）</strong>と呼びます。</p>
-        <div class="callout callout-info">
-          <div class="callout-title">対処法</div>
-          <p style="margin:0">数字・日付・人名・URLは必ず自分で確認する。「この情報の出典はありますか？」と聞く。重要な判断に使う情報は別の情報源でもクロスチェック。</p>
-        </div>
-        <p><strong>大切な心構え:</strong> AIの回答は「優秀だが経験の浅いアシスタントの提案」だと思ってください。そのまま使うのではなく、あなたの判断で確認・修正して使います。</p>
-
-        <h3>Q3: 何を頼んでいいかわからない</h3>
-        <table>
-          <thead><tr><th>あなたの状況</th><th>AIに頼めること</th></tr></thead>
-          <tbody>
-            <tr><td>長い文書を読む時間がない</td><td>「この文書を要約して。要点を5つにまとめて」</td></tr>
-            <tr><td>メールの文面が思いつかない</td><td>「○○さんへの△△の件のメールを下書きして」</td></tr>
-            <tr><td>データを整理したい</td><td>「このデータを表形式に整理して」</td></tr>
-            <tr><td>報告書の構成を考えたい</td><td>「△△の報告書の目次案を3パターン作って」</td></tr>
-            <tr><td>文章を推敲したい</td><td>「この文章をより読みやすく修正して」</td></tr>
-            <tr><td>アイデアを広げたい</td><td>「△△について異なる視点から5つアイデアを出して」</td></tr>
-            <tr><td>英語の文書を読みたい</td><td>「この英文を日本語に翻訳して。専門用語は原語も併記」</td></tr>
-          </tbody>
-        </table>
-
-        <h3>Q4: エラーが出た / 止まった</h3>
-        <table>
-          <thead><tr><th>症状</th><th>対処法</th></tr></thead>
-          <tbody>
-            <tr><td>「エラー」と表示された</td><td>メッセージを読んで、指示を言い換えて再送信</td></tr>
-            <tr><td>途中で止まった</td><td>「続けて」と送信する</td></tr>
-            <tr><td>同じ間違いを繰り返す</td><td>新しいセッションで、指示を変えて再挑戦</td></tr>
-            <tr><td>ファイルが見つからないと言われる</td><td>「このフォルダの中身を見せて」と頼む</td></tr>
-          </tbody>
-        </table>
-        <p><strong>大切なこと:</strong> エラーはあなたの能力不足ではありません。AIとの対話は試行錯誤が当たり前です。言い方を変えて、もう一度試してみてください。</p>
-
-        <h3>Q5: 前に話した内容を覚えていない</h3>
-        <p><strong>原因:</strong> AIは会話（セッション）が切れると、前回の内容を忘れます。</p>
-        <div class="callout callout-info">
-          <div class="callout-title">対処法</div>
-          <p style="margin:0">重要な前提は毎回の会話冒頭で伝える。継続的に使う情報は CLAUDE.md に書いておく。前回の会話のまとめを最初に貼り付けてから新しい依頼をする。</p>
+      <div class="flow-step">
+        <div class="flow-num">3</div>
+        <div class="flow-body">
+          <h3>認証情報を管理する</h3>
+          <p>APIキー（各サービスの「鍵」）を安全に保管・運用する方法を学びます。セキュリティの基礎です。</p>
+          <div class="flow-chapters">
+            <a href="ops.html#cred-keychain" class="flow-chip" onclick="goTo('credentials','cred-keychain')">macOS Keychain <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#cred-env" class="flow-chip" onclick="goTo('credentials','cred-env')">環境変数の設定 <span class="arrow">&#8599;</span></a>
+          </div>
         </div>
       </div>
 
-      <!-- Chapter 6 -->
-      <div class="chapter" id="ch6">
-        <div class="chapter-label">第6章</div>
-        <h2>上手な指示の作り方</h2>
-
-        <h3>良い指示の4つの要素</h3>
-        <p>AIへの指示は、以下の4要素を含めると格段に良くなります。全部入れる必要はありませんが、意識するだけで結果が変わります。</p>
-
-        <div class="protocol-card">
-          <h4>指示の4要素</h4>
-          <div class="protocol-steps">
-            <div class="protocol-step">
-              <div class="protocol-step-num">1. 役割</div>
-              <div class="protocol-step-title">どんな立場で考えてほしいか</div>
-              <div class="protocol-step-example">「あなたはワークショップのファシリテーターです」</div>
-            </div>
-            <div class="protocol-step">
-              <div class="protocol-step-num">2. 文脈</div>
-              <div class="protocol-step-title">背景情報・状況説明</div>
-              <div class="protocol-step-example">「来月、企業30社が参加する対話イベントを開催します」</div>
-            </div>
-            <div class="protocol-step">
-              <div class="protocol-step-num">3. 制約</div>
-              <div class="protocol-step-title">守ってほしい条件</div>
-              <div class="protocol-step-example">「所要時間は3時間以内で」「参加者は初対面同士です」</div>
-            </div>
-            <div class="protocol-step">
-              <div class="protocol-step-num">4. 形式</div>
-              <div class="protocol-step-title">出力の形をどうしてほしいか</div>
-              <div class="protocol-step-example">「タイムテーブル形式で」「箇条書きではなく文章で」</div>
-            </div>
+      <div class="flow-step">
+        <div class="flow-num">4</div>
+        <div class="flow-body">
+          <h3>アプリを作る・公開する</h3>
+          <p>実際にClaude Codeでアプリを作り、インターネットに公開するまでの手順です。</p>
+          <div class="flow-chapters">
+            <a href="ops.html#wf-create" class="flow-chip" onclick="goTo('workflow','wf-create')">新しいアプリを作る <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#wf-maintain" class="flow-chip" onclick="goTo('workflow','wf-maintain')">修正・更新する <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#wf-local" class="flow-chip" onclick="goTo('workflow','wf-local')">ローカルサーバー <span class="arrow">&#8599;</span></a>
           </div>
-        </div>
-
-        <h3>業務別テンプレート集</h3>
-        <p>以下のテンプレートは、そのままコピーして【】の部分を書き換えて使えます。</p>
-
-        <div class="template-block">
-          <div class="template-header">テンプレート1: 報告書のドラフト作成</div>
-          <div class="template-body">
-<pre>以下の情報をもとに、報告書のドラフトを作成してください。
-
-【テーマ】（報告書のテーマ）
-【対象読者】（誰が読むか）
-【ボリューム】（目安の文字数。例: 3,000字程度）
-
-【含める内容】
-- （項目1）
-- （項目2）
-- （項目3）
-
-【スタイル】
-- ですます調
-- 箇条書きだけでなく文章（地の文）を中心に
-- 分析や洞察は根拠とセットで述べる</pre>
-          </div>
-        </div>
-
-        <div class="template-block">
-          <div class="template-header">テンプレート2: ワークショップの設計支援</div>
-          <div class="template-body">
-<pre>以下の条件でワークショップのプログラムを設計して。
-
-【テーマ】（ワークショップのテーマ）
-【目的】（達成したいこと）
-【参加者】（人数、属性、関係性）
-【時間】（所要時間）
-【形式】（対面 / オンライン / ハイブリッド）
-
-【大切にしたいこと】
-- 参加者同士の対話時間を十分に確保する
-- 一方的な講義形式にしない
-- 多様な意見が出やすい場をつくる
-
-【出力形式】
-タイムテーブル形式で、各パートについて
-「目的」「進め方」「必要な準備物」を記載して。</pre>
-          </div>
-        </div>
-
-        <div class="template-block">
-          <div class="template-header">テンプレート3: データの整理・分析</div>
-          <div class="template-body">
-<pre>以下のデータを整理・分析してください。
-
-【データの説明】（何のデータか）
-【分析の目的】（何を知りたいか）
-
-【やってほしいこと】
-1. データの全体像を把握して報告
-2. （具体的な分析内容）
-3. 気づいた点や示唆があれば指摘
-
-【データ】
-（ここにデータを貼り付ける）</pre>
-          </div>
-        </div>
-
-        <div class="template-block">
-          <div class="template-header">テンプレート4: 文章の推敲・改善</div>
-          <div class="template-body">
-<pre>以下の文章を推敲してください。
-
-【改善のポイント】
-- 読みやすさを向上させる
-- 冗長な表現を簡潔にする
-- 論理の流れが自然になるよう調整する
-
-変更箇所がわかるように、修正理由も簡潔に添えて。
-
-【文章】
-（ここに文章を貼り付ける）</pre>
-          </div>
-        </div>
-
-        <h3>指示を改善するコツ</h3>
-        <p>AIの出力が期待と違ったら、以下を試してください。</p>
-        <table>
-          <thead><tr><th>AIの出力の問題</th><th>改善の方向</th></tr></thead>
-          <tbody>
-            <tr><td>内容が薄い・表面的</td><td>「具体例を3つ含めて」「根拠も述べて」</td></tr>
-            <tr><td>長すぎる</td><td>「500字以内で」「要点を3つに絞って」</td></tr>
-            <tr><td>トーンが合わない</td><td>「もう少しカジュアルに」「温かい文体で」</td></tr>
-            <tr><td>的外れな内容</td><td>背景情報を追加。「前提として○○です」</td></tr>
-            <tr><td>形式が違う</td><td>「表形式で」「見出し付きの文章で」</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Chapter 7: Practical Setup -->
-      <div class="chapter" id="ch7">
-        <div class="chapter-label">第7章</div>
-        <h2>アプリを作る: 準備編</h2>
-
-        <p>この章では、Claude Codeでアプリを作るまでの準備を、実際の操作手順に沿って説明します。一つずつ順番に進めてください。</p>
-
-        <h3>ステップ1: Cursorをインストールする</h3>
-
-        <ol style="padding-left:20px; margin-bottom:24px;">
-          <li style="margin-bottom:12px;">ブラウザで <code>cursor.com</code> にアクセスする</li>
-          <li style="margin-bottom:12px;">「Download」ボタンをクリック（Mac版が自動で選ばれる）</li>
-          <li style="margin-bottom:12px;">ダウンロードされたファイルを開き、アプリケーションフォルダにドラッグ</li>
-          <li style="margin-bottom:12px;">Cursorを起動し、アカウントを作成（Googleアカウントでログイン可能）</li>
-          <li style="margin-bottom:12px;">初回設定で「Claude」を選択する画面が出たら、Claudeを選ぶ</li>
-        </ol>
-
-        <div class="callout callout-info">
-          <div class="callout-title">Cursorとは</div>
-          <p style="margin:0">AIと対話しながらファイルの作成・編集ができるアプリです。ChatGPTのようなチャット画面が右側にあり、左側でファイルの中身を確認できます。</p>
-        </div>
-
-        <h3>ステップ2: 作業フォルダを作る</h3>
-
-        <ol style="padding-left:20px; margin-bottom:24px;">
-          <li style="margin-bottom:12px;">Finderを開き、自分のホームフォルダ（家のアイコン）に移動</li>
-          <li style="margin-bottom:12px;"><code>projects</code> というフォルダを作る（既にあればそのまま）</li>
-          <li style="margin-bottom:12px;">その中にアプリ用のフォルダを作る（例: <code>expense-checker</code>）</li>
-          <li style="margin-bottom:12px;">Cursorに戻り、メニューから「File」→「Open Folder」で今作ったフォルダを開く</li>
-        </ol>
-
-        <div class="callout callout-warning">
-          <div class="callout-title">フォルダ名のルール</div>
-          <p style="margin:0">フォルダ名は<strong>半角英数字とハイフン</strong>だけで付けてください。日本語やスペースが入ると不具合の原因になります。例: <code>expense-checker</code>（OK）、<code>経費チェッカー</code>（NG）</p>
-        </div>
-
-        <h3>ステップ3: Claude Codeに話しかける</h3>
-
-        <ol style="padding-left:20px; margin-bottom:24px;">
-          <li style="margin-bottom:12px;">Cursor画面の右側にチャットパネルが表示されている</li>
-          <li style="margin-bottom:12px;">ここに日本語でやりたいことを入力する</li>
-          <li style="margin-bottom:12px;">AIがファイルの作成・編集を提案してくる</li>
-          <li style="margin-bottom:12px;">「Accept」（承認）ボタンで変更を適用する</li>
-        </ol>
-
-        <div class="example-pair">
-          <div class="example-good">
-            <div class="example-label">最初に送るメッセージの例</div>
-<pre style="margin:0;border:none;background:transparent;padding:0;">経費管理ツールをWebアプリとして作ってください。
-
-【機能】
-- 経費の入力（日付、カテゴリ、金額、メモ）
-- カテゴリ別の集計
-- CSV出力
-
-1つのHTMLファイルで完結させてください。
-データはブラウザのlocalStorageに保存して。</pre>
-          </div>
-        </div>
-
-        <h3>ステップ4: 作ったアプリを確認する</h3>
-
-        <p>AIがファイルを作成したら、ブラウザで動作を確認します。</p>
-
-        <h4>HTMLファイル1つで完結するアプリの場合</h4>
-        <ol style="padding-left:20px; margin-bottom:24px;">
-          <li style="margin-bottom:12px;">Cursorの左側のファイル一覧で <code>index.html</code> を右クリック</li>
-          <li style="margin-bottom:12px;">「Open in Browser」またはファイルをFinderから直接ダブルクリック</li>
-          <li style="margin-bottom:12px;">ブラウザでアプリが表示される</li>
-        </ol>
-
-        <h4>サーバーが必要なアプリの場合</h4>
-        <p>AIが「サーバーを起動します」「<code>http://localhost:5210</code> で確認できます」と言った場合:</p>
-        <ol style="padding-left:20px; margin-bottom:24px;">
-          <li style="margin-bottom:12px;">AIの指示通りにサーバー起動コマンドを実行する（AIがやってくれることが多い）</li>
-          <li style="margin-bottom:12px;">ブラウザで指定のURL（例: <code>http://localhost:5210</code>）を開く</li>
-          <li style="margin-bottom:12px;">アプリが表示される。このURLは<strong>自分のPCだけ</strong>で見える状態</li>
-        </ol>
-
-        <div class="callout callout-info">
-          <div class="callout-title">localhost とは</div>
-          <p style="margin:0">「自分のパソコンの中だけで動いているWebサイト」のことです。この段階では他の人は見れません。問題なければ次のステップで公開します。</p>
-        </div>
-
-        <h3>ステップ5: 修正を依頼する</h3>
-
-        <p>確認して気になる点があれば、そのままチャットで伝えます。何度でも修正できます。</p>
-
-        <div class="example-pair">
-          <div class="example-good">
-            <div class="example-label">修正依頼の例</div>
-<pre style="margin:0;border:none;background:transparent;padding:0;">いくつか修正をお願いします。
-- 金額の入力欄に3桁ごとのカンマを表示して
-- カテゴリに「接待費」を追加して
-- 全体の文字サイズをもう少し大きくして
-- ヘッダーの色を黒に変えて</pre>
-          </div>
-        </div>
-
-        <h3>ステップ6: インターネットに公開する</h3>
-
-        <p>アプリが完成したら、AIに「公開して」と伝えるだけです。AIが以下を自動で行います。</p>
-
-        <table>
-          <thead><tr><th>AIがやること</th><th>何が起きているか</th></tr></thead>
-          <tbody>
-            <tr><td>GitHubにコードを保存</td><td>ファイル一式をクラウド上のDropboxのような場所にバックアップ</td></tr>
-            <tr><td>Vercelにデプロイ</td><td>アプリをインターネット上のサーバーに配置</td></tr>
-            <tr><td>URLを発行</td><td><code>https://あなたのアプリ名.vercel.app</code> というURLが作られる</td></tr>
-          </tbody>
-        </table>
-
-        <div class="example-pair">
-          <div class="example-good">
-            <div class="example-label">公開を依頼するメッセージ</div>
-<pre style="margin:0;border:none;background:transparent;padding:0;">完成です。GitHubに保存して、Vercelで公開してください。</pre>
-          </div>
-        </div>
-
-        <p>公開が完了すると、AIが <code>https://○○.vercel.app</code> のようなURLを教えてくれます。このURLをSlackやメールで共有すれば、誰でもアクセスできます。</p>
-
-        <div class="callout callout-warning">
-          <div class="callout-title">公開 = 誰でも見られる状態</div>
-          <p style="margin:0">Vercelで公開したアプリは、URLを知っている人なら誰でもアクセスできます。社内限定にしたい場合は、URLを社内だけで共有してください。パスワード保護が必要な場合は、AIに「パスワード認証をつけて」と依頼してください。</p>
-        </div>
-
-        <h3>操作の全体像</h3>
-
-        <div class="protocol-card">
-          <h4>ゼロから公開までの流れ</h4>
-          <div class="protocol-steps">
-            <div class="protocol-step">
-              <div class="protocol-step-num">1</div>
-              <div class="protocol-step-title">フォルダを作って開く</div>
-              <div class="protocol-step-example">Finderで新規フォルダ作成 → Cursorで「Open Folder」</div>
-            </div>
-            <div class="protocol-step">
-              <div class="protocol-step-num">2</div>
-              <div class="protocol-step-title">AIに依頼する</div>
-              <div class="protocol-step-example">チャットに「○○を作って」と日本語で入力</div>
-            </div>
-            <div class="protocol-step">
-              <div class="protocol-step-num">3</div>
-              <div class="protocol-step-title">ブラウザで確認する</div>
-              <div class="protocol-step-example">index.htmlを開く or localhostのURLをブラウザに入力</div>
-            </div>
-            <div class="protocol-step">
-              <div class="protocol-step-num">4</div>
-              <div class="protocol-step-title">修正 → 公開</div>
-              <div class="protocol-step-example">「ここを直して」→「公開して」で完了。URLが発行される</div>
-            </div>
-          </div>
-        </div>
-
-        <h3>つまずきやすいポイントと対処法</h3>
-
-        <table>
-          <thead><tr><th>つまずき</th><th>対処</th></tr></thead>
-          <tbody>
-            <tr><td>CursorでClaude Codeが使えない</td><td>設定 → Models でClaudeが選択されているか確認</td></tr>
-            <tr><td>AIが「許可が必要です」と言う</td><td>「Allow」「Accept」ボタンを押す。ファイル変更の許可を求めている</td></tr>
-            <tr><td>localhostが表示されない</td><td>サーバーが起動していない。AIに「サーバーを起動して」と伝える</td></tr>
-            <tr><td>公開したURLが404エラー</td><td>デプロイに数分かかることがある。1-2分待ってリロード</td></tr>
-            <tr><td>「GitHubの認証が必要」と言われた</td><td>AIの指示に従ってGitHubアカウントでログイン（初回のみ）</td></tr>
-          </tbody>
-        </table>
-
-        <h3>用語クイックリファレンス</h3>
-        <p>AIとの会話中に出てくる用語の早見表です。覚える必要はありませんが、出てきたときに参照してください。</p>
-
-        <table>
-          <thead><tr><th>AIが言うこと</th><th>何が起きているか</th><th>あなたがやること</th></tr></thead>
-          <tbody>
-            <tr><td>「GitHubにプッシュします」</td><td>ファイルをクラウドにバックアップしている</td><td>何もしなくてOK</td></tr>
-            <tr><td>「Vercelにデプロイします」</td><td>アプリをインターネットに公開している</td><td>完了後にURLをメモ</td></tr>
-            <tr><td>「localhostで確認できます」</td><td>自分のPCだけで見える状態で起動した</td><td>ブラウザでURLを開く</td></tr>
-            <tr><td>「データベースを作成します」</td><td>データを保存する箱（Excel的なもの）を用意している</td><td>何もしなくてOK</td></tr>
-            <tr><td>「APIキーが必要です」</td><td>外部サービスを使うための鍵が必要</td><td>西村に確認する</td></tr>
-            <tr><td>「npm install を実行します」</td><td>アプリに必要な部品をダウンロードしている</td><td>何もしなくてOK</td></tr>
-            <tr><td>「HTMLとCSSを作成しました」</td><td>ページの構造（HTML）と見た目（CSS）を書いた</td><td>ブラウザで見た目を確認</td></tr>
-            <tr><td>「コミットしました」</td><td>変更を記録した（Ctrl+S の上位版）</td><td>何もしなくてOK</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Chapter 8: Building Apps -->
-      <div class="chapter" id="ch8">
-        <div class="chapter-label">第8章</div>
-        <h2>実際にアプリを作る</h2>
-
-        <p>「アプリを作る」と聞くと、プログラミングの専門知識が必要だと思うかもしれません。しかしClaude Codeを使えば、日本語で「こういうものが欲しい」と伝えるだけで、実際に動くWebアプリを作ることができます。</p>
-        <p>以下は、ミラツク/エッセンスで実際にClaude Codeを使って作られたアプリの実例です。すべて、プログラミングのコードを一行も手書きせずに完成しています。</p>
-
-        <h3>実例で見る「作れるもの」</h3>
-
-        <table>
-          <thead><tr><th>アプリ名</th><th>何ができるか</th><th>作成時間の目安</th></tr></thead>
-          <tbody>
-            <tr><td>日程候補チェッカー</td><td>複数人のGoogleカレンダーから空き時間を自動検出</td><td>1-2時間</td></tr>
-            <tr><td>リサーチダッシュボード</td><td>調査結果をカード形式で蓄積・検索・公開</td><td>2-3時間</td></tr>
-            <tr><td>政策データベース</td><td>全省庁の審議会・委員情報を横断検索</td><td>3-4時間</td></tr>
-            <tr><td>登壇者管理システム</td><td>イベント登壇者の情報・履歴を一元管理</td><td>2-3時間</td></tr>
-            <tr><td>経費チェッカー</td><td>経費の入力・集計・レポート出力</td><td>1-2時間</td></tr>
-            <tr><td>このマニュアル</td><td>あなたが今読んでいるこのWebページ</td><td>30分</td></tr>
-          </tbody>
-        </table>
-
-        <h3>アプリの作り方: 3つのパターン</h3>
-
-        <p>作りたいものの複雑さに応じて、3つのパターンがあります。</p>
-
-        <h4>パターン1: 「1ページ完結」の業務ツール（最も簡単）</h4>
-
-        <p>一番手軽なのは、1つのHTMLファイルで完結するツールです。ブラウザで開くだけで使えて、サーバーも不要。経費計算、チェックリスト、フォーマット変換など、「Excelでやっていた作業をブラウザで」というイメージです。</p>
-
-        <div class="template-block">
-          <div class="template-header">実際の依頼例: 経費チェッカーを作る</div>
-          <div class="template-body">
-<pre>経費管理ツールをWebアプリとして作ってください。
-
-【機能】
-- 経費の入力フォーム（日付、カテゴリ、金額、メモ）
-- カテゴリ別の集計表
-- 月別のグラフ表示
-- CSV出力ボタン
-
-【デザイン】
-- シンプルで見やすいデザイン
-- スマホでも使えるようにレスポンシブ対応
-
-【技術的な条件】
-- 1つのHTMLファイルで完結させる
-- データはブラウザのlocalStorageに保存
-  （サーバー不要で、同じブラウザなら次回も
-  データが残る）</pre>
-          </div>
-        </div>
-
-        <div class="callout callout-info">
-          <div class="callout-title">ポイント</div>
-          <p style="margin:0">「1つのHTMLファイルで完結」「localStorageに保存」と伝えると、サーバーの設定なしで動くツールが作れます。作ったファイルをダブルクリックするだけで使えます。</p>
-        </div>
-
-        <h4>パターン2: データを扱う業務アプリ（中級）</h4>
-
-        <p>データの蓄積・検索・管理が必要なアプリです。研究者のデータベース、イベント参加者の管理、調査結果の蓄積など。Pythonのサーバーとデータベースを使いますが、Claude Codeがすべて構築してくれます。</p>
-
-        <div class="template-block">
-          <div class="template-header">実際の依頼例: 登壇者管理システムを作る</div>
-          <div class="template-body">
-<pre>オンラインイベントの登壇者を管理するWebアプリを
-作ってください。
-
-【背景】
-ミラツクでは月に複数回のオンラインイベントを
-開催しており、登壇者の情報管理が属人化しています。
-
-【必要な機能】
-- 登壇者の情報登録（氏名、所属、専門分野、
-  連絡先、過去の登壇履歴）
-- イベントごとの登壇者アサイン
-- 検索・フィルタ機能（専門分野、所属で絞り込み）
-- 登壇者へのメール一括送信テンプレート
-
-【デザイン】
-- esse-senseのデザインテイストに合わせて
-  （黒・白・赤のシンプルなデザイン）
-- 左にリスト、右に詳細の2ペインレイアウト
-
-【ユーザー】
-- 社内スタッフ3-5名が利用
-- ITに詳しくない人でも直感的に使えること</pre>
-          </div>
-        </div>
-
-        <h4>パターン3: 公開Webサイト（応用）</h4>
-
-        <p>社外に公開するダッシュボードやポータルサイトです。調査結果の公開ページ、イベント情報サイトなどが該当します。GitHub PagesやVercelで無料公開できます。</p>
-
-        <div class="template-block">
-          <div class="template-header">実際の依頼例: リサーチダッシュボードを作る</div>
-          <div class="template-body">
-<pre>調査・リサーチの結果を蓄積して公開するダッシュ
-ボードを作ってください。
-
-【背景】
-チームで行った調査やリサーチの結果が、個人の
-PCやSlackに散在しています。一覧できるダッシュ
-ボードが欲しい。
-
-【必要な機能】
-- リサーチ結果の一覧表示（カード形式）
-- カテゴリ・タグでの絞り込み
-- キーワード検索
-- 各リサーチの詳細ページ（全文表示）
-- 新しいリサーチの追加（コマンドラインから）
-
-【公開方法】
-- GitHub Pagesで無料公開
-- URLをチームやクライアントに共有できるように</pre>
-          </div>
-        </div>
-
-        <h3>作る前に伝えると良いこと</h3>
-
-        <p>アプリの依頼で結果が大きく変わるのは、「何を作るか」よりも「誰がなぜ使うか」の説明です。以下のチェックリストを参考にしてください。</p>
-
-        <table>
-          <thead><tr><th>伝えること</th><th>なぜ重要か</th><th>例</th></tr></thead>
-          <tbody>
-            <tr><td>背景・課題</td><td>AIが目的を理解し、適切な設計を選ぶ</td><td>「今はExcelで管理しているが限界」</td></tr>
-            <tr><td>使う人</td><td>UIの複雑さやデザインが変わる</td><td>「ITに詳しくないスタッフ3名」</td></tr>
-            <tr><td>主要な機能</td><td>作るものの範囲が明確になる</td><td>「登録・検索・一覧表示・CSV出力」</td></tr>
-            <tr><td>デザインの参考</td><td>イメージのズレを防ぐ</td><td>「シンプルで余白の多いデザイン」</td></tr>
-            <tr><td>データの扱い</td><td>技術選定に影響する</td><td>「社内だけで使う」「外部に公開する」</td></tr>
-          </tbody>
-        </table>
-
-        <h3>作った後の流れ</h3>
-
-        <p>Claude Codeでアプリを作ると、以下の流れで公開まで進みます。すべてAIが自動で行います。</p>
-
-        <div class="protocol-card">
-          <h4>アプリ作成から公開まで</h4>
-          <div class="protocol-steps">
-            <div class="protocol-step">
-              <div class="protocol-step-num">STEP 1</div>
-              <div class="protocol-step-title">作成</div>
-              <div class="protocol-step-example">日本語で要件を伝える。AIがコードを書き、ファイルを作成する</div>
-            </div>
-            <div class="protocol-step">
-              <div class="protocol-step-num">STEP 2</div>
-              <div class="protocol-step-title">確認</div>
-              <div class="protocol-step-example">ブラウザで動作を確認。「ここを変えて」とフィードバック</div>
-            </div>
-            <div class="protocol-step">
-              <div class="protocol-step-num">STEP 3</div>
-              <div class="protocol-step-title">修正</div>
-              <div class="protocol-step-example">AIが修正を反映。納得いくまで何度でも調整可能</div>
-            </div>
-            <div class="protocol-step">
-              <div class="protocol-step-num">STEP 4</div>
-              <div class="protocol-step-title">公開</div>
-              <div class="protocol-step-example">「公開して」と伝えるだけ。AIがデプロイまで完了する</div>
-            </div>
-          </div>
-        </div>
-
-        <h3>実際の会話例: 日程候補チェッカーができるまで</h3>
-
-        <p>以下は、実際にアプリを作ったときの会話の流れです。プログラミングの知識は一切使っていません。</p>
-
-        <div style="margin:20px 0 28px;">
-          <div style="background:var(--sidebar-bg); border-radius:10px; padding:16px 20px; margin:8px 0;">
-            <div style="font-size:11px; font-weight:600; color:var(--accent); margin-bottom:6px;">自分</div>
-            <div style="font-size:14px;">チームメンバーの空いている日程を自動で見つけるツールが欲しい。Googleカレンダーの情報をもとに、全員が空いている時間帯を一覧表示して。</div>
-          </div>
-          <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px 20px; margin:8px 0;">
-            <div style="font-size:11px; font-weight:600; color:var(--text-muted); margin-bottom:6px;">Claude Code</div>
-            <div style="font-size:14px;">日程候補チェッカーを作成します。まず要件を確認させてください。（1）何名くらいのメンバーを想定していますか？（2）カレンダーのデータはどう取得しますか？...</div>
-          </div>
-          <div style="background:var(--sidebar-bg); border-radius:10px; padding:16px 20px; margin:8px 0;">
-            <div style="font-size:11px; font-weight:600; color:var(--accent); margin-bottom:6px;">自分</div>
-            <div style="font-size:14px;">3-5名くらい。カレンダーはiCalのURLから読み込めるようにして。</div>
-          </div>
-          <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px 20px; margin:8px 0;">
-            <div style="font-size:11px; font-weight:600; color:var(--text-muted); margin-bottom:6px;">Claude Code</div>
-            <div style="font-size:14px;">承知しました。Pythonのバックエンド + HTML/CSSのフロントエンドで構築します。iCalのURLを登録すると、全員の予定を重ね合わせて空き時間を表示する仕組みにします。作成を開始します。</div>
-          </div>
-          <div style="text-align:center; padding:12px; color:var(--text-muted); font-size:13px;">
-            ... AIがファイルを作成・コードを書く（数分） ...
-          </div>
-          <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px 20px; margin:8px 0;">
-            <div style="font-size:11px; font-weight:600; color:var(--text-muted); margin-bottom:6px;">Claude Code</div>
-            <div style="font-size:14px;">完成しました。http://localhost:5211 で確認できます。メンバーの追加・iCal URLの登録・期間選択の機能を実装しました。</div>
-          </div>
-          <div style="background:var(--sidebar-bg); border-radius:10px; padding:16px 20px; margin:8px 0;">
-            <div style="font-size:11px; font-weight:600; color:var(--accent); margin-bottom:6px;">自分</div>
-            <div style="font-size:14px;">いいね。空き時間の表示をもう少し見やすくして。あと、結果をSlackに送れる機能も追加して。</div>
-          </div>
-          <div style="text-align:center; padding:12px; color:var(--text-muted); font-size:13px;">
-            ... AIが修正・機能追加（数分） ...
-          </div>
-          <div style="background:var(--sidebar-bg); border-radius:10px; padding:16px 20px; margin:8px 0;">
-            <div style="font-size:11px; font-weight:600; color:var(--accent); margin-bottom:6px;">自分</div>
-            <div style="font-size:14px;">完璧。公開して。</div>
-          </div>
-          <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px 20px; margin:8px 0;">
-            <div style="font-size:11px; font-weight:600; color:var(--text-muted); margin-bottom:6px;">Claude Code</div>
-            <div style="font-size:14px;">GitHubにコードを保存し、Vercelにデプロイしました。公開URL: https://schedule-checker-xxx.vercel.app</div>
-          </div>
-        </div>
-
-        <p>このように、「欲しいものを日本語で伝える → 確認する → フィードバックする → 公開する」というサイクルで、プログラミングの知識なしにアプリが完成します。</p>
-
-        <h3>よくある質問</h3>
-
-        <table>
-          <thead><tr><th>質問</th><th>回答</th></tr></thead>
-          <tbody>
-            <tr><td>プログラミングを全く知らなくても作れる？</td><td>作れます。実際にこのマニュアル自体がその方法で作られています。必要なのは「何が欲しいか」を言葉で伝える力です。</td></tr>
-            <tr><td>作ったアプリにバグがあったら？</td><td>「ここがおかしい」「この操作をするとエラーが出る」と伝えれば、AIが修正します。</td></tr>
-            <tr><td>デザインが気に入らなかったら？</td><td>「もっとシンプルに」「色をこう変えて」「この部分をもっと大きく」と伝えれば調整できます。</td></tr>
-            <tr><td>作ったアプリの維持管理は？</td><td>修正や機能追加が必要になったら、同じように日本語で依頼するだけです。コードを読む必要はありません。</td></tr>
-            <tr><td>費用はかかる？</td><td>Claude Codeの利用料のみ。アプリの公開はGitHub Pages（無料）やVercel（無料枠あり）で可能です。</td></tr>
-          </tbody>
-        </table>
-
-        <div class="callout callout-info">
-          <div class="callout-title">まずは小さく始める</div>
-          <p style="margin:0">最初から大きなアプリを作ろうとせず、「Excelで30分かかっている作業を自動化する」くらいの小さなツールから始めてみてください。小さな成功体験が、次のアイデアにつながります。</p>
         </div>
       </div>
 
-      <!-- Appendix -->
-      <div class="chapter" id="appendix">
-        <div class="chapter-label">参考</div>
-        <h2>用語集</h2>
-
-        <div class="glossary-item"><span class="glossary-term">プロンプト</span><span class="glossary-def">AIへの指示・質問のこと</span></div>
-        <div class="glossary-item"><span class="glossary-term">セッション</span><span class="glossary-def">AIとの一連の会話のこと。新しいセッション = 新しい会話を始める</span></div>
-        <div class="glossary-item"><span class="glossary-term">コンテキスト</span><span class="glossary-def">AIが覚えている会話の内容。長くなると古い部分を忘れる</span></div>
-        <div class="glossary-item"><span class="glossary-term">ハルシネーション</span><span class="glossary-def">AIが事実と異なることをもっともらしく生成すること</span></div>
-        <div class="glossary-item"><span class="glossary-term">CLAUDE.md</span><span class="glossary-def">AIが毎回自動で読む設定ファイル。業務ルールを書いておく場所</span></div>
-        <div class="glossary-item"><span class="glossary-term">Cursor</span><span class="glossary-def">Claude Codeを使うためのアプリ。チャット画面でAIと対話できる</span></div>
-
-        <div style="margin-top:48px; padding-top:24px; border-top:1px solid var(--border); font-size:12px; color:var(--text-muted);">
-          <p>第1版 | 2026年4月</p>
-          <p>ベストプラクティス調査（Web調査18件、学術論文20件、企業事例10件）の知見に基づいて設計。</p>
+      <div class="flow-step">
+        <div class="flow-num">5</div>
+        <div class="flow-body">
+          <h3>困ったときは</h3>
+          <p>よくあるエラーとその対処法をまとめています。</p>
+          <div class="flow-chapters">
+            <a href="ops.html#ts-common" class="flow-chip" onclick="goTo('troubleshoot','ts-common')">トラブルシューティング <span class="arrow">&#8599;</span></a>
+          </div>
         </div>
       </div>
 
     </div>
   </div>
 
-  <button class="print-btn" onclick="window.print()">PDF / 印刷</button>
+  <!-- Quick Cards -->
+  <div class="cards">
+    <div class="cards-title">あなたの状況から探す</div>
+    <div class="cards-grid">
+      <a href="ops.html#env-mac" class="card">
+        <div class="card-icon">&#9654;</div>
+        <h3>まだ何も始めていない</h3>
+        <p>環境構築の最初から順番に進めましょう。Macに必要なソフトを入れるところからスタート。</p>
+      </a>
+      <a href="ops.html#wf-create" class="card">
+        <div class="card-icon">&#9881;</div>
+        <h3>環境は整った。アプリを作りたい</h3>
+        <p>フォルダの作り方からAIへの依頼テンプレート、公開までの一連の手順。</p>
+      </a>
+      <a href="ops.html#svc-database" class="card">
+        <div class="card-icon">&#128451;</div>
+        <h3>AIに「○○が必要」と言われた</h3>
+        <p>データベース、メール送信、決済など、各サービスの登録と接続手順。</p>
+      </a>
+      <a href="ops.html#ts-common" class="card">
+        <div class="card-icon">&#128295;</div>
+        <h3>エラーが出て困っている</h3>
+        <p>「Address already in use」「npm install失敗」等のよくある問題と解決方法。</p>
+      </a>
+    </div>
+  </div>
+
+  <!-- Services Overview -->
+  <div class="status">
+    <div class="status-title">使用するサービス一覧</div>
+    <table>
+      <thead>
+        <tr>
+          <th>サービス</th>
+          <th>役割</th>
+          <th>必要度</th>
+          <th>費用</th>
+          <th>マニュアル</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>GitHub</strong></td>
+          <td>コードの保管・バックアップ</td>
+          <td><span class="tag tag-required">必須</span></td>
+          <td><span class="tag tag-free">無料</span></td>
+          <td><a href="ops.html#svc-github">設定手順</a></td>
+        </tr>
+        <tr>
+          <td><strong>Vercel</strong></td>
+          <td>アプリのインターネット公開</td>
+          <td><span class="tag tag-required">必須</span></td>
+          <td><span class="tag tag-free">無料</span></td>
+          <td><a href="ops.html#svc-vercel">設定手順</a></td>
+        </tr>
+        <tr>
+          <td><strong>Anthropic</strong></td>
+          <td>AIの頭脳（APIキー）</td>
+          <td><span class="tag tag-required">必須</span></td>
+          <td>従量課金</td>
+          <td><a href="ops.html#env-accounts">設定手順</a></td>
+        </tr>
+        <tr>
+          <td><strong>Turso</strong></td>
+          <td>軽量データベース</td>
+          <td><span class="tag tag-optional">必要時</span></td>
+          <td><span class="tag tag-free">無料</span></td>
+          <td><a href="ops.html#svc-database">設定手順</a></td>
+        </tr>
+        <tr>
+          <td><strong>Supabase</strong></td>
+          <td>データベース + ログイン機能</td>
+          <td><span class="tag tag-optional">必要時</span></td>
+          <td><span class="tag tag-free">無料</span></td>
+          <td><a href="ops.html#svc-database">設定手順</a></td>
+        </tr>
+        <tr>
+          <td><strong>Firebase</strong></td>
+          <td>リアルタイムDB + 認証</td>
+          <td><span class="tag tag-optional">必要時</span></td>
+          <td><span class="tag tag-free">無料</span></td>
+          <td><a href="ops.html#svc-database">設定手順</a></td>
+        </tr>
+        <tr>
+          <td><strong>SendGrid</strong></td>
+          <td>メール送信</td>
+          <td><span class="tag tag-optional">必要時</span></td>
+          <td>月100通無料</td>
+          <td><a href="ops.html#svc-email">設定手順</a></td>
+        </tr>
+        <tr>
+          <td><strong>Stripe</strong></td>
+          <td>クレジットカード決済</td>
+          <td><span class="tag tag-optional">必要時</span></td>
+          <td>手数料のみ</td>
+          <td><a href="ops.html#svc-stripe">設定手順</a></td>
+        </tr>
+        <tr>
+          <td><strong>Brave Search</strong></td>
+          <td>Web検索API</td>
+          <td><span class="tag tag-optional">必要時</span></td>
+          <td>月2,000回無料</td>
+          <td><a href="ops.html#svc-other">設定手順</a></td>
+        </tr>
+        <tr>
+          <td><strong>Slack API</strong></td>
+          <td>Slack連携</td>
+          <td><span class="tag tag-optional">必要時</span></td>
+          <td><span class="tag tag-free">無料</span></td>
+          <td><a href="ops.html#svc-other">設定手順</a></td>
+        </tr>
+        <tr>
+          <td><strong>Notion API</strong></td>
+          <td>Notion連携</td>
+          <td><span class="tag tag-optional">必要時</span></td>
+          <td><span class="tag tag-free">無料</span></td>
+          <td><a href="ops.html#svc-other">設定手順</a></td>
+        </tr>
+        <tr>
+          <td><strong>Zoom API</strong></td>
+          <td>会議の自動作成</td>
+          <td><span class="tag tag-optional">必要時</span></td>
+          <td><span class="tag tag-free">無料</span></td>
+          <td><a href="ops.html#svc-other">設定手順</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>Claude Code 活用マニュアル | 第1版 2026年4月</p>
+    <p style="margin-top:4px;">ベストプラクティス調査（Web調査18件、学術論文20件、企業事例10件）の知見に基づいて設計。</p>
+  </div>
 
   <script>
-    function showChapter(id, e) {
-      document.querySelectorAll('.chapter').forEach(c => c.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      e.currentTarget.classList.add('active');
-      document.querySelector('.main').scrollTo(0, 0);
-      window.scrollTo(0, 0);
-      // Close sidebar on mobile
-      if (window.innerWidth <= 860) toggleSidebar();
-    }
-
-    function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('open');
-      document.getElementById('overlay').classList.toggle('open');
+    // Navigate to ops.html with the right chapter open
+    function goTo(partId, chapterId) {
+      // Store target in sessionStorage so ops.html can pick it up
+      sessionStorage.setItem('openChapter', chapterId);
+      sessionStorage.setItem('openPart', partId);
     }
   </script>
 </body>
