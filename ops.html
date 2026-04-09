@@ -125,26 +125,29 @@
     :focus-visible { outline:2px solid var(--terra); outline-offset:2px; }
     ::selection { background:var(--brown-light); color:var(--brown-dark); }
 
-    /* Chat — fixed bottom bar, always visible */
-    .chat-bar {
-      position:fixed; bottom:0; left:var(--sidebar-w); right:0; z-index:500;
-      background:var(--surface); border-top:1px solid var(--border);
-      box-shadow: 0 -2px 12px rgba(61,46,34,.06);
-      transition: left .3s;
+    /* Chat — right side panel, always visible */
+    .chat-side {
+      position:fixed; top:0; right:0; width:320px; height:100vh; z-index:80;
+      background:var(--surface); border-left:1px solid var(--border);
+      display:flex; flex-direction:column;
+      box-shadow: -2px 0 12px rgba(61,46,34,.04);
     }
-    /* Messages area — hidden by default, slides up when there are messages */
+    .chat-side-header {
+      padding:18px 18px 14px; border-bottom:1px solid var(--border);
+    }
+    .chat-side-header h3 { font-size:14px; font-weight:600; color:var(--text); }
+    .chat-side-header p { font-size:12px; color:var(--text-3); margin-top:3px; line-height:1.5; }
+
     .chat-messages {
-      max-height:0; overflow:hidden; transition:max-height .3s ease;
+      flex:1; overflow-y:auto; padding:16px;
       display:flex; flex-direction:column; gap:10px;
-      padding:0 20px;
     }
-    .chat-messages.has-messages { max-height:300px; overflow-y:auto; padding:16px 20px; }
     .chat-messages::-webkit-scrollbar { width:4px; }
     .chat-messages::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
 
     .chat-msg {
-      max-width:85%; padding:10px 14px; border-radius:12px;
-      font-size:14px; line-height:1.6; word-break:break-word;
+      max-width:92%; padding:10px 14px; border-radius:12px;
+      font-size:13.5px; line-height:1.6; word-break:break-word;
     }
     .chat-msg.user {
       align-self:flex-end; background:var(--brown); color:#fff;
@@ -157,7 +160,7 @@
     .chat-msg.ai code { background:rgba(122,64,51,.08); padding:1px 4px; border-radius:3px; font-size:.85em; }
     .chat-msg.system {
       align-self:center; background:transparent; color:var(--text-3);
-      font-size:12px; text-align:center; padding:4px 8px;
+      font-size:12px; text-align:center; padding:4px 8px; line-height:1.6;
     }
     .chat-typing { display:flex; gap:4px; padding:8px 14px; align-self:flex-start; }
     .chat-typing span {
@@ -169,21 +172,18 @@
     @keyframes chatBounce { to { opacity:.3; transform:translateY(-4px); } }
 
     .chat-input-row {
-      display:flex; gap:8px; padding:10px 16px; align-items:flex-end;
-    }
-    .chat-label {
-      font-size:11px; color:var(--text-3); padding:0 4px; flex-shrink:0; align-self:center;
-      letter-spacing:.03em;
+      display:flex; gap:8px; padding:12px; border-top:1px solid var(--border);
+      align-items:flex-end; background:var(--bg);
     }
     .chat-input {
-      flex:1; padding:9px 14px; border:1px solid var(--border); border-radius:10px;
-      font-size:14px; font-family:inherit; background:var(--bg); color:var(--text);
-      resize:none; line-height:1.4; min-height:40px; max-height:80px;
+      flex:1; padding:10px 14px; border:1px solid var(--border); border-radius:10px;
+      font-size:14px; font-family:inherit; background:var(--surface); color:var(--text);
+      resize:none; line-height:1.4; min-height:42px; max-height:84px;
     }
     .chat-input:focus { outline:none; border-color:var(--terra); box-shadow:0 0 0 3px rgba(168,107,80,.12); }
     .chat-input::placeholder { color:var(--text-3); }
     .chat-send {
-      width:40px; height:40px; border-radius:10px; border:none;
+      width:42px; height:42px; border-radius:10px; border:none;
       background:var(--brown); color:#fff; cursor:pointer;
       display:flex; align-items:center; justify-content:center;
       transition:all .15s; flex-shrink:0;
@@ -192,13 +192,13 @@
     .chat-send:disabled { opacity:.4; cursor:not-allowed; }
     .chat-send svg { width:16px; height:16px; }
 
-    /* Add bottom padding to main so content isn't hidden behind chat bar */
-    .main { padding-bottom:120px!important; }
+    /* Adjust main content to not overlap with chat side */
+    .main { max-width:700px; }
 
-    @media(max-width:900px) {
-      .chat-bar { left:0; }
+    @media(max-width:1200px) {
+      .chat-side { display:none; }
     }
-    @media print { .chat-bar { display:none!important; } }
+    @media print { .chat-side { display:none!important; } }
 
     /* Diagrams */
     .diagram { margin:24px 0; border-radius:10px; overflow:hidden; border:1px solid var(--border); background:var(--surface); }
@@ -334,21 +334,26 @@
     <div class="main" id="main-content"></div>
   </div>
 
-  <!-- Chat Bar (always visible at bottom) -->
-  <div class="chat-bar" id="chatBar">
-    <div class="chat-messages" id="chatMessages"></div>
+  <!-- Chat Side Panel (always visible on right) -->
+  <aside class="chat-side" id="chatSide">
+    <div class="chat-side-header">
+      <h3>わからないことがあれば</h3>
+      <p>読んでいるページの内容をもとに、AIが回答します</p>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-msg system">ここに質問を入力すると、今読んでいるページの内容をふまえて回答します。</div>
+    </div>
     <div class="chat-input-row">
-      <span class="chat-label">Q&A</span>
-      <textarea class="chat-input" id="chatInput" placeholder="マニュアルの内容について質問できます..." rows="1"
+      <textarea class="chat-input" id="chatInput" placeholder="ここに質問を入力..." rows="1"
         onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"
-        oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,80)+'px'"></textarea>
+        oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,84)+'px'"></textarea>
       <button class="chat-send" id="chatSend" onclick="sendChat()" title="送信">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
         </svg>
       </button>
     </div>
-  </div>
+  </aside>
 
   <script src="manual-data.js"></script>
   <script>
@@ -667,9 +672,6 @@
 
       const messagesEl = document.getElementById('chatMessages');
       const sendBtn = document.getElementById('chatSend');
-
-      // Show messages area
-      messagesEl.classList.add('has-messages');
 
       // Add user message
       chatHistory.push({ role: 'user', content: question });
