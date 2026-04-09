@@ -459,27 +459,27 @@
       <div class="sidebar-nav">
         <div class="nav-section">
           <div class="nav-section-title">はじめに</div>
-          <button class="nav-item active" onclick="showChapter('ch1')">Claude Code とは何か</button>
-          <button class="nav-item" onclick="showChapter('ch2')">安全に使うために</button>
+          <button class="nav-item active" onclick="showChapter('ch1', event)">Claude Code とは何か</button>
+          <button class="nav-item" onclick="showChapter('ch2', event)">安全に使うために</button>
         </div>
         <div class="nav-section">
           <div class="nav-section-title">実践</div>
-          <button class="nav-item" onclick="showChapter('ch3')">最初の一歩</button>
-          <button class="nav-item" onclick="showChapter('ch4')">CLAUDE.md を設定する</button>
+          <button class="nav-item" onclick="showChapter('ch3', event)">最初の一歩</button>
+          <button class="nav-item" onclick="showChapter('ch4', event)">CLAUDE.md を設定する</button>
         </div>
         <div class="nav-section">
           <div class="nav-section-title">活用</div>
-          <button class="nav-item" onclick="showChapter('ch5')">よくあるトラブル</button>
-          <button class="nav-item" onclick="showChapter('ch6')">上手な指示の作り方</button>
+          <button class="nav-item" onclick="showChapter('ch5', event)">よくあるトラブル</button>
+          <button class="nav-item" onclick="showChapter('ch6', event)">上手な指示の作り方</button>
         </div>
         <div class="nav-section">
           <div class="nav-section-title">応用</div>
-          <button class="nav-item" onclick="showChapter('ch7')">アプリを作る: 準備編</button>
-          <button class="nav-item" onclick="showChapter('ch8')">アプリを作る: 実践編</button>
+          <button class="nav-item" onclick="showChapter('ch7', event)">アプリを作る: 準備編</button>
+          <button class="nav-item" onclick="showChapter('ch8', event)">実際にアプリを作る</button>
         </div>
         <div class="nav-section">
           <div class="nav-section-title">参考</div>
-          <button class="nav-item" onclick="showChapter('appendix')">用語集</button>
+          <button class="nav-item" onclick="showChapter('appendix', event)">用語集</button>
         </div>
       </div>
     </nav>
@@ -1369,11 +1369,11 @@ PCやSlackに散在しています。一覧できるダッシュ
   <button class="print-btn" onclick="window.print()">PDF / 印刷</button>
 
   <script>
-    function showChapter(id) {
+    function showChapter(id, e) {
       document.querySelectorAll('.chapter').forEach(c => c.classList.remove('active'));
       document.getElementById(id).classList.add('active');
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      event.currentTarget.classList.add('active');
+      e.currentTarget.classList.add('active');
       document.querySelector('.main').scrollTo(0, 0);
       window.scrollTo(0, 0);
       // Close sidebar on mobile
