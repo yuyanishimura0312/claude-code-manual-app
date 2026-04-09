@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Code 活用マニュアル | ミラツク</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%23111'/><text x='50%25' y='55%25' text-anchor='middle' dominant-baseline='central' font-family='Georgia,serif' font-size='20' fill='white'>e</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fafbfc;
+      --surface: #ffffff;
+      --text: #1a1a1a;
+      --text-secondary: #5a6270;
+      --text-muted: #8b95a5;
+      --border: #e8ebef;
+      --accent: #c44b2b;
+      --accent-light: rgba(196, 75, 43, 0.08);
+      --sidebar-bg: #f5f6f8;
+      --sidebar-w: 280px;
+      --code-bg: #f0f2f5;
+      --warning-bg: #fff8f0;
+      --warning-border: #f0c060;
+      --info-bg: #f0f6ff;
+      --info-border: #6090d0;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.85;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+      font-feature-settings: "palt";
+    }
+
+    /* ===== Layout ===== */
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ===== Sidebar ===== */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border);
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 100;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header {
+      padding: 24px 20px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-header h1 {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--text);
+    }
+
+    .sidebar-header p {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .sidebar-nav {
+      padding: 12px 0;
+    }
+
+    .nav-section {
+      padding: 4px 16px;
+      margin-top: 8px;
+    }
+
+    .nav-section-title {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 0;
+    }
+
+    .nav-item {
+      display: block;
+      padding: 7px 12px;
+      margin: 1px 0;
+      font-size: 13px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-radius: 6px;
+      transition: all 0.15s;
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      font-family: inherit;
+    }
+
+    .nav-item:hover { background: rgba(0,0,0,0.04); color: var(--text); }
+    .nav-item.active { background: var(--accent-light); color: var(--accent); font-weight: 600; }
+
+    /* ===== Main ===== */
+    .main {
+      flex: 1;
+      margin-left: var(--sidebar-w);
+      max-width: 800px;
+      padding: 40px 48px 80px;
+    }
+
+    /* ===== Hamburger ===== */
+    .hamburger {
+      display: none;
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 200;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      cursor: pointer;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+
+    .hamburger svg { display: block; }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 90;
+    }
+
+    /* ===== Typography ===== */
+    .chapter {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .chapter.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .chapter-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 26px;
+      font-weight: 600;
+      line-height: 1.4;
+      margin-bottom: 32px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--text);
+    }
+
+    h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 40px 0 16px;
+      padding-left: 12px;
+      border-left: 3px solid var(--accent);
+    }
+
+    h4 {
+      font-size: 15px;
+      font-weight: 600;
+      margin: 28px 0 12px;
+      color: var(--text);
+    }
+
+    p { margin-bottom: 16px; }
+
+    /* ===== Tables ===== */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px;
+      font-size: 13.5px;
+    }
+
+    th {
+      background: var(--sidebar-bg);
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.03em;
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    tr:hover td { background: rgba(0,0,0,0.015); }
+
+    /* ===== Code blocks ===== */
+    pre {
+      background: var(--code-bg);
+      border-radius: 8px;
+      padding: 20px 24px;
+      overflow-x: auto;
+      margin: 16px 0 24px;
+      font-size: 13px;
+      line-height: 1.7;
+      border: 1px solid var(--border);
+    }
+
+    code {
+      font-family: 'SF Mono', 'Menlo', monospace;
+      font-size: 0.9em;
+    }
+
+    p code, td code, li code {
+      background: var(--code-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.85em;
+    }
+
+    /* ===== Callouts ===== */
+    .callout {
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 20px 0 24px;
+      font-size: 14px;
+    }
+
+    .callout-warning {
+      background: var(--warning-bg);
+      border-left: 4px solid var(--warning-border);
+    }
+
+    .callout-info {
+      background: var(--info-bg);
+      border-left: 4px solid var(--info-border);
+    }
+
+    .callout-title {
+      font-weight: 600;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    /* ===== Cards ===== */
+    .protocol-card {
+      background: var(--surface);
+      border: 2px solid var(--text);
+      border-radius: 12px;
+      padding: 28px 32px;
+      margin: 24px 0;
+    }
+
+    .protocol-card h4 {
+      margin-top: 0;
+      text-align: center;
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+
+    .protocol-steps {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .protocol-step {
+      padding: 16px;
+      border-radius: 8px;
+      background: var(--sidebar-bg);
+    }
+
+    .protocol-step-num {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+
+    .protocol-step-title {
+      font-weight: 600;
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+
+    .protocol-step-example {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ===== Example blocks ===== */
+    .example-pair {
+      margin: 20px 0 28px;
+    }
+
+    .example-bad, .example-good {
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 8px 0;
+    }
+
+    .example-bad {
+      background: #fdf0f0;
+      border: 1px solid #f0c0c0;
+    }
+
+    .example-good {
+      background: #f0fdf0;
+      border: 1px solid #c0e8c0;
+    }
+
+    .example-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    .example-bad .example-label { color: #b03030; }
+    .example-good .example-label { color: #208020; }
+
+    /* ===== Template blocks ===== */
+    .template-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin: 20px 0 28px;
+      overflow: hidden;
+    }
+
+    .template-header {
+      background: var(--sidebar-bg);
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .template-body {
+      padding: 20px;
+    }
+
+    .template-body pre {
+      margin: 0;
+      border: none;
+      background: var(--code-bg);
+    }
+
+    /* ===== Glossary ===== */
+    .glossary-item {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 16px;
+    }
+
+    .glossary-term {
+      font-weight: 600;
+      min-width: 140px;
+      flex-shrink: 0;
+      font-size: 14px;
+    }
+
+    .glossary-def {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    /* ===== Print ===== */
+    .print-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--text);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      z-index: 50;
+      font-family: inherit;
+    }
+
+    .print-btn:hover { opacity: 0.85; }
+
+    @media print {
+      .sidebar, .hamburger, .print-btn, .overlay { display: none !important; }
+      .main { margin-left: 0; max-width: 100%; padding: 20px; }
+      .chapter { display: block !important; page-break-before: always; }
+      .chapter:first-child { page-break-before: auto; }
+      h2 { page-break-after: avoid; }
+      pre, table { page-break-inside: avoid; }
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 860px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .hamburger { display: block; }
+      .overlay.open { display: block; }
+      .main { margin-left: 0; padding: 60px 24px 80px; }
+      .protocol-steps { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="hamburger" onclick="toggleSidebar()" aria-label="メニュー">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8">
+      <line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/>
+    </svg>
+  </button>
+  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+  <div class="layout">
+
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h1>Claude Code 活用マニュアル</h1>
+        <p>ミラツク / エッセンス 社内向け</p>
+      </div>
+      <div class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">はじめに</div>
+          <button class="nav-item active" onclick="showChapter('ch1')">Claude Code とは何か</button>
+          <button class="nav-item" onclick="showChapter('ch2')">安全に使うために</button>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">実践</div>
+          <button class="nav-item" onclick="showChapter('ch3')">最初の一歩</button>
+          <button class="nav-item" onclick="showChapter('ch4')">CLAUDE.md を設定する</button>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">活用</div>
+          <button class="nav-item" onclick="showChapter('ch5')">よくあるトラブル</button>
+          <button class="nav-item" onclick="showChapter('ch6')">上手な指示の作り方</button>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">サポート</div>
+          <button class="nav-item" onclick="showChapter('appendix')">付録</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main -->
+    <div class="main">
+
+      <!-- Chapter 1 -->
+      <div class="chapter active" id="ch1">
+        <div class="chapter-label">第1章</div>
+        <h2>Claude Code とは何か</h2>
+
+        <h3>これは何のツール？</h3>
+        <p>Claude Codeは、Anthropic社が開発したAIアシスタントです。ChatGPTのような対話型AIですが、決定的に違う点が一つあります。<strong>あなたのパソコンの中のファイルを直接読み書きできる</strong>ということです。</p>
+        <p>たとえば、ChatGPTでは「この文章を修正して」と頼んだら、修正後のテキストが画面に表示されるので、自分でコピーして貼り付ける必要がありました。Claude Codeでは、「この書類を修正して」と頼むだけで、AIが直接ファイルを開き、修正し、保存してくれます。</p>
+        <p>つまり、これまで「AIに聞く → 答えを見る → 自分で作業する」だった流れが、「AIに頼む → AIが作業する → 結果を確認する」に変わります。</p>
+
+        <h3>なぜミラツクで使うのか</h3>
+        <p>私たちの業務には、AIが得意とする作業がたくさんあります。</p>
+        <table>
+          <thead><tr><th>AI が得意な作業</th><th>具体例</th></tr></thead>
+          <tbody>
+            <tr><td>文書の整理・構造化</td><td>リサーチ結果のまとめ、議事録の作成</td></tr>
+            <tr><td>ドラフト作成</td><td>報告書、提案書、メールの下書き</td></tr>
+            <tr><td>データの集計・分析</td><td>アンケート集計、傾向分析</td></tr>
+            <tr><td>翻訳・要約</td><td>英語文献の翻訳、長文の要約</td></tr>
+            <tr><td>アイデア出し</td><td>企画のブレスト、構成案の複数パターン作成</td></tr>
+          </tbody>
+        </table>
+        <p>これらの作業をAIに任せることで、私たちは「考える仕事」「人と対話する仕事」——つまり、ミラツクの本質的な価値である対話と探究に、より多くの時間を使えるようになります。</p>
+
+        <h3>このマニュアルの使い方</h3>
+        <table>
+          <thead><tr><th>あなたの状態</th><th>読むところ</th></tr></thead>
+          <tbody>
+            <tr><td>まだ触ったことがない</td><td>第2章 → 第3章</td></tr>
+            <tr><td>一度は触ったが、うまく使えない</td><td>第3章 → 第5章</td></tr>
+            <tr><td>基本はわかるが、もっとうまく使いたい</td><td>第6章</td></tr>
+            <tr><td>CLAUDE.md って何？</td><td>第4章</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Chapter 2 -->
+      <div class="chapter" id="ch2">
+        <div class="chapter-label">第2章</div>
+        <h2>安全に使うために</h2>
+
+        <h3>絶対にAIに入力してはいけない情報</h3>
+        <p>以下の情報は、Claude Codeに絶対に入力しないでください。これは最も重要なルールです。</p>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">入力禁止リスト</div>
+          <table>
+            <thead><tr><th>カテゴリ</th><th>具体例</th></tr></thead>
+            <tbody>
+              <tr><td>個人情報</td><td>氏名+住所+電話番号のセット、マイナンバー、パスポート番号</td></tr>
+              <tr><td>財務情報</td><td>クレジットカード番号、銀行口座番号、給与明細</td></tr>
+              <tr><td>認証情報</td><td>パスワード、APIキー、アクセストークン</td></tr>
+              <tr><td>契約・法務</td><td>未公開の契約書、NDA対象の情報、係争中の案件</td></tr>
+              <tr><td>他者の機密</td><td>クライアントの非公開資料、パートナー企業の内部情報</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout callout-info">
+          <div class="callout-title">判断に迷ったら</div>
+          <p style="margin:0">「この情報がインターネットに公開されたら問題があるか？」と自問してください。答えが「はい」なら入力しない。それでも判断できない場合は、西村に確認してください。</p>
+        </div>
+
+        <h3>安全に使えるもの</h3>
+        <p>以下は安全に入力・活用できます。</p>
+        <table>
+          <tbody>
+            <tr><td>公開済みの報告書・レポート</td></tr>
+            <tr><td>自分が書いた文章のドラフト</td></tr>
+            <tr><td>公開されている統計データ・調査結果</td></tr>
+            <tr><td>業務フローの整理・改善案</td></tr>
+            <tr><td>一般的な質問・相談</td></tr>
+            <tr><td>公開前だが機密性のない社内文書</td></tr>
+          </tbody>
+        </table>
+
+        <h3>困ったときの連絡先</h3>
+        <table>
+          <thead><tr><th>状況</th><th>連絡先</th></tr></thead>
+          <tbody>
+            <tr><td>AIの使い方で困ったとき</td><td>AIアンバサダー（付録参照）</td></tr>
+            <tr><td>セキュリティに関する懸念</td><td>西村</td></tr>
+            <tr><td>ツールの不具合</td><td>Slack #ざつだん</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Chapter 3 -->
+      <div class="chapter" id="ch3">
+        <div class="chapter-label">第3章</div>
+        <h2>最初の一歩</h2>
+
+        <h3>ステップ0: ツールを起動する</h3>
+        <p>Claude Codeは <strong>Cursor</strong> というアプリの中で使います。Cursorは、ChatGPTのようなチャット画面でAIとやりとりできるアプリです。ターミナル（黒い画面）を使う必要はありません。</p>
+        <ol style="margin-bottom:24px; padding-left:20px;">
+          <li style="margin-bottom:8px;">Cursorアプリを開く</li>
+          <li style="margin-bottom:8px;">フォルダを開く（自分の作業フォルダを選択）</li>
+          <li>画面右側のチャットパネルでAIに話しかける</li>
+        </ol>
+
+        <h3>ステップ1: 最初の成功体験を得る</h3>
+        <p>まずは「これは便利だ」と実感することが大切です。以下から、自分の業務に近いものを一つ選んで試してください。</p>
+
+        <h4>お題A: 議事録の構造化（事務・運営担当向け）</h4>
+        <p>打ち合わせのメモや走り書きを、きちんとした議事録に整えてもらいます。</p>
+        <div class="example-pair">
+          <div class="example-bad">
+            <div class="example-label">悪い例 — こう頼むと曖昧な結果になる</div>
+            <code>議事録を作って</code>
+          </div>
+          <div class="example-good">
+            <div class="example-label">良い例 — こう頼むと的確な結果が得られる</div>
+<pre style="margin:0;border:none;background:transparent;padding:0;">以下の打ち合わせメモから議事録を作成してください。
+
+【会議情報】
+- 会議名: 月次定例ミーティング
+- 日時: 2026年4月9日 10:00-11:00
+- 参加者: 西村、田中、佐藤
+
+【メモ内容】
+（ここにメモを貼り付ける）
+
+【議事録のフォーマット】
+1. 議題ごとに整理
+2. 各議題について「議論の要点」「決定事項」
+   「次のアクション（担当者・期限）」を記載
+3. 次回の予定を末尾に記載</pre>
+          </div>
+        </div>
+
+        <h4>お題B: リサーチの要約（リサーチ・コンサル担当向け）</h4>
+        <p>長い記事や報告書の要点をまとめてもらいます。</p>
+        <div class="example-pair">
+          <div class="example-bad">
+            <div class="example-label">悪い例</div>
+            <code>この記事をまとめて</code>
+          </div>
+          <div class="example-good">
+            <div class="example-label">良い例</div>
+<pre style="margin:0;border:none;background:transparent;padding:0;">以下の記事を読んで、要約を作成してください。
+
+【要約の構成】
+- 一言でいうと（1文）
+- 主要な論点（3-5個、各2-3文で説明）
+- ミラツクの事業との関連性（あれば）
+- 追加で調べるべきこと（あれば）
+
+【記事】
+（ここに記事の内容を貼り付ける）</pre>
+          </div>
+        </div>
+
+        <h4>お題C: メール・案内文の作成（全職種共通）</h4>
+        <div class="example-pair">
+          <div class="example-bad">
+            <div class="example-label">悪い例</div>
+            <code>メールを書いて</code>
+          </div>
+          <div class="example-good">
+            <div class="example-label">良い例</div>
+<pre style="margin:0;border:none;background:transparent;padding:0;">以下の情報をもとに、イベント参加者への
+案内メールを作成してください。
+
+【送信先】ワークショップ参加者（企業の
+ CSR担当者 約30名）
+【トーン】丁寧だが堅すぎない、ミラツクらしい
+ 温かみのある文体
+【含める情報】
+- 日時: 2026年5月15日 14:00-17:00
+- 場所: オンライン（Zoom）
+- テーマ: 社会課題と企業の接点を探る対話
+- 事前準備: 自社の取り組み事例を1つ準備</pre>
+          </div>
+        </div>
+
+        <h3>4ステップ思考プロトコル</h3>
+        <p>AIに何かを頼むときは、この4ステップを意識してください。これを習慣にするだけで、結果の質が大きく変わります。</p>
+
+        <div class="protocol-card">
+          <h4>AIへの依頼の基本形</h4>
+          <div class="protocol-steps">
+            <div class="protocol-step">
+              <div class="protocol-step-num">STEP 1</div>
+              <div class="protocol-step-title">調査</div>
+              <div class="protocol-step-example">まず現状を把握させる<br>「このフォルダの中身を確認して」<br>「この文書の構成を教えて」</div>
+            </div>
+            <div class="protocol-step">
+              <div class="protocol-step-num">STEP 2</div>
+              <div class="protocol-step-title">計画</div>
+              <div class="protocol-step-example">やることを整理させる<br>「どう進めるか計画を立てて」<br>「必要な手順をリストアップして」</div>
+            </div>
+            <div class="protocol-step">
+              <div class="protocol-step-num">STEP 3</div>
+              <div class="protocol-step-title">実行</div>
+              <div class="protocol-step-example">作業を依頼する<br>「では、その計画に沿って進めて」<br>「まず最初のステップだけやって」</div>
+            </div>
+            <div class="protocol-step">
+              <div class="protocol-step-num">STEP 4</div>
+              <div class="protocol-step-title">確認</div>
+              <div class="protocol-step-example">結果を検証させる<br>「内容を読み返して問題ないか確認して」<br>「抜け漏れがないかチェックして」</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-info">
+          <div class="callout-title">特に重要なのは「調査」と「確認」</div>
+          <p style="margin:0">いきなり「実行」から始めると、AIが状況を誤解したまま作業を進めることがあります。また、AIの出力は必ず自分の目で確認してください。AIは事実と異なることをもっともらしく書くことがあります（ハルシネーション）。</p>
+        </div>
+      </div>
+
+      <!-- Chapter 4 -->
+      <div class="chapter" id="ch4">
+        <div class="chapter-label">第4章</div>
+        <h2>CLAUDE.md を設定する</h2>
+
+        <h3>CLAUDE.md とは</h3>
+        <p>CLAUDE.mdは、AIが作業を始める前に必ず読む「業務マニュアル」のようなファイルです。ここに組織のルールや自分の役割を書いておくと、毎回説明し直す手間がなくなります。</p>
+        <p>たとえば、CLAUDE.mdに「報告書はですます調で書く」と書いておけば、毎回「ですます調で書いて」と指示する必要がありません。</p>
+
+        <h3>設定方法</h3>
+        <ol style="margin-bottom:24px; padding-left:20px;">
+          <li style="margin-bottom:8px;">自分の作業フォルダの一番上の階層に <code>CLAUDE.md</code> というファイルを作る</li>
+          <li style="margin-bottom:8px;">以下のテンプレートをコピーして貼り付ける</li>
+          <li>【】の部分を自分の情報に書き換える</li>
+        </ol>
+
+        <div class="template-block">
+          <div class="template-header">CLAUDE.md テンプレート（コピーして使ってください）</div>
+          <div class="template-body">
+<pre># 業務コンテキスト
+
+## 自分について
+- 名前: 【あなたの名前】
+- 役割: 【例: リサーチアシスタント、事業推進担当】
+- 主な業務: 【例: ワークショップの企画運営、報告書作成】
+
+## 組織について
+- 組織名: NPO法人ミラツク / 株式会社エッセンス
+- 事業内容: 社会課題に取り組む多様なステークホルダーの
+  対話と協働を促進
+- 大切にしている価値: 対等な立場での探究、多様な知の統合
+
+## 文章のルール
+- 報告書: ですます調、地の文中心（箇条書きだけにしない）
+- メール: 丁寧だが堅すぎないトーン
+- 「参加者」より「ご参加くださる皆さま」を好む
+
+## 注意事項
+- 個人情報・機密情報は扱わない
+- 事実と推測は明確に区別する
+- 分からないことは「分かりません」と正直に答える</pre>
+          </div>
+        </div>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">CLAUDE.md に書いてはいけないもの</div>
+          <p style="margin:0">パスワード、APIキー、クライアントの機密情報、個人の住所・電話番号、銀行口座・カード番号。CLAUDE.mdはテキストファイルなので、見られても問題ない情報だけを書いてください。</p>
+        </div>
+      </div>
+
+      <!-- Chapter 5 -->
+      <div class="chapter" id="ch5">
+        <div class="chapter-label">第5章</div>
+        <h2>よくあるトラブルと対処法</h2>
+
+        <h3>Q1: AIの回答がだんだんおかしくなってきた</h3>
+        <p><strong>原因:</strong> AIには「一度に覚えていられる量」に限界があります。</p>
+        <p>ノートをイメージしてください。AIとの会話は、ノートにどんどん書き足していくようなものです。ノートのページがいっぱいになると、最初の方に書いたことが読めなくなります。これと同じことがAIにも起こります。</p>
+        <div class="callout callout-info">
+          <div class="callout-title">対処法</div>
+          <p style="margin:0">長い会話が続いたら、<strong>新しいセッション（会話）を始める</strong>。一つの会話で複数の話題を扱わず、話題ごとに会話を分ける。目安として、30分以上同じ会話を続けている場合は区切りを検討。</p>
+        </div>
+
+        <h3>Q2: AIが嘘をついている気がする</h3>
+        <p><strong>原因:</strong> AIは「もっともらしい回答」を生成する仕組みです。知らないことでも、それらしい答えを作ってしまうことがあります。これを<strong>ハルシネーション（幻覚）</strong>と呼びます。</p>
+        <div class="callout callout-info">
+          <div class="callout-title">対処法</div>
+          <p style="margin:0">数字・日付・人名・URLは必ず自分で確認する。「この情報の出典はありますか？」と聞く。重要な判断に使う情報は別の情報源でもクロスチェック。</p>
+        </div>
+        <p><strong>大切な心構え:</strong> AIの回答は「優秀だが経験の浅いアシスタントの提案」だと思ってください。そのまま使うのではなく、あなたの判断で確認・修正して使います。</p>
+
+        <h3>Q3: 何を頼んでいいかわからない</h3>
+        <table>
+          <thead><tr><th>あなたの状況</th><th>AIに頼めること</th></tr></thead>
+          <tbody>
+            <tr><td>長い文書を読む時間がない</td><td>「この文書を要約して。要点を5つにまとめて」</td></tr>
+            <tr><td>メールの文面が思いつかない</td><td>「○○さんへの△△の件のメールを下書きして」</td></tr>
+            <tr><td>データを整理したい</td><td>「このデータを表形式に整理して」</td></tr>
+            <tr><td>報告書の構成を考えたい</td><td>「△△の報告書の目次案を3パターン作って」</td></tr>
+            <tr><td>文章を推敲したい</td><td>「この文章をより読みやすく修正して」</td></tr>
+            <tr><td>アイデアを広げたい</td><td>「△△について異なる視点から5つアイデアを出して」</td></tr>
+            <tr><td>英語の文書を読みたい</td><td>「この英文を日本語に翻訳して。専門用語は原語も併記」</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Q4: エラーが出た / 止まった</h3>
+        <table>
+          <thead><tr><th>症状</th><th>対処法</th></tr></thead>
+          <tbody>
+            <tr><td>「エラー」と表示された</td><td>メッセージを読んで、指示を言い換えて再送信</td></tr>
+            <tr><td>途中で止まった</td><td>「続けて」と送信する</td></tr>
+            <tr><td>同じ間違いを繰り返す</td><td>新しいセッションで、指示を変えて再挑戦</td></tr>
+            <tr><td>ファイルが見つからないと言われる</td><td>「このフォルダの中身を見せて」と頼む</td></tr>
+          </tbody>
+        </table>
+        <p><strong>大切なこと:</strong> エラーはあなたの能力不足ではありません。AIとの対話は試行錯誤が当たり前です。言い方を変えて、もう一度試してみてください。</p>
+
+        <h3>Q5: 前に話した内容を覚えていない</h3>
+        <p><strong>原因:</strong> AIは会話（セッション）が切れると、前回の内容を忘れます。</p>
+        <div class="callout callout-info">
+          <div class="callout-title">対処法</div>
+          <p style="margin:0">重要な前提は毎回の会話冒頭で伝える。継続的に使う情報は CLAUDE.md に書いておく。前回の会話のまとめを最初に貼り付けてから新しい依頼をする。</p>
+        </div>
+      </div>
+
+      <!-- Chapter 6 -->
+      <div class="chapter" id="ch6">
+        <div class="chapter-label">第6章</div>
+        <h2>上手な指示の作り方</h2>
+
+        <h3>良い指示の4つの要素</h3>
+        <p>AIへの指示は、以下の4要素を含めると格段に良くなります。全部入れる必要はありませんが、意識するだけで結果が変わります。</p>
+
+        <div class="protocol-card">
+          <h4>指示の4要素</h4>
+          <div class="protocol-steps">
+            <div class="protocol-step">
+              <div class="protocol-step-num">1. 役割</div>
+              <div class="protocol-step-title">どんな立場で考えてほしいか</div>
+              <div class="protocol-step-example">「あなたはワークショップのファシリテーターです」</div>
+            </div>
+            <div class="protocol-step">
+              <div class="protocol-step-num">2. 文脈</div>
+              <div class="protocol-step-title">背景情報・状況説明</div>
+              <div class="protocol-step-example">「来月、企業30社が参加する対話イベントを開催します」</div>
+            </div>
+            <div class="protocol-step">
+              <div class="protocol-step-num">3. 制約</div>
+              <div class="protocol-step-title">守ってほしい条件</div>
+              <div class="protocol-step-example">「所要時間は3時間以内で」「参加者は初対面同士です」</div>
+            </div>
+            <div class="protocol-step">
+              <div class="protocol-step-num">4. 形式</div>
+              <div class="protocol-step-title">出力の形をどうしてほしいか</div>
+              <div class="protocol-step-example">「タイムテーブル形式で」「箇条書きではなく文章で」</div>
+            </div>
+          </div>
+        </div>
+
+        <h3>業務別テンプレート集</h3>
+        <p>以下のテンプレートは、そのままコピーして【】の部分を書き換えて使えます。</p>
+
+        <div class="template-block">
+          <div class="template-header">テンプレート1: 報告書のドラフト作成</div>
+          <div class="template-body">
+<pre>以下の情報をもとに、報告書のドラフトを作成してください。
+
+【テーマ】（報告書のテーマ）
+【対象読者】（誰が読むか）
+【ボリューム】（目安の文字数。例: 3,000字程度）
+
+【含める内容】
+- （項目1）
+- （項目2）
+- （項目3）
+
+【スタイル】
+- ですます調
+- 箇条書きだけでなく文章（地の文）を中心に
+- 分析や洞察は根拠とセットで述べる</pre>
+          </div>
+        </div>
+
+        <div class="template-block">
+          <div class="template-header">テンプレート2: ワークショップの設計支援</div>
+          <div class="template-body">
+<pre>以下の条件でワークショップのプログラムを設計して。
+
+【テーマ】（ワークショップのテーマ）
+【目的】（達成したいこと）
+【参加者】（人数、属性、関係性）
+【時間】（所要時間）
+【形式】（対面 / オンライン / ハイブリッド）
+
+【大切にしたいこと】
+- 参加者同士の対話時間を十分に確保する
+- 一方的な講義形式にしない
+- 多様な意見が出やすい場をつくる
+
+【出力形式】
+タイムテーブル形式で、各パートについて
+「目的」「進め方」「必要な準備物」を記載して。</pre>
+          </div>
+        </div>
+
+        <div class="template-block">
+          <div class="template-header">テンプレート3: データの整理・分析</div>
+          <div class="template-body">
+<pre>以下のデータを整理・分析してください。
+
+【データの説明】（何のデータか）
+【分析の目的】（何を知りたいか）
+
+【やってほしいこと】
+1. データの全体像を把握して報告
+2. （具体的な分析内容）
+3. 気づいた点や示唆があれば指摘
+
+【データ】
+（ここにデータを貼り付ける）</pre>
+          </div>
+        </div>
+
+        <div class="template-block">
+          <div class="template-header">テンプレート4: 文章の推敲・改善</div>
+          <div class="template-body">
+<pre>以下の文章を推敲してください。
+
+【改善のポイント】
+- 読みやすさを向上させる
+- 冗長な表現を簡潔にする
+- 論理の流れが自然になるよう調整する
+
+変更箇所がわかるように、修正理由も簡潔に添えて。
+
+【文章】
+（ここに文章を貼り付ける）</pre>
+          </div>
+        </div>
+
+        <h3>指示を改善するコツ</h3>
+        <p>AIの出力が期待と違ったら、以下を試してください。</p>
+        <table>
+          <thead><tr><th>AIの出力の問題</th><th>改善の方向</th></tr></thead>
+          <tbody>
+            <tr><td>内容が薄い・表面的</td><td>「具体例を3つ含めて」「根拠も述べて」</td></tr>
+            <tr><td>長すぎる</td><td>「500字以内で」「要点を3つに絞って」</td></tr>
+            <tr><td>トーンが合わない</td><td>「もう少しカジュアルに」「温かい文体で」</td></tr>
+            <tr><td>的外れな内容</td><td>背景情報を追加。「前提として○○です」</td></tr>
+            <tr><td>形式が違う</td><td>「表形式で」「見出し付きの文章で」</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Appendix -->
+      <div class="chapter" id="appendix">
+        <div class="chapter-label">付録</div>
+        <h2>サポート体制と用語集</h2>
+
+        <h3>AIアンバサダー連絡先</h3>
+        <p>アンバサダーは「AIの使い方で困ったとき、気軽に聞ける人」です。技術サポートの担当者ではありません。「こうやったらうまくいったよ」「自分もそこで詰まった」という経験を共有してくれる仲間です。</p>
+        <table>
+          <thead><tr><th>部署</th><th>アンバサダー</th><th>連絡先</th></tr></thead>
+          <tbody>
+            <tr><td>（後日記入）</td><td></td><td></td></tr>
+            <tr><td>（後日記入）</td><td></td><td></td></tr>
+            <tr><td>（後日記入）</td><td></td><td></td></tr>
+          </tbody>
+        </table>
+
+        <h3>もくもく会</h3>
+        <p>各自がAIを使った作業を持ち寄り、同じ時間・同じ場所で一緒に取り組む会です。質問もその場で聞けます。</p>
+        <table>
+          <tbody>
+            <tr><td>開催頻度</td><td>月2回（第2・第4水曜日）</td></tr>
+            <tr><td>時間</td><td>15:00 - 16:00</td></tr>
+            <tr><td>場所</td><td>（後日記入）</td></tr>
+          </tbody>
+        </table>
+        <p style="margin-top:12px;"><strong>もくもく会の流れ:</strong></p>
+        <table>
+          <tbody>
+            <tr><td>0:00 - 0:05</td><td>今日やること共有</td></tr>
+            <tr><td>0:05 - 0:40</td><td>各自もくもく作業</td></tr>
+            <tr><td>0:40 - 0:55</td><td>共有タイム（うまくいったこと・困ったこと）</td></tr>
+            <tr><td>0:55 - 1:00</td><td>次回に向けて</td></tr>
+          </tbody>
+        </table>
+
+        <h3>用語集</h3>
+        <div class="glossary-item"><span class="glossary-term">プロンプト</span><span class="glossary-def">AIへの指示・質問のこと</span></div>
+        <div class="glossary-item"><span class="glossary-term">セッション</span><span class="glossary-def">AIとの一連の会話のこと。新しいセッション = 新しい会話を始める</span></div>
+        <div class="glossary-item"><span class="glossary-term">コンテキスト</span><span class="glossary-def">AIが覚えている会話の内容。長くなると古い部分を忘れる</span></div>
+        <div class="glossary-item"><span class="glossary-term">ハルシネーション</span><span class="glossary-def">AIが事実と異なることをもっともらしく生成すること</span></div>
+        <div class="glossary-item"><span class="glossary-term">CLAUDE.md</span><span class="glossary-def">AIが毎回自動で読む設定ファイル。業務ルールを書いておく場所</span></div>
+        <div class="glossary-item"><span class="glossary-term">Cursor</span><span class="glossary-def">Claude Codeを使うためのアプリ。チャット画面でAIと対話できる</span></div>
+        <div class="glossary-item"><span class="glossary-term">アンバサダー</span><span class="glossary-def">AIの使い方に詳しい社内の仲間。困ったとき相談できる人</span></div>
+        <div class="glossary-item"><span class="glossary-term">もくもく会</span><span class="glossary-def">各自がAI作業を持ち寄って一緒に取り組む会</span></div>
+
+        <div style="margin-top:48px; padding-top:24px; border-top:1px solid var(--border); font-size:12px; color:var(--text-muted);">
+          <p>第1版 | 2026年4月</p>
+          <p>SCALEフレームワーク（Safety, Concrete Examples, Ambassador-led, Learning in Work, Evolve in Stages）に基づいて設計。ベストプラクティス調査（Web調査18件、学術論文20件、企業事例10件）の知見を反映。</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <button class="print-btn" onclick="window.print()">PDF / 印刷</button>
+
+  <script>
+    function showChapter(id) {
+      document.querySelectorAll('.chapter').forEach(c => c.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+      document.querySelector('.main').scrollTo(0, 0);
+      window.scrollTo(0, 0);
+      // Close sidebar on mobile
+      if (window.innerWidth <= 860) toggleSidebar();
+    }
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('overlay').classList.toggle('open');
+    }
+  </script>
+</body>
+</html>
