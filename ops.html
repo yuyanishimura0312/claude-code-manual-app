@@ -125,50 +125,25 @@
     :focus-visible { outline:2px solid var(--terra); outline-offset:2px; }
     ::selection { background:var(--brown-light); color:var(--brown-dark); }
 
-    /* Chat Widget */
-    .chat-toggle {
-      position:fixed; bottom:24px; right:24px; z-index:500;
-      width:52px; height:52px; border-radius:50%; border:none;
-      background:var(--brown); color:#fff; cursor:pointer;
-      box-shadow: var(--shadow-md); transition:all .2s;
-      display:flex; align-items:center; justify-content:center;
+    /* Chat — fixed bottom bar, always visible */
+    .chat-bar {
+      position:fixed; bottom:0; left:var(--sidebar-w); right:0; z-index:500;
+      background:var(--surface); border-top:1px solid var(--border);
+      box-shadow: 0 -2px 12px rgba(61,46,34,.06);
+      transition: left .3s;
     }
-    .chat-toggle:hover { background:var(--brown-dark); transform:scale(1.05); }
-    .chat-toggle svg { width:24px; height:24px; }
-    .chat-toggle.has-dot::after {
-      content:''; position:absolute; top:2px; right:2px; width:10px; height:10px;
-      border-radius:50%; background:var(--gold); border:2px solid var(--brown);
-    }
-
-    .chat-panel {
-      position:fixed; bottom:88px; right:24px; z-index:500;
-      width:380px; max-height:520px; border-radius:14px;
-      background:var(--surface); border:1px solid var(--border);
-      box-shadow: var(--shadow-md), 0 16px 40px rgba(61,46,34,.12);
-      display:none; flex-direction:column; overflow:hidden;
-      animation: chatSlideUp .25s ease;
-    }
-    .chat-panel.open { display:flex; }
-    @keyframes chatSlideUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
-
-    .chat-header {
-      padding:16px 18px; border-bottom:1px solid var(--border);
-      display:flex; justify-content:space-between; align-items:center;
-      background:var(--surface-2);
-    }
-    .chat-header h3 { font-size:14px; font-weight:600; color:var(--text); }
-    .chat-header button { background:none; border:none; cursor:pointer; color:var(--text-3); padding:4px; }
-    .chat-header button:hover { color:var(--text); }
-
+    /* Messages area — hidden by default, slides up when there are messages */
     .chat-messages {
-      flex:1; overflow-y:auto; padding:16px; min-height:200px; max-height:340px;
-      display:flex; flex-direction:column; gap:12px;
+      max-height:0; overflow:hidden; transition:max-height .3s ease;
+      display:flex; flex-direction:column; gap:10px;
+      padding:0 20px;
     }
+    .chat-messages.has-messages { max-height:300px; overflow-y:auto; padding:16px 20px; }
     .chat-messages::-webkit-scrollbar { width:4px; }
     .chat-messages::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
 
     .chat-msg {
-      max-width:88%; padding:10px 14px; border-radius:12px;
+      max-width:85%; padding:10px 14px; border-radius:12px;
       font-size:14px; line-height:1.6; word-break:break-word;
     }
     .chat-msg.user {
@@ -193,31 +168,37 @@
     .chat-typing span:nth-child(3) { animation-delay:.3s; }
     @keyframes chatBounce { to { opacity:.3; transform:translateY(-4px); } }
 
-    .chat-input-area {
-      padding:12px; border-top:1px solid var(--border); display:flex; gap:8px;
+    .chat-input-row {
+      display:flex; gap:8px; padding:10px 16px; align-items:flex-end;
+    }
+    .chat-label {
+      font-size:11px; color:var(--text-3); padding:0 4px; flex-shrink:0; align-self:center;
+      letter-spacing:.03em;
     }
     .chat-input {
-      flex:1; padding:10px 14px; border:1px solid var(--border); border-radius:10px;
+      flex:1; padding:9px 14px; border:1px solid var(--border); border-radius:10px;
       font-size:14px; font-family:inherit; background:var(--bg); color:var(--text);
-      resize:none; line-height:1.4; min-height:42px; max-height:84px;
+      resize:none; line-height:1.4; min-height:40px; max-height:80px;
     }
-    .chat-input:focus { outline:none; border-color:var(--terra); }
+    .chat-input:focus { outline:none; border-color:var(--terra); box-shadow:0 0 0 3px rgba(168,107,80,.12); }
     .chat-input::placeholder { color:var(--text-3); }
     .chat-send {
-      width:42px; height:42px; border-radius:10px; border:none;
+      width:40px; height:40px; border-radius:10px; border:none;
       background:var(--brown); color:#fff; cursor:pointer;
       display:flex; align-items:center; justify-content:center;
       transition:all .15s; flex-shrink:0;
     }
     .chat-send:hover { background:var(--brown-dark); }
     .chat-send:disabled { opacity:.4; cursor:not-allowed; }
-    .chat-send svg { width:18px; height:18px; }
+    .chat-send svg { width:16px; height:16px; }
 
-    @media(max-width:480px) {
-      .chat-panel { right:8px; left:8px; width:auto; bottom:80px; max-height:70vh; }
-      .chat-toggle { bottom:16px; right:16px; }
+    /* Add bottom padding to main so content isn't hidden behind chat bar */
+    .main { padding-bottom:120px!important; }
+
+    @media(max-width:900px) {
+      .chat-bar { left:0; }
     }
-    @media print { .chat-toggle, .chat-panel { display:none!important; } }
+    @media print { .chat-bar { display:none!important; } }
 
     /* Diagrams */
     .diagram { margin:24px 0; border-radius:10px; overflow:hidden; border:1px solid var(--border); background:var(--surface); }
@@ -353,27 +334,14 @@
     <div class="main" id="main-content"></div>
   </div>
 
-  <!-- Chat Widget -->
-  <button class="chat-toggle" id="chatToggle" onclick="toggleChat()" title="質問する">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
-    </svg>
-  </button>
-
-  <div class="chat-panel" id="chatPanel">
-    <div class="chat-header">
-      <h3>マニュアルについて質問する</h3>
-      <button onclick="toggleChat()" title="閉じる">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-      </button>
-    </div>
-    <div class="chat-messages" id="chatMessages">
-      <div class="chat-msg system">マニュアルの内容について何でも質問できます。現在読んでいるページの内容をもとに回答します。</div>
-    </div>
-    <div class="chat-input-area">
-      <textarea class="chat-input" id="chatInput" placeholder="質問を入力..." rows="1"
+  <!-- Chat Bar (always visible at bottom) -->
+  <div class="chat-bar" id="chatBar">
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-input-row">
+      <span class="chat-label">Q&A</span>
+      <textarea class="chat-input" id="chatInput" placeholder="マニュアルの内容について質問できます..." rows="1"
         onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"
-        oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,84)+'px'"></textarea>
+        oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,80)+'px'"></textarea>
       <button class="chat-send" id="chatSend" onclick="sendChat()" title="送信">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
@@ -674,17 +642,9 @@
     });
 
     // =========================================================
-    // Chat Widget
+    // Chat Bar
     // =========================================================
     const chatHistory = [];
-
-    function toggleChat() {
-      const panel = document.getElementById('chatPanel');
-      panel.classList.toggle('open');
-      if (panel.classList.contains('open')) {
-        document.getElementById('chatInput').focus();
-      }
-    }
 
     function getCurrentChapterContent() {
       // Get the current chapter's raw markdown content for context
@@ -707,6 +667,9 @@
 
       const messagesEl = document.getElementById('chatMessages');
       const sendBtn = document.getElementById('chatSend');
+
+      // Show messages area
+      messagesEl.classList.add('has-messages');
 
       // Add user message
       chatHistory.push({ role: 'user', content: question });
