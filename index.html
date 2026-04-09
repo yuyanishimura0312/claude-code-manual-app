@@ -473,6 +473,10 @@
           <button class="nav-item" onclick="showChapter('ch6')">上手な指示の作り方</button>
         </div>
         <div class="nav-section">
+          <div class="nav-section-title">応用</div>
+          <button class="nav-item" onclick="showChapter('ch7')">実際にアプリを作る</button>
+        </div>
+        <div class="nav-section">
           <div class="nav-section-title">参考</div>
           <button class="nav-item" onclick="showChapter('appendix')">用語集</button>
         </div>
@@ -924,6 +928,235 @@
             <tr><td>形式が違う</td><td>「表形式で」「見出し付きの文章で」</td></tr>
           </tbody>
         </table>
+      </div>
+
+      <!-- Chapter 7: Building Apps -->
+      <div class="chapter" id="ch7">
+        <div class="chapter-label">第7章</div>
+        <h2>実際にアプリを作る</h2>
+
+        <p>「アプリを作る」と聞くと、プログラミングの専門知識が必要だと思うかもしれません。しかしClaude Codeを使えば、日本語で「こういうものが欲しい」と伝えるだけで、実際に動くWebアプリを作ることができます。</p>
+        <p>以下は、ミラツク/エッセンスで実際にClaude Codeを使って作られたアプリの実例です。すべて、プログラミングのコードを一行も手書きせずに完成しています。</p>
+
+        <h3>実例で見る「作れるもの」</h3>
+
+        <table>
+          <thead><tr><th>アプリ名</th><th>何ができるか</th><th>作成時間の目安</th></tr></thead>
+          <tbody>
+            <tr><td>日程候補チェッカー</td><td>複数人のGoogleカレンダーから空き時間を自動検出</td><td>1-2時間</td></tr>
+            <tr><td>リサーチダッシュボード</td><td>調査結果をカード形式で蓄積・検索・公開</td><td>2-3時間</td></tr>
+            <tr><td>政策データベース</td><td>全省庁の審議会・委員情報を横断検索</td><td>3-4時間</td></tr>
+            <tr><td>登壇者管理システム</td><td>イベント登壇者の情報・履歴を一元管理</td><td>2-3時間</td></tr>
+            <tr><td>経費チェッカー</td><td>経費の入力・集計・レポート出力</td><td>1-2時間</td></tr>
+            <tr><td>このマニュアル</td><td>あなたが今読んでいるこのWebページ</td><td>30分</td></tr>
+          </tbody>
+        </table>
+
+        <h3>アプリの作り方: 3つのパターン</h3>
+
+        <p>作りたいものの複雑さに応じて、3つのパターンがあります。</p>
+
+        <h4>パターン1: 「1ページ完結」の業務ツール（最も簡単）</h4>
+
+        <p>一番手軽なのは、1つのHTMLファイルで完結するツールです。ブラウザで開くだけで使えて、サーバーも不要。経費計算、チェックリスト、フォーマット変換など、「Excelでやっていた作業をブラウザで」というイメージです。</p>
+
+        <div class="template-block">
+          <div class="template-header">実際の依頼例: 経費チェッカーを作る</div>
+          <div class="template-body">
+<pre>経費管理ツールをWebアプリとして作ってください。
+
+【機能】
+- 経費の入力フォーム（日付、カテゴリ、金額、メモ）
+- カテゴリ別の集計表
+- 月別のグラフ表示
+- CSV出力ボタン
+
+【デザイン】
+- シンプルで見やすいデザイン
+- スマホでも使えるようにレスポンシブ対応
+
+【技術的な条件】
+- 1つのHTMLファイルで完結させる
+- データはブラウザのlocalStorageに保存
+  （サーバー不要で、同じブラウザなら次回も
+  データが残る）</pre>
+          </div>
+        </div>
+
+        <div class="callout callout-info">
+          <div class="callout-title">ポイント</div>
+          <p style="margin:0">「1つのHTMLファイルで完結」「localStorageに保存」と伝えると、サーバーの設定なしで動くツールが作れます。作ったファイルをダブルクリックするだけで使えます。</p>
+        </div>
+
+        <h4>パターン2: データを扱う業務アプリ（中級）</h4>
+
+        <p>データの蓄積・検索・管理が必要なアプリです。研究者のデータベース、イベント参加者の管理、調査結果の蓄積など。Pythonのサーバーとデータベースを使いますが、Claude Codeがすべて構築してくれます。</p>
+
+        <div class="template-block">
+          <div class="template-header">実際の依頼例: 登壇者管理システムを作る</div>
+          <div class="template-body">
+<pre>オンラインイベントの登壇者を管理するWebアプリを
+作ってください。
+
+【背景】
+ミラツクでは月に複数回のオンラインイベントを
+開催しており、登壇者の情報管理が属人化しています。
+
+【必要な機能】
+- 登壇者の情報登録（氏名、所属、専門分野、
+  連絡先、過去の登壇履歴）
+- イベントごとの登壇者アサイン
+- 検索・フィルタ機能（専門分野、所属で絞り込み）
+- 登壇者へのメール一括送信テンプレート
+
+【デザイン】
+- esse-senseのデザインテイストに合わせて
+  （黒・白・赤のシンプルなデザイン）
+- 左にリスト、右に詳細の2ペインレイアウト
+
+【ユーザー】
+- 社内スタッフ3-5名が利用
+- ITに詳しくない人でも直感的に使えること</pre>
+          </div>
+        </div>
+
+        <h4>パターン3: 公開Webサイト（応用）</h4>
+
+        <p>社外に公開するダッシュボードやポータルサイトです。調査結果の公開ページ、イベント情報サイトなどが該当します。GitHub PagesやVercelで無料公開できます。</p>
+
+        <div class="template-block">
+          <div class="template-header">実際の依頼例: リサーチダッシュボードを作る</div>
+          <div class="template-body">
+<pre>調査・リサーチの結果を蓄積して公開するダッシュ
+ボードを作ってください。
+
+【背景】
+チームで行った調査やリサーチの結果が、個人の
+PCやSlackに散在しています。一覧できるダッシュ
+ボードが欲しい。
+
+【必要な機能】
+- リサーチ結果の一覧表示（カード形式）
+- カテゴリ・タグでの絞り込み
+- キーワード検索
+- 各リサーチの詳細ページ（全文表示）
+- 新しいリサーチの追加（コマンドラインから）
+
+【公開方法】
+- GitHub Pagesで無料公開
+- URLをチームやクライアントに共有できるように</pre>
+          </div>
+        </div>
+
+        <h3>作る前に伝えると良いこと</h3>
+
+        <p>アプリの依頼で結果が大きく変わるのは、「何を作るか」よりも「誰がなぜ使うか」の説明です。以下のチェックリストを参考にしてください。</p>
+
+        <table>
+          <thead><tr><th>伝えること</th><th>なぜ重要か</th><th>例</th></tr></thead>
+          <tbody>
+            <tr><td>背景・課題</td><td>AIが目的を理解し、適切な設計を選ぶ</td><td>「今はExcelで管理しているが限界」</td></tr>
+            <tr><td>使う人</td><td>UIの複雑さやデザインが変わる</td><td>「ITに詳しくないスタッフ3名」</td></tr>
+            <tr><td>主要な機能</td><td>作るものの範囲が明確になる</td><td>「登録・検索・一覧表示・CSV出力」</td></tr>
+            <tr><td>デザインの参考</td><td>イメージのズレを防ぐ</td><td>「シンプルで余白の多いデザイン」</td></tr>
+            <tr><td>データの扱い</td><td>技術選定に影響する</td><td>「社内だけで使う」「外部に公開する」</td></tr>
+          </tbody>
+        </table>
+
+        <h3>作った後の流れ</h3>
+
+        <p>Claude Codeでアプリを作ると、以下の流れで公開まで進みます。すべてAIが自動で行います。</p>
+
+        <div class="protocol-card">
+          <h4>アプリ作成から公開まで</h4>
+          <div class="protocol-steps">
+            <div class="protocol-step">
+              <div class="protocol-step-num">STEP 1</div>
+              <div class="protocol-step-title">作成</div>
+              <div class="protocol-step-example">日本語で要件を伝える。AIがコードを書き、ファイルを作成する</div>
+            </div>
+            <div class="protocol-step">
+              <div class="protocol-step-num">STEP 2</div>
+              <div class="protocol-step-title">確認</div>
+              <div class="protocol-step-example">ブラウザで動作を確認。「ここを変えて」とフィードバック</div>
+            </div>
+            <div class="protocol-step">
+              <div class="protocol-step-num">STEP 3</div>
+              <div class="protocol-step-title">修正</div>
+              <div class="protocol-step-example">AIが修正を反映。納得いくまで何度でも調整可能</div>
+            </div>
+            <div class="protocol-step">
+              <div class="protocol-step-num">STEP 4</div>
+              <div class="protocol-step-title">公開</div>
+              <div class="protocol-step-example">「公開して」と伝えるだけ。AIがデプロイまで完了する</div>
+            </div>
+          </div>
+        </div>
+
+        <h3>実際の会話例: 日程候補チェッカーができるまで</h3>
+
+        <p>以下は、実際にアプリを作ったときの会話の流れです。プログラミングの知識は一切使っていません。</p>
+
+        <div style="margin:20px 0 28px;">
+          <div style="background:var(--sidebar-bg); border-radius:10px; padding:16px 20px; margin:8px 0;">
+            <div style="font-size:11px; font-weight:600; color:var(--accent); margin-bottom:6px;">自分</div>
+            <div style="font-size:14px;">チームメンバーの空いている日程を自動で見つけるツールが欲しい。Googleカレンダーの情報をもとに、全員が空いている時間帯を一覧表示して。</div>
+          </div>
+          <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px 20px; margin:8px 0;">
+            <div style="font-size:11px; font-weight:600; color:var(--text-muted); margin-bottom:6px;">Claude Code</div>
+            <div style="font-size:14px;">日程候補チェッカーを作成します。まず要件を確認させてください。（1）何名くらいのメンバーを想定していますか？（2）カレンダーのデータはどう取得しますか？...</div>
+          </div>
+          <div style="background:var(--sidebar-bg); border-radius:10px; padding:16px 20px; margin:8px 0;">
+            <div style="font-size:11px; font-weight:600; color:var(--accent); margin-bottom:6px;">自分</div>
+            <div style="font-size:14px;">3-5名くらい。カレンダーはiCalのURLから読み込めるようにして。</div>
+          </div>
+          <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px 20px; margin:8px 0;">
+            <div style="font-size:11px; font-weight:600; color:var(--text-muted); margin-bottom:6px;">Claude Code</div>
+            <div style="font-size:14px;">承知しました。Pythonのバックエンド + HTML/CSSのフロントエンドで構築します。iCalのURLを登録すると、全員の予定を重ね合わせて空き時間を表示する仕組みにします。作成を開始します。</div>
+          </div>
+          <div style="text-align:center; padding:12px; color:var(--text-muted); font-size:13px;">
+            ... AIがファイルを作成・コードを書く（数分） ...
+          </div>
+          <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px 20px; margin:8px 0;">
+            <div style="font-size:11px; font-weight:600; color:var(--text-muted); margin-bottom:6px;">Claude Code</div>
+            <div style="font-size:14px;">完成しました。http://localhost:5211 で確認できます。メンバーの追加・iCal URLの登録・期間選択の機能を実装しました。</div>
+          </div>
+          <div style="background:var(--sidebar-bg); border-radius:10px; padding:16px 20px; margin:8px 0;">
+            <div style="font-size:11px; font-weight:600; color:var(--accent); margin-bottom:6px;">自分</div>
+            <div style="font-size:14px;">いいね。空き時間の表示をもう少し見やすくして。あと、結果をSlackに送れる機能も追加して。</div>
+          </div>
+          <div style="text-align:center; padding:12px; color:var(--text-muted); font-size:13px;">
+            ... AIが修正・機能追加（数分） ...
+          </div>
+          <div style="background:var(--sidebar-bg); border-radius:10px; padding:16px 20px; margin:8px 0;">
+            <div style="font-size:11px; font-weight:600; color:var(--accent); margin-bottom:6px;">自分</div>
+            <div style="font-size:14px;">完璧。公開して。</div>
+          </div>
+          <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px 20px; margin:8px 0;">
+            <div style="font-size:11px; font-weight:600; color:var(--text-muted); margin-bottom:6px;">Claude Code</div>
+            <div style="font-size:14px;">GitHubにコードを保存し、Vercelにデプロイしました。公開URL: https://schedule-checker-xxx.vercel.app</div>
+          </div>
+        </div>
+
+        <p>このように、「欲しいものを日本語で伝える → 確認する → フィードバックする → 公開する」というサイクルで、プログラミングの知識なしにアプリが完成します。</p>
+
+        <h3>よくある質問</h3>
+
+        <table>
+          <thead><tr><th>質問</th><th>回答</th></tr></thead>
+          <tbody>
+            <tr><td>プログラミングを全く知らなくても作れる？</td><td>作れます。実際にこのマニュアル自体がその方法で作られています。必要なのは「何が欲しいか」を言葉で伝える力です。</td></tr>
+            <tr><td>作ったアプリにバグがあったら？</td><td>「ここがおかしい」「この操作をするとエラーが出る」と伝えれば、AIが修正します。</td></tr>
+            <tr><td>デザインが気に入らなかったら？</td><td>「もっとシンプルに」「色をこう変えて」「この部分をもっと大きく」と伝えれば調整できます。</td></tr>
+            <tr><td>作ったアプリの維持管理は？</td><td>修正や機能追加が必要になったら、同じように日本語で依頼するだけです。コードを読む必要はありません。</td></tr>
+            <tr><td>費用はかかる？</td><td>Claude Codeの利用料のみ。アプリの公開はGitHub Pages（無料）やVercel（無料枠あり）で可能です。</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout callout-info">
+          <div class="callout-title">まずは小さく始める</div>
+          <p style="margin:0">最初から大きなアプリを作ろうとせず、「Excelで30分かかっている作業を自動化する」くらいの小さなツールから始めてみてください。小さな成功体験が、次のアイデアにつながります。</p>
+        </div>
       </div>
 
       <!-- Appendix -->
