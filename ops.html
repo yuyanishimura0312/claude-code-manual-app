@@ -14,13 +14,13 @@
       /* Surfaces */
       --bg: #FDFAF7; --surface: #FFFFFF; --surface-2: #F5EFE8;
       /* Text */
-      --text: #3D2E22; --text-2: #6B5445; --text-3: #9A918A;
+      --text: #3D2E22; --text-2: #6B5445; --text-3: #7A7268;
       /* Borders & Shadows */
       --border: #E6D5C4; --border-light: #F0EDE6;
       /* Semantic */
       --accent: var(--brown); --accent-bg: var(--brown-light);
       --code-bg: #F5EFE8; --warn-bg: #FFF8F0; --warn-border: #E8B060;
-      --info-bg: #F0F4F8; --info-border: #8AACC8;
+      --info-bg: #F5F0E8; --info-border: #CEA26F;
       /* Sidebar */
       --sidebar-bg: #F5EFE8; --sidebar-w: 280px;
       /* Shadows (warm-toned, Stripe-inspired) */
@@ -51,7 +51,7 @@
     .nav-part:hover { color:var(--brown-dark); }
     .nav-part .arrow { transition:transform .2s; font-size:10px; }
     .nav-part .arrow.open { transform:rotate(90deg); }
-    .nav-chapters { overflow:hidden; transition: max-height .3s ease; }
+    .nav-chapters { overflow:hidden; max-height:0; pointer-events:none; transition: max-height .3s ease; }
     .nav-item { display:block; padding:7px 12px 7px 16px; font-size:13px; color:var(--text-2); text-decoration:none; border-radius:6px; cursor:pointer; border:none; background:none; width:100%; text-align:left; font-family:inherit; transition:all .15s; line-height:1.4; }
     .nav-item:hover { background:rgba(122,64,51,.06); color:var(--text); }
     .nav-item.active { background:var(--accent-bg); color:var(--brown); font-weight:600; }
@@ -65,7 +65,7 @@
     /* Typography — UX BP: clear hierarchy, warm tones */
     .part-label { font-size:12px; font-weight:600; color:var(--brown); letter-spacing:.1em; }
     /* H2: 24px, Serif for warmth */
-    h2 { font-family:'Noto Serif JP','Hiragino Mincho ProN',Georgia,serif; font-size:24px; font-weight:600; line-height:1.35; margin:6px 0 32px; padding-bottom:16px; border-bottom:2px solid var(--brown); color:var(--text); }
+    h2 { font-family:'Noto Serif JP','Hiragino Mincho ProN',Georgia,serif; font-size:24px; font-weight:600; line-height:1.35; margin:6px 0 32px; padding-bottom:16px; border-bottom:1.5px solid #E6D5C4; color:var(--text); }
     /* H3: 20px, brown left border */
     h3 { font-size:20px; font-weight:600; margin:48px 0 16px; padding-left:14px; border-left:3px solid var(--brown); line-height:1.4; }
     /* H4: 16px */
@@ -78,7 +78,8 @@
     hr { border:none; border-top:1px solid var(--border); margin:32px 0; }
 
     /* Tables — warm theme */
-    table { width:100%; border-collapse:collapse; margin:16px 0 28px; font-size:14.5px; }
+    .table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; margin:16px 0 28px; }
+    table { width:100%; border-collapse:collapse; font-size:14.5px; }
     th { background:var(--surface-2); font-weight:600; font-size:12px; letter-spacing:.04em; text-align:left; padding:10px 14px; border:1px solid var(--border); color:var(--text-2); }
     td { padding:10px 14px; border:1px solid var(--border); vertical-align:top; line-height:1.5; }
     tr:hover td { background:var(--bg); }
@@ -136,9 +137,9 @@
     .flow-d-label { font-size:11.5px; font-weight:500; text-align:center; line-height:1.4; }
     .flow-d-sub { font-size:10px; color:var(--text-3); text-align:center; }
     .flow-d-arrow { font-size:18px; color:var(--border); margin:0 2px; padding-top:4px; }
-    .flow-d-icon.blue { background:#e8f0fe; color:#2060c0; }
-    .flow-d-icon.green { background:#e8f8e8; color:#208020; }
-    .flow-d-icon.orange { background:#fff0e0; color:#c07020; }
+    .flow-d-icon.blue { background:#FAE8DC; color:#7A4033; }
+    .flow-d-icon.green { background:#F5EFE8; color:#A86B50; }
+    .flow-d-icon.orange { background:#FFF4EC; color:#CEA26F; }
     .flow-d-icon.red { background:#fde8e8; color:var(--accent); }
     .flow-d-icon.gray { background:var(--sidebar-bg); color:var(--text-2); }
     .flow-d-icon.dark { background:var(--text); color:#fff; }
@@ -146,9 +147,9 @@
     /* Architecture diagram */
     .arch { display:flex; align-items:stretch; gap:16px; flex-wrap:wrap; justify-content:center; }
     .arch-box { flex:1; min-width:160px; max-width:240px; border-radius:10px; padding:20px 16px; text-align:center; }
-    .arch-box.local { background:#f0f6ff; border:2px solid #c0d4f0; }
-    .arch-box.cloud { background:#f0fdf0; border:2px solid #c0e8c0; }
-    .arch-box.public { background:#fff8f0; border:2px solid #f0dcc0; }
+    .arch-box.local { background:#FAF4EE; border:2px solid #E6D5C4; }
+    .arch-box.cloud { background:#F5EFE8; border:2px solid #D4C0AE; }
+    .arch-box.public { background:#FFF4EC; border:2px solid #CEA26F; }
     .arch-icon { font-size:28px; margin-bottom:8px; }
     .arch-label { font-size:14px; font-weight:600; margin-bottom:4px; }
     .arch-desc { font-size:11.5px; color:var(--text-2); line-height:1.6; }
@@ -287,15 +288,20 @@
       if (openParts.has(partId)) {
         openParts.delete(partId);
         el.style.maxHeight = '0';
+        el.style.pointerEvents = 'none';
         arrow.classList.remove('open');
       } else {
         openParts.add(partId);
         el.style.maxHeight = el.scrollHeight + 'px';
+        el.style.pointerEvents = 'auto';
         arrow.classList.add('open');
       }
     }
 
     function showChapter(chId) {
+      // Close any open glossary popups
+      document.querySelectorAll('.term.show').forEach(t => t.classList.remove('show'));
+
       // Find chapter data
       let chData = null, partData = null;
       for (const p of MANUAL.parts) {
@@ -364,7 +370,7 @@
           table += '<tr>' + cells.map(c => `<td>${c.trim()}</td>`).join('') + '</tr>';
         }
         table += '</tbody></table>';
-        return table;
+        return `<div class="table-wrap">${table}</div>`;
       });
 
       // Callout blocks (custom syntax: lines starting with > )
@@ -537,6 +543,12 @@
       togglePart(firstPart.id);
       showChapter(firstPart.chapters[0].id);
     }
+
+    // Handle hash navigation (back/forward, direct URL access)
+    window.addEventListener('hashchange', () => {
+      const chId = location.hash.replace('#', '');
+      if (chId) showChapter(chId);
+    });
   </script>
 </body>
 </html>
