@@ -474,7 +474,8 @@
         </div>
         <div class="nav-section">
           <div class="nav-section-title">応用</div>
-          <button class="nav-item" onclick="showChapter('ch7')">実際にアプリを作る</button>
+          <button class="nav-item" onclick="showChapter('ch7')">アプリを作る: 準備編</button>
+          <button class="nav-item" onclick="showChapter('ch8')">アプリを作る: 実践編</button>
         </div>
         <div class="nav-section">
           <div class="nav-section-title">参考</div>
@@ -930,9 +931,194 @@
         </table>
       </div>
 
-      <!-- Chapter 7: Building Apps -->
+      <!-- Chapter 7: Practical Setup -->
       <div class="chapter" id="ch7">
         <div class="chapter-label">第7章</div>
+        <h2>アプリを作る: 準備編</h2>
+
+        <p>この章では、Claude Codeでアプリを作るまでの準備を、実際の操作手順に沿って説明します。一つずつ順番に進めてください。</p>
+
+        <h3>ステップ1: Cursorをインストールする</h3>
+
+        <ol style="padding-left:20px; margin-bottom:24px;">
+          <li style="margin-bottom:12px;">ブラウザで <code>cursor.com</code> にアクセスする</li>
+          <li style="margin-bottom:12px;">「Download」ボタンをクリック（Mac版が自動で選ばれる）</li>
+          <li style="margin-bottom:12px;">ダウンロードされたファイルを開き、アプリケーションフォルダにドラッグ</li>
+          <li style="margin-bottom:12px;">Cursorを起動し、アカウントを作成（Googleアカウントでログイン可能）</li>
+          <li style="margin-bottom:12px;">初回設定で「Claude」を選択する画面が出たら、Claudeを選ぶ</li>
+        </ol>
+
+        <div class="callout callout-info">
+          <div class="callout-title">Cursorとは</div>
+          <p style="margin:0">AIと対話しながらファイルの作成・編集ができるアプリです。ChatGPTのようなチャット画面が右側にあり、左側でファイルの中身を確認できます。</p>
+        </div>
+
+        <h3>ステップ2: 作業フォルダを作る</h3>
+
+        <ol style="padding-left:20px; margin-bottom:24px;">
+          <li style="margin-bottom:12px;">Finderを開き、自分のホームフォルダ（家のアイコン）に移動</li>
+          <li style="margin-bottom:12px;"><code>projects</code> というフォルダを作る（既にあればそのまま）</li>
+          <li style="margin-bottom:12px;">その中にアプリ用のフォルダを作る（例: <code>expense-checker</code>）</li>
+          <li style="margin-bottom:12px;">Cursorに戻り、メニューから「File」→「Open Folder」で今作ったフォルダを開く</li>
+        </ol>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">フォルダ名のルール</div>
+          <p style="margin:0">フォルダ名は<strong>半角英数字とハイフン</strong>だけで付けてください。日本語やスペースが入ると不具合の原因になります。例: <code>expense-checker</code>（OK）、<code>経費チェッカー</code>（NG）</p>
+        </div>
+
+        <h3>ステップ3: Claude Codeに話しかける</h3>
+
+        <ol style="padding-left:20px; margin-bottom:24px;">
+          <li style="margin-bottom:12px;">Cursor画面の右側にチャットパネルが表示されている</li>
+          <li style="margin-bottom:12px;">ここに日本語でやりたいことを入力する</li>
+          <li style="margin-bottom:12px;">AIがファイルの作成・編集を提案してくる</li>
+          <li style="margin-bottom:12px;">「Accept」（承認）ボタンで変更を適用する</li>
+        </ol>
+
+        <div class="example-pair">
+          <div class="example-good">
+            <div class="example-label">最初に送るメッセージの例</div>
+<pre style="margin:0;border:none;background:transparent;padding:0;">経費管理ツールをWebアプリとして作ってください。
+
+【機能】
+- 経費の入力（日付、カテゴリ、金額、メモ）
+- カテゴリ別の集計
+- CSV出力
+
+1つのHTMLファイルで完結させてください。
+データはブラウザのlocalStorageに保存して。</pre>
+          </div>
+        </div>
+
+        <h3>ステップ4: 作ったアプリを確認する</h3>
+
+        <p>AIがファイルを作成したら、ブラウザで動作を確認します。</p>
+
+        <h4>HTMLファイル1つで完結するアプリの場合</h4>
+        <ol style="padding-left:20px; margin-bottom:24px;">
+          <li style="margin-bottom:12px;">Cursorの左側のファイル一覧で <code>index.html</code> を右クリック</li>
+          <li style="margin-bottom:12px;">「Open in Browser」またはファイルをFinderから直接ダブルクリック</li>
+          <li style="margin-bottom:12px;">ブラウザでアプリが表示される</li>
+        </ol>
+
+        <h4>サーバーが必要なアプリの場合</h4>
+        <p>AIが「サーバーを起動します」「<code>http://localhost:5210</code> で確認できます」と言った場合:</p>
+        <ol style="padding-left:20px; margin-bottom:24px;">
+          <li style="margin-bottom:12px;">AIの指示通りにサーバー起動コマンドを実行する（AIがやってくれることが多い）</li>
+          <li style="margin-bottom:12px;">ブラウザで指定のURL（例: <code>http://localhost:5210</code>）を開く</li>
+          <li style="margin-bottom:12px;">アプリが表示される。このURLは<strong>自分のPCだけ</strong>で見える状態</li>
+        </ol>
+
+        <div class="callout callout-info">
+          <div class="callout-title">localhost とは</div>
+          <p style="margin:0">「自分のパソコンの中だけで動いているWebサイト」のことです。この段階では他の人は見れません。問題なければ次のステップで公開します。</p>
+        </div>
+
+        <h3>ステップ5: 修正を依頼する</h3>
+
+        <p>確認して気になる点があれば、そのままチャットで伝えます。何度でも修正できます。</p>
+
+        <div class="example-pair">
+          <div class="example-good">
+            <div class="example-label">修正依頼の例</div>
+<pre style="margin:0;border:none;background:transparent;padding:0;">いくつか修正をお願いします。
+- 金額の入力欄に3桁ごとのカンマを表示して
+- カテゴリに「接待費」を追加して
+- 全体の文字サイズをもう少し大きくして
+- ヘッダーの色を黒に変えて</pre>
+          </div>
+        </div>
+
+        <h3>ステップ6: インターネットに公開する</h3>
+
+        <p>アプリが完成したら、AIに「公開して」と伝えるだけです。AIが以下を自動で行います。</p>
+
+        <table>
+          <thead><tr><th>AIがやること</th><th>何が起きているか</th></tr></thead>
+          <tbody>
+            <tr><td>GitHubにコードを保存</td><td>ファイル一式をクラウド上のDropboxのような場所にバックアップ</td></tr>
+            <tr><td>Vercelにデプロイ</td><td>アプリをインターネット上のサーバーに配置</td></tr>
+            <tr><td>URLを発行</td><td><code>https://あなたのアプリ名.vercel.app</code> というURLが作られる</td></tr>
+          </tbody>
+        </table>
+
+        <div class="example-pair">
+          <div class="example-good">
+            <div class="example-label">公開を依頼するメッセージ</div>
+<pre style="margin:0;border:none;background:transparent;padding:0;">完成です。GitHubに保存して、Vercelで公開してください。</pre>
+          </div>
+        </div>
+
+        <p>公開が完了すると、AIが <code>https://○○.vercel.app</code> のようなURLを教えてくれます。このURLをSlackやメールで共有すれば、誰でもアクセスできます。</p>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">公開 = 誰でも見られる状態</div>
+          <p style="margin:0">Vercelで公開したアプリは、URLを知っている人なら誰でもアクセスできます。社内限定にしたい場合は、URLを社内だけで共有してください。パスワード保護が必要な場合は、AIに「パスワード認証をつけて」と依頼してください。</p>
+        </div>
+
+        <h3>操作の全体像</h3>
+
+        <div class="protocol-card">
+          <h4>ゼロから公開までの流れ</h4>
+          <div class="protocol-steps">
+            <div class="protocol-step">
+              <div class="protocol-step-num">1</div>
+              <div class="protocol-step-title">フォルダを作って開く</div>
+              <div class="protocol-step-example">Finderで新規フォルダ作成 → Cursorで「Open Folder」</div>
+            </div>
+            <div class="protocol-step">
+              <div class="protocol-step-num">2</div>
+              <div class="protocol-step-title">AIに依頼する</div>
+              <div class="protocol-step-example">チャットに「○○を作って」と日本語で入力</div>
+            </div>
+            <div class="protocol-step">
+              <div class="protocol-step-num">3</div>
+              <div class="protocol-step-title">ブラウザで確認する</div>
+              <div class="protocol-step-example">index.htmlを開く or localhostのURLをブラウザに入力</div>
+            </div>
+            <div class="protocol-step">
+              <div class="protocol-step-num">4</div>
+              <div class="protocol-step-title">修正 → 公開</div>
+              <div class="protocol-step-example">「ここを直して」→「公開して」で完了。URLが発行される</div>
+            </div>
+          </div>
+        </div>
+
+        <h3>つまずきやすいポイントと対処法</h3>
+
+        <table>
+          <thead><tr><th>つまずき</th><th>対処</th></tr></thead>
+          <tbody>
+            <tr><td>CursorでClaude Codeが使えない</td><td>設定 → Models でClaudeが選択されているか確認</td></tr>
+            <tr><td>AIが「許可が必要です」と言う</td><td>「Allow」「Accept」ボタンを押す。ファイル変更の許可を求めている</td></tr>
+            <tr><td>localhostが表示されない</td><td>サーバーが起動していない。AIに「サーバーを起動して」と伝える</td></tr>
+            <tr><td>公開したURLが404エラー</td><td>デプロイに数分かかることがある。1-2分待ってリロード</td></tr>
+            <tr><td>「GitHubの認証が必要」と言われた</td><td>AIの指示に従ってGitHubアカウントでログイン（初回のみ）</td></tr>
+          </tbody>
+        </table>
+
+        <h3>用語クイックリファレンス</h3>
+        <p>AIとの会話中に出てくる用語の早見表です。覚える必要はありませんが、出てきたときに参照してください。</p>
+
+        <table>
+          <thead><tr><th>AIが言うこと</th><th>何が起きているか</th><th>あなたがやること</th></tr></thead>
+          <tbody>
+            <tr><td>「GitHubにプッシュします」</td><td>ファイルをクラウドにバックアップしている</td><td>何もしなくてOK</td></tr>
+            <tr><td>「Vercelにデプロイします」</td><td>アプリをインターネットに公開している</td><td>完了後にURLをメモ</td></tr>
+            <tr><td>「localhostで確認できます」</td><td>自分のPCだけで見える状態で起動した</td><td>ブラウザでURLを開く</td></tr>
+            <tr><td>「データベースを作成します」</td><td>データを保存する箱（Excel的なもの）を用意している</td><td>何もしなくてOK</td></tr>
+            <tr><td>「APIキーが必要です」</td><td>外部サービスを使うための鍵が必要</td><td>西村に確認する</td></tr>
+            <tr><td>「npm install を実行します」</td><td>アプリに必要な部品をダウンロードしている</td><td>何もしなくてOK</td></tr>
+            <tr><td>「HTMLとCSSを作成しました」</td><td>ページの構造（HTML）と見た目（CSS）を書いた</td><td>ブラウザで見た目を確認</td></tr>
+            <tr><td>「コミットしました」</td><td>変更を記録した（Ctrl+S の上位版）</td><td>何もしなくてOK</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Chapter 8: Building Apps -->
+      <div class="chapter" id="ch8">
+        <div class="chapter-label">第8章</div>
         <h2>実際にアプリを作る</h2>
 
         <p>「アプリを作る」と聞くと、プログラミングの専門知識が必要だと思うかもしれません。しかしClaude Codeを使えば、日本語で「こういうものが欲しい」と伝えるだけで、実際に動くWebアプリを作ることができます。</p>
