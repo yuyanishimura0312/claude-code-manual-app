@@ -325,7 +325,7 @@
     <nav class="sidebar" id="sidebar">
       <div class="sidebar-header">
         <a href="index.html" style="font-size:11px;color:var(--accent);text-decoration:none;">&larr; 概要に戻る</a>
-        <h1 style="margin-top:6px;">Claude Code 実務マニュアル <span class="ver">完全版</span></h1>
+        <h1 style="margin-top:6px;">Claude Code 実務マニュアル <span class="ver">v2.0</span></h1>
         <p>2026年4月</p>
       </div>
       <div class="search-box"><input type="text" id="search" placeholder="検索..." oninput="filterNav(this.value)"></div>
@@ -543,6 +543,17 @@
       'ハルシネーション': 'AIが事実と異なることをもっともらしく生成してしまう現象。AIの出力は必ず確認が必要。',
       'CLAUDE.md': 'AIが毎回の会話で最初に読み込む設定ファイル。業務ルールや組織情報を書いておく場所。',
       'Cursor': 'AIと対話しながらファイルを作成・編集できるアプリ。ChatGPTのようなチャット画面がある。',
+      'Hook': 'ツール実行の前後に自動で走るシェルスクリプト。品質チェックや通知の自動化に使う。',
+      'Hooks': 'ツール実行の前後に自動で走るシェルスクリプト。品質チェックや通知の自動化に使う。',
+      'メモリ': 'セッション間で情報を持ち越すためのファイルベースの記憶システム。ユーザーの好みやプロジェクト状況を自動保存する。',
+      'サブエージェント': 'メインのAIが呼び出す専門AIのこと。調査・レビュー・セキュリティ監査など特定のタスクを委任できる。',
+      'コンテキストウィンドウ': 'AIが一度に扱える情報量の上限。作業デスクの広さに例えられる。長い会話では自動圧縮される。',
+      'Rules': 'CLAUDE.mdの拡張機能。~/.claude/rules/フォルダに条件付きルールファイルを配置できる。',
+      'Plan Mode': 'AIに「まず計画だけ立てて実行はまだしないで」と伝えるモード。Shift+Tabで切替。大きな変更前に方針確認に使う。',
+      'MCP': 'Model Context Protocol。AIに外部ツール（GitHub, Slack, Notion等）を使う能力を追加する仕組み。',
+      'settings.json': 'Claude Codeの設定ファイル。権限の許可リスト、Hooks、その他の動作設定を記述する。',
+      'コンパクト': '/compactコマンドで会話を圧縮（要約）すること。長いセッションでコンテキストを節約する。',
+      'MVP': 'Minimum Viable Product。最小限の機能で動くバージョン。まず公開して使いながら改善する手法。',
     };
 
     function applyGlossary(html) {
