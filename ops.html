@@ -221,6 +221,11 @@
     .chat-faq-item .faq-a { color:var(--text-2); line-height:1.5; display:none; margin-top:6px; font-size:12px; }
     .chat-faq-item.open .faq-a { display:block; }
     .faq-empty { padding:10px 16px; font-size:11px; color:var(--text-3); text-align:center; }
+    .faq-category-label {
+      padding:6px 16px 4px; font-size:10px; font-weight:700; color:var(--brown);
+      letter-spacing:.06em; background:var(--bg); border-bottom:1px solid var(--border-light);
+      position:sticky; top:0;
+    }
 
     /* Rate Limit */
     .chat-limit-box {
@@ -731,34 +736,58 @@
     const LIMIT_ANONYMOUS = 3;
     const LIMIT_REGISTERED = 10;
 
+    // --- FAQ Categories ---
+    const FAQ_CATEGORIES = [
+      { id: 'basic', label: '基本' },
+      { id: 'setup', label: '環境構築' },
+      { id: 'dev', label: 'アプリ開発' },
+      { id: 'publish', label: '公開・運用' },
+      { id: 'trouble', label: 'トラブル' },
+      { id: 'other', label: 'その他' },
+    ];
+    // Map part IDs to FAQ categories
+    const PART_TO_CATEGORY = {
+      'intro': 'basic', 'setup': 'setup', 'first-app': 'dev',
+      'publish': 'publish', 'trouble': 'trouble', 'expand': 'dev', 'advanced': 'other',
+    };
+
     // --- Preset FAQs (always shown) ---
     const PRESET_FAQS = [
-      { q: 'Claude Codeは無料で使えますか？', a: 'Claude Code本体はClaude Proプラン（月額約$20）またはAPI従量課金が必要です。GitHub、Vercelなどの周辺サービスは無料枠で始められます。' },
-      { q: 'プログラミングの知識がなくても使えますか？', a: 'はい。日本語で「こういうものが欲しい」と伝えるだけで、AIがコードを書いてくれます。コードの中身を理解する必要はありません。ただし「何を作りたいか」を具体的に伝える力は必要です。' },
-      { q: 'ターミナルとは何ですか？', a: 'ターミナルは、文字を入力してパソコンに指示を出すアプリです。MacにはじめからインストールされていてCommand+Spaceで「ターミナル」と検索すると開けます。Claude Codeはこの中で動きます。' },
-      { q: 'Homebrewとは何ですか？', a: 'Homebrewは、Macにソフトウェアを簡単にインストールするためのツールです。App Storeのターミナル版と考えてください。Claude Codeの環境構築で必要な他のソフトをインストールするために使います。' },
-      { q: 'APIキーとは何ですか？', a: 'APIキーは、外部サービスを使うための「鍵」です。パスワードのようなもので、これがないとアプリからAIやメール送信などのサービスを利用できません。漏洩すると悪用されるリスクがあるため、安全に保管する必要があります。' },
-      { q: 'GitHubとVercelの違いは？', a: 'GitHubは作ったファイルの「保管場所」です。パソコンが壊れてもファイルが残ります。Vercelはアプリを「インターネットに公開する場所」です。GitHubに保存したファイルを読み取り、URLを発行して誰でもアクセスできるようにしてくれます。' },
-      { q: 'エラーが出たらどうすればいいですか？', a: 'エラーメッセージをそのままClaude Codeに貼り付けて「このエラーを修正してください」と伝えてください。多くの場合、AIが原因を特定して修正してくれます。赤い文字が出ても慌てる必要はありません。' },
-      { q: '作ったアプリが壊れたら戻せますか？', a: 'はい。GitHubに保存してあれば、いつでも前の状態に戻せます。Claude Codeに「前回のコミットに戻して」と伝えてください。' },
+      { cat: 'basic', q: 'Claude Codeは無料で使えますか？', a: 'Claude Code本体はClaude Proプラン（月額約$20）またはAPI従量課金が必要です。GitHub、Vercelなどの周辺サービスは無料枠で始められます。' },
+      { cat: 'basic', q: 'プログラミングの知識がなくても使えますか？', a: 'はい。日本語で「こういうものが欲しい」と伝えるだけで、AIがコードを書いてくれます。コードの中身を理解する必要はありません。ただし「何を作りたいか」を具体的に伝える力は必要です。' },
+      { cat: 'setup', q: 'ターミナルとは何ですか？', a: 'ターミナルは、文字を入力してパソコンに指示を出すアプリです。MacにはじめからインストールされていてCommand+Spaceで「ターミナル」と検索すると開けます。Claude Codeはこの中で動きます。' },
+      { cat: 'setup', q: 'Homebrewとは何ですか？', a: 'Homebrewは、Macにソフトウェアを簡単にインストールするためのツールです。App Storeのターミナル版と考えてください。Claude Codeの環境構築で必要な他のソフトをインストールするために使います。' },
+      { cat: 'setup', q: 'APIキーとは何ですか？', a: 'APIキーは、外部サービスを使うための「鍵」です。パスワードのようなもので、これがないとアプリからAIやメール送信などのサービスを利用できません。漏洩すると悪用されるリスクがあるため、安全に保管する必要があります。' },
+      { cat: 'publish', q: 'GitHubとVercelの違いは？', a: 'GitHubは作ったファイルの「保管場所」です。パソコンが壊れてもファイルが残ります。Vercelはアプリを「インターネットに公開する場所」です。GitHubに保存したファイルを読み取り、URLを発行して誰でもアクセスできるようにしてくれます。' },
+      { cat: 'trouble', q: 'エラーが出たらどうすればいいですか？', a: 'エラーメッセージをそのままClaude Codeに貼り付けて「このエラーを修正してください」と伝えてください。多くの場合、AIが原因を特定して修正してくれます。赤い文字が出ても慌てる必要はありません。' },
+      { cat: 'publish', q: '作ったアプリが壊れたら戻せますか？', a: 'はい。GitHubに保存してあれば、いつでも前の状態に戻せます。Claude Codeに「前回のコミットに戻して」と伝えてください。' },
+      { cat: 'dev', q: 'どんなアプリが作れますか？', a: '経費管理、イベント参加者管理、アンケート集計、文献管理、ダッシュボードなど、データの入力・表示・検索を行うWebアプリが得意です。30分〜数時間で基本形が完成します。' },
+      { cat: 'dev', q: '「まず計画を見せて」とは？', a: '大きな変更をする前にAIに方針を確認するための言葉です。AIが「こう作ります」と計画を提示してくれるので、方向性が正しいか確認してからOKを出せます。手戻りが大幅に減ります。' },
     ];
 
     // --- FAQ Management ---
     function loadFaqs() {
       try { return JSON.parse(localStorage.getItem(FAQ_STORAGE_KEY) || '[]'); } catch { return []; }
     }
+    function getCurrentCategory() {
+      if (!currentChapter) return 'other';
+      for (const p of MANUAL.parts) {
+        for (const c of p.chapters) {
+          if (c.id === currentChapter) return PART_TO_CATEGORY[p.id] || 'other';
+        }
+      }
+      return 'other';
+    }
     function getAllFaqs() {
-      // Merge preset + user FAQs, preset at bottom
       const userFaqs = loadFaqs();
       return [...userFaqs, ...PRESET_FAQS];
     }
     function saveFaqEntry(q, a) {
       const faqs = loadFaqs();
-      // Avoid near-duplicates (simple check)
       const isDuplicate = faqs.some(f => f.q.length > 10 && q.includes(f.q.slice(0, 20)));
       if (!isDuplicate) {
-        faqs.unshift({ q, a, ts: Date.now() });
-        if (faqs.length > 50) faqs.length = 50; // cap at 50
+        faqs.unshift({ q, a, ts: Date.now(), cat: getCurrentCategory() });
+        if (faqs.length > 50) faqs.length = 50;
         localStorage.setItem(FAQ_STORAGE_KEY, JSON.stringify(faqs));
       }
       renderFaqs();
@@ -768,12 +797,29 @@
       const listEl = document.getElementById('faqList');
       const countEl = document.getElementById('faqCount');
       countEl.textContent = allFaqs.length;
-      listEl.innerHTML = allFaqs.map((f, i) => `
-        <div class="chat-faq-item" onclick="this.classList.toggle('open')">
-          <div class="faq-q">Q. ${escapeHtml(f.q.slice(0, 80))}${f.q.length > 80 ? '...' : ''}</div>
-          <div class="faq-a">${escapeHtml(f.a).replace(/\n/g, '<br>')}</div>
-        </div>
-      `).join('');
+
+      // Group by category
+      const grouped = {};
+      for (const cat of FAQ_CATEGORIES) grouped[cat.id] = [];
+      for (const f of allFaqs) {
+        const catId = f.cat || 'other';
+        if (!grouped[catId]) grouped[catId] = [];
+        grouped[catId].push(f);
+      }
+
+      let html = '';
+      for (const cat of FAQ_CATEGORIES) {
+        const items = grouped[cat.id];
+        if (items.length === 0) continue;
+        html += `<div class="faq-category-label">${escapeHtml(cat.label)}</div>`;
+        html += items.map(f => `
+          <div class="chat-faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-q">Q. ${escapeHtml(f.q.slice(0, 80))}${f.q.length > 80 ? '...' : ''}</div>
+            <div class="faq-a">${escapeHtml(f.a).replace(/\n/g, '<br>')}</div>
+          </div>
+        `).join('');
+      }
+      listEl.innerHTML = html;
     }
     function toggleFaqPanel() {
       const list = document.getElementById('faqList');
