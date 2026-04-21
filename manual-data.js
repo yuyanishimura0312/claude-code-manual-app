@@ -1,1182 +1,435 @@
-// Claude Code Operations Manual - Comprehensive Data
+// Claude Code Operations Manual - Complete Rewrite based on research
+// Structure: Experience-first, progressive disclosure, non-programmer audience
 
 const MANUAL = {
   title: "Claude Code 実務マニュアル",
   subtitle: "完全版",
-  version: "2.0",
+  version: "3.0",
   date: "2026年4月",
 
   parts: [
     // =====================================================================
-    // PART 1: ENVIRONMENT SETUP
+    // PART 0: INTRODUCTION — 30秒で分かるClaude Code
     // =====================================================================
     {
-      id: "env",
-      title: "環境構築",
-      description: "ゼロからClaude Codeが使える状態にするまで",
+      id: "intro",
+      title: "はじめに",
+      description: "Claude Codeとは何か、何ができるか",
       chapters: [
         {
-          id: "env-mac",
-          title: "macOSの準備",
+          id: "intro-what",
+          title: "Claude Codeとは",
           content: `
-## macOSの準備
+## Claude Codeとは
 
-Claude Codeを使い始めるには、いくつかのソフトウェアをMacにインストールする必要があります。「インストール」と聞くと難しそうですが、やることは「コマンドをコピーして貼り付ける」だけです。
+**Claude Codeは、日本語で「こういうものが欲しい」と伝えるだけで、実際に動くWebアプリを作ってくれるAIツールです。** プログラミングの知識は一切不要です。
 
-この章では、必要なソフトウェアを1つずつ順番にインストールしていきます。
+たとえば、こんなことができます:
+
+- 「助成金の情報を管理するデータベースを作って」→ 検索・フィルタ付きのWebアプリが30分で完成
+- 「この会議の録音を文字起こしして、議事録を作って」→ AIが自動で要約・整理
+- 「毎月の経費を記録して、月別にグラフ表示するアプリを作って」→ スマホでも使えるアプリが1時間で完成
 
 ---
 
-### 「ターミナル」を開く
+### 誰のためのツールか
 
-まず「ターミナル」というアプリを開きます。ターミナルは、文字を入力してパソコンに指示を出すためのアプリです。普段はアイコンをクリックして操作しますが、ターミナルでは文字で指示を出します。
+Claude Codeは、以下のような方に最適です:
+
+- **NPO・NGOのスタッフ**: 助成金管理、イベント運営、会員管理など、業務を効率化するアプリを自分で作りたい
+- **コンサルタント**: クライアント向けのダッシュボードや分析ツールを素早く作りたい
+- **研究者**: データの整理・可視化、論文管理、調査ツールを自分の研究に合わせて作りたい
+- **プログラミングは専門外だが、ITツールには日常的に触れている方**
+
+---
+
+### 実際に作れるもの（実例）
+
+以下は、プログラミング未経験の状態からClaude Codeで実際に作り、運用しているアプリの例です。
+
+| アプリ | 何をするか | 作成時間 |
+|---|---|---|
+| 助成金データベース | 3,669件の助成金情報を検索・フィルタ。締切順ソート | 約1時間 |
+| 科研費申請書作成ツール | 研究テーマを入力するとAIが申請書の下書きを生成 | 約2時間 |
+| 産学連携マッチング | 研究キーワードと企業ニーズを自動マッチング | 約3時間 |
+| イベント管理アプリ | 参加者登録・QRコード受付・アンケート集計 | 約半日 |
+| 会議録自動化ツール | 録音からTODOリストを自動抽出 | 約2時間 |
+
+すべてインターネットに公開済みで、日常的に使っています。
+
+---
+
+### かかる費用
+
+| 項目 | 費用 | 備考 |
+|---|---|---|
+| Claude Code本体 | 月額約$20〜（Claude Proプラン） | またはAPI従量課金（使った分だけ） |
+| アプリの公開（Vercel） | 無料 | 個人利用の範囲内 |
+| コードの保管（GitHub） | 無料 | プライベートリポジトリも無料 |
+| データベース（必要時） | 無料 | Supabase、Turso等の無料枠 |
+
+**最初にかかるお金はClaude Codeの利用料（月額約3,000円〜）だけです。** 他のサービスはすべて無料枠で始められます。
+
+---
+
+### このマニュアルの使い方
+
+**初めての方は、上から順番に読み進めてください。** 「準備」「最初のアプリ」「公開」の3ステップで、最短1時間半でアプリをインターネットに公開できます。
+
+| ステップ | 内容 | 所要時間 |
+|---|---|---|
+| 1. 準備する | ソフトのインストールとアカウント作成 | 約30分 |
+| 2. アプリを作る | AIに指示してアプリを作成 | 30分〜1時間 |
+| 3. 公開する | インターネットに公開してURLを共有 | 約10分 |
+
+「困ったときは」のページは、エラーが出たときにいつでも参照してください。「もっと使いこなす」以降は、基本に慣れてから読めば十分です。
+`
+        }
+      ]
+    },
+
+    // =====================================================================
+    // PART 1: MINIMAL SETUP — 最小限の準備
+    // =====================================================================
+    {
+      id: "setup",
+      title: "準備する",
+      description: "最短で使い始めるための最小限のセットアップ",
+      chapters: [
+        {
+          id: "setup-mac",
+          title: "Macの準備（15分）",
+          content: `
+## Macの準備
+
+Claude Codeを使うために、Macにいくつかのソフトウェアをインストールします。やることは「コマンドをコピーして貼り付ける」だけです。
+
+---
+
+### ステップ1: ターミナルを開く
+
+「ターミナル」は、文字を入力してパソコンに指示を出すアプリです。Claude Codeはこの中で動きます。
 
 **開き方:**
-1. キーボードで \`Command\` + \`Space\` を同時に押す（Spotlight検索が開く）
+1. キーボードで \`Command\` + \`Space\` を同時に押す
 2. 「ターミナル」と入力する
 3. 表示された「ターミナル」をクリック
 
-黒い（または白い）ウィンドウが開き、文字が入力できる状態になります。これがターミナルです。
+黒い（または白い）ウィンドウが開きます。ここに文字を入力して \`Enter\` を押すと、指示が実行されます。
 
-**覚えておくこと:**
-- ターミナルに文字を入力して \`Enter\` を押すと、その指示が実行されます
-- 実行中のコマンドを止めたいときは \`Ctrl\` + \`C\` を押します（最も基本的な停止操作）
-- コマンドを入力したが実行前にやめたいときは、入力欄をすべて消してやり直せます
-- 万が一おかしなことが起きても、パソコンが壊れることはありません。落ち着いて \`Ctrl\` + \`C\` を押してください
-- パスワードを入力するとき、画面には何も表示されませんが、ちゃんと入力されています
+**安心ポイント:**
+- 実行中の操作を止めたいときは \`Ctrl\` + \`C\` を押せば止まります
+- 間違ったコマンドを入力しても、パソコンが壊れることはありません
+- パスワード入力時、画面には何も表示されませんが、入力されています
 
 ---
 
-### Homebrewをインストールする
+### ステップ2: Homebrewをインストールする
 
-Homebrewは「ソフトウェアのインストールを簡単にするツール」です。App Storeでアプリをインストールするのと同じことを、ターミナルからできるようにしてくれます。このあとの手順で何度も使うので、最初にインストールします。
+Homebrewは「ソフトのインストールを簡単にするツール」です。このあとの手順で使います。
 
-**やること:**
-1. ターミナルを開く
-2. 以下のコマンドを**まるごとコピー**して、ターミナルに貼り付ける
-3. \`Enter\` を押す
-
+ターミナルに以下を**まるごとコピー**して貼り付け、\`Enter\` を押します:
 \`\`\`
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 \`\`\`
 
-4. 「Password:」と表示されたら、**Macのログインパスワード**を入力して \`Enter\`（画面には何も表示されませんが入力されています）
-5. 「Press RETURN to continue」と表示されたら \`Enter\` を押す
-6. 数分間待つ。たくさんの文字が流れますが、正常です
+- 「Password:」と表示されたら → Macのログインパスワードを入力して \`Enter\`
+- 「Press RETURN to continue」と表示されたら → \`Enter\`
+- 数分待ちます（たくさん文字が流れますが正常です）
 
-**うまくいったか確認する:**
+**確認:**
 \`\`\`
 brew --version
 \`\`\`
-「Homebrew 4.x.x」のようにバージョン番号が表示されれば成功です。
+「Homebrew 4.x.x」と表示されれば成功です。
 
-**エラーが出た場合:**
-「command not found: brew」と表示された場合、ターミナルに以下を貼り付けて実行してください:
+「command not found: brew」と出た場合は、以下を実行してください:
 \`\`\`
 echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
 eval "$(/opt/homebrew/bin/brew shellenv)"
 \`\`\`
-そのあと、もう一度 \`brew --version\` を試してください。
 
 ---
 
-### Node.jsをインストールする
+### ステップ3: Node.jsをインストールする
 
-Node.jsは、Webアプリを動かすために必要なソフトウェアです。「Webアプリのエンジン」だと思ってください。Claude Codeが作るアプリの多くがNode.jsで動きます。
+Webアプリを動かすためのソフトです。
 
-**やること:**
 \`\`\`
 brew install node
 \`\`\`
 
-数分かかります。完了したら確認:
-\`\`\`
-node --version
-\`\`\`
-「v20.x.x」や「v24.x.x」のように表示されればOKです。
+**確認:** \`node --version\` で「v20」以上が出ればOK。
 
 ---
 
-### Pythonを確認する
+### ステップ4: 確認
 
-Pythonは、データ処理やAI連携でよく使うプログラミング言語です。Macには最初から入っていることが多いので、まず確認します。
+以下の2つがインストールされていれば、準備完了です。
 
-**確認方法:**
-\`\`\`
-python3 --version
-\`\`\`
-
-「Python 3.9」以上が表示されればOKです。表示されない場合:
-\`\`\`
-brew install python
-\`\`\`
-
----
-
-### Gitを確認する
-
-Gitは、ファイルの変更履歴を自動的に記録してくれるツールです。Wordで「報告書_ver1」「報告書_ver2」とファイル名を変えて管理していた作業を、自動でやってくれるものだと思ってください。
-
-**確認方法:**
-\`\`\`
-git --version
-\`\`\`
-バージョンが表示されればOKです。Macには最初から入っています。
-
----
-
-### この章のまとめ
-
-以下の4つがインストールされていれば、環境構築は完了です。
-
-| ソフトウェア | 確認コマンド | 何のために使うか |
+| ソフト | 確認コマンド | 役割 |
 |---|---|---|
-| Homebrew | \`brew --version\` | 他のソフトをインストールするため |
-| Node.js | \`node --version\` | Webアプリを動かすため |
-| Python | \`python3 --version\` | データ処理・AI連携のため |
-| Git | \`git --version\` | ファイルの変更履歴を管理するため |
+| Homebrew | \`brew --version\` | 他のソフトのインストールを簡単にする |
+| Node.js | \`node --version\` | Webアプリを動かすエンジン |
 
-すべて1回だけやれば、以降は必要ありません。
+PythonとGitはMacに最初から入っています（\`python3 --version\`、\`git --version\` で確認できます）。
 `
         },
         {
-          id: "env-accounts",
-          title: "アカウントを作る",
+          id: "setup-accounts",
+          title: "アカウントを作る（15分）",
           content: `
-## 必要なアカウントを作る
+## アカウントを作る
 
-Claude Codeでアプリを作り、インターネットに公開するためには、いくつかの外部サービスのアカウントが必要です。すべて無料で作れます。
+3つのアカウントを作ります。すべて無料です。
 
-「なぜこんなにたくさんのサービスが必要なの？」と思うかもしれません。それぞれのサービスには専門の役割があります:
-
-- **GitHub**: 作ったファイルを保管する倉庫
-- **Vercel**: 作ったアプリをインターネットに公開する場所
-- **Anthropic**: AIの頭脳を使うための鍵
-
-この3つだけあれば、ほとんどのアプリを作って公開できます。
-
-<div class="concept-cards"><div class="concept-card" style="border-left:3px solid #7A4033"><div class="icon">&#128193;</div><div class="title">GitHub</div><div class="body">コードの倉庫。パソコンが壊れてもファイルが残る</div></div><div class="concept-card" style="border-left:3px solid #A86B50"><div class="icon">&#127760;</div><div class="title">Vercel</div><div class="body">公開の窓口。URLを発行してくれる</div></div><div class="concept-card" style="border-left:3px solid #CEA26F"><div class="icon">&#129504;</div><div class="title">Anthropic</div><div class="body">AIの頭脳。アプリにAI機能をつけるための鍵</div></div></div>
+| サービス | 役割 | 例えると |
+|---|---|---|
+| **Anthropic** | AIの頭脳を使うための鍵 | 図書館の利用カード |
+| **GitHub** | 作ったファイルの保管場所 | クラウドの書庫 |
+| **Vercel** | アプリをインターネットに公開する場所 | Webサイトのホスティング |
 
 ---
 
-### 1. GitHub（ギットハブ）アカウントを作る
+### 1. Anthropic アカウント（AIの鍵を取得する）
 
-**GitHubとは:** 作ったアプリのファイル一式をインターネット上に保存しておく場所です。Googleドライブと似ていますが、「誰が、いつ、何を変更したか」が自動で記録される点が違います。
+1. ブラウザで <a href="https://console.anthropic.com/" target="_blank" rel="noopener">console.anthropic.com</a> を開く
+2. 「Sign up」でアカウントを作成
+3. ログイン後、左メニューの「API Keys」をクリック
+4. 「Create Key」→ 名前を入力（例: 「work」）→ 作成
+5. 表示されたキー（\`sk-ant-\` で始まる長い文字列）を**必ずコピー**
 
-**作り方:**
-1. ブラウザで <a href="https://github.com/signup" target="_blank" rel="noopener">github.com</a> にアクセスする
-2. 「Sign up」ボタンをクリック
-3. メールアドレスを入力 → 「Continue」
-4. パスワードを設定（15文字以上、または8文字以上+数字+小文字を含む）
-5. ユーザー名を決める（半角英数字。あとで変更可能）
-6. メール認証を完了する（届いたメールのリンクをクリック）
-
-**次にやること — パソコンからGitHubを使えるようにする:**
-
-ターミナルで以下を実行します。これにより、ターミナルからGitHubにファイルを送れるようになります。
-
-\`\`\`
-brew install gh
-\`\`\`
-
-インストールが終わったら:
-\`\`\`
-gh auth login
-\`\`\`
-
-いくつか質問されるので、以下のように答えてください:
-1. 「What account do you want to log into?」→ **GitHub.com** を選択（矢印キーで選んでEnter）
-2. 「What is your preferred protocol?」→ **HTTPS** を選択
-3. 「Authenticate Git with your GitHub credentials?」→ **Yes**
-4. 「How would you like to authenticate?」→ **Login with a web browser**
-5. 表示されるコード（8桁）をメモする
-6. ブラウザが開くので、コードを入力してGitHubアカウントでログイン
-
-**うまくいったか確認する:**
-\`\`\`
-gh auth status
-\`\`\`
-「Logged in to github.com as あなたのユーザー名」と表示されれば成功です。
-
----
-
-### 2. Vercel（バーセル）アカウントを作る
-
-**Vercelとは:** 作ったアプリをインターネットに公開してくれるサービスです。GitHubに保存したファイルを自動的に読み取り、Webサイトとして世界中からアクセスできる状態にしてくれます。
-
-**作り方:**
-1. ブラウザで <a href="https://vercel.com/signup" target="_blank" rel="noopener">vercel.com</a> にアクセス
-2. 「Sign Up」をクリック
-3. 「Continue with GitHub」を選択（さっき作ったGitHubアカウントで連携）
-4. GitHubへのアクセスを許可する
-
-これだけで完了です。GitHubと連携しているので、別のパスワードを覚える必要はありません。
-
-**次にやること — パソコンからVercelを使えるようにする:**
-\`\`\`
-npm install -g vercel
-vercel login
-\`\`\`
-ブラウザが開くので、Vercelアカウントでログイン。
-
-**うまくいったか確認する:**
-\`\`\`
-vercel whoami
-\`\`\`
-あなたのアカウント名が表示されれば成功です。
-
----
-
-### 3. Anthropic（アンソロピック）アカウントを作る
-
-**Anthropicとは:** Claude（AI）を開発している会社です。アプリの中でAI機能を使いたい場合、Anthropicの「APIキー」が必要になります。
-
-「APIキー」とは、AIを使うための「パスワード」のようなものです。このキーがないと、アプリからAIに質問を送ることができません。
-
-**作り方:**
-1. ブラウザで <a href="https://console.anthropic.com/" target="_blank" rel="noopener">console.anthropic.com</a> にアクセス
-2. 「Sign up」でアカウントを作成（メールアドレスまたはGoogleアカウント）
-3. ログイン後、左メニューから「API Keys」をクリック
-4. 「Create Key」をクリック
-5. キーの名前を入力（例: 「work」など何でもOK）
-6. 表示されたキー（\`sk-ant-\` で始まる長い文字列）を**必ずコピー**する
-
-**重要:** このキーは一度しか表示されません。閉じてしまうと二度と見れないので、必ずこの時点でコピーしてください。
+**重要:** このキーは一度しか表示されません。必ずこの時点でコピーしてください。
 
 **キーを安全に保存する:**
-
-コピーしたキーを、Macの「キーチェーン」という安全な保管庫に保存します。ターミナルで以下を実行してください（\`sk-ant-...\` の部分を、コピーしたキーに置き換えます）:
-
 \`\`\`
 security add-generic-password -s "ANTHROPIC_API_KEY" -a "anthropic" -w "sk-ant-ここにコピーしたキーを貼り付ける"
 \`\`\`
 
-**保存できたか確認する:**
+保存できたか確認:
 \`\`\`
 security find-generic-password -s "ANTHROPIC_API_KEY" -w
 \`\`\`
-キーが表示されれば成功です。
+キーが表示されれば成功。
 
 ---
 
-### 必要になったときに作るアカウント
+### 2. GitHub アカウント（ファイルの保管場所）
 
-上の3つ（GitHub、Vercel、Anthropic）があれば、多くのアプリを作れます。以下のサービスは、特定の機能が必要になったときにClaude Codeが「○○のアカウントが必要です」と教えてくれるので、その時点で作ればOKです。
+1. <a href="https://github.com/signup" target="_blank" rel="noopener">github.com</a> で「Sign up」
+2. メールアドレス、パスワード、ユーザー名を設定
+3. メール認証を完了
 
-| サービス | どんなときに必要か | 無料枠 |
-|---|---|---|
-| Supabase | ユーザーのログイン機能を作るとき | 2プロジェクトまで |
-| Firebase | データがリアルタイムで更新されるアプリを作るとき | 寛大な無料枠 |
-| Turso | データを大量に保存するWebアプリを作るとき | 500DBまで |
-| SendGrid | アプリからメールを自動送信するとき | 月100通まで |
-| Stripe | アプリで決済（課金）を受け付けるとき | 手数料のみ |
-| Brave Search | アプリにWeb検索機能をつけるとき | 月2,000回まで |
+**ターミナルからGitHubを使えるようにする:**
+\`\`\`
+brew install gh
+gh auth login
+\`\`\`
 
-各サービスの詳しいセットアップ手順は「サービス接続ガイド」の章で説明します。
+質問に答えます:
+1. 「What account...?」→ **GitHub.com**
+2. 「What is your preferred protocol?」→ **HTTPS**
+3. 「Authenticate Git...?」→ **Yes**
+4. 「How would you like to authenticate?」→ **Login with a web browser**
+5. 表示される8桁のコードをメモ → ブラウザでコードを入力
+
+**確認:** \`gh auth status\` で「Logged in」と表示されれば成功。
+
+---
+
+### 3. Vercel アカウント（アプリの公開場所）
+
+1. <a href="https://vercel.com/signup" target="_blank" rel="noopener">vercel.com</a> で「Sign Up」
+2. 「Continue with GitHub」を選択（GitHubと自動連携）
+
+これだけで完了です。
 `
         },
         {
-          id: "env-cursor",
-          title: "開発環境のセットアップ",
+          id: "setup-install",
+          title: "Claude Codeをインストールする（5分）",
           content: `
-## 開発環境のセットアップ
+## Claude Codeをインストールする
 
-Claude Codeは、ターミナルで直接AIに指示を出せるツールです。日本語で「こういうものが欲しい」と伝えるだけで、ファイルの作成・編集、コマンドの実行、GitHub保存まですべてAIが行ってくれます。
+ターミナルで以下を実行します:
 
-本マニュアルでは、**Claude Code CLI（ターミナル版）** を使います。これが最も高機能で、すべての機能が使える環境です。
-
----
-
-### Claude Code CLI をインストールする
-
-**やること（以下のいずれか）:**
-
-方法A（推奨）:
 \`\`\`
 curl -fsSL https://claude.ai/install.sh | bash
 \`\`\`
 
-方法B（Homebrewを使う場合）:
+**別の方法（上がうまくいかない場合）:**
 \`\`\`
 brew install --cask claude-code
 \`\`\`
 
-方法C（npmを使う場合）:
-\`\`\`
-npm install -g @anthropic-ai/claude-code
-\`\`\`
-
-**うまくいったか確認する:**
+**確認:**
 \`\`\`
 claude --version
 \`\`\`
-
 バージョン番号が表示されれば成功です。
 
 ---
 
 ### 初回起動
 
-まず作業フォルダに移動してから起動します:
+適当なフォルダに移動してClaude Codeを起動します:
 \`\`\`
-cd ~/projects/apps/アプリの名前
+mkdir ~/projects/apps/my-first-app
+cd ~/projects/apps/my-first-app
 claude
 \`\`\`
 
-初回はAnthropicアカウントでのログインが求められます。ブラウザが開くので、ログインしてください。
+初回はブラウザが開いてAnthropicアカウントでのログインを求められます。ログインすれば、次回以降は自動です。
 
 ---
 
-### 基本操作
+### 準備完了！
 
-- 起動したら、そのまま日本語で指示を入力して \`Enter\` を押す
-- AIがファイルの作成・編集を提案してきたら、承認（\`y\`）または拒否（\`n\`）を選ぶ
-- 終了するには \`/exit\` と入力するか、\`Ctrl\` + \`C\` を2回押す
-- AIの操作を途中で止めたいときは \`Escape\` キーを押す
+ここまでで、Claude Codeを使う準備は整いました。次の章で、実際にアプリを作ります。
 
-**実際のやりとりのイメージ:**
+| 確認項目 | コマンド |
+|---|---|
+| Homebrewが入っている | \`brew --version\` |
+| Node.jsが入っている | \`node --version\` |
+| GitHubにログイン済み | \`gh auth status\` |
+| Claude Codeが入っている | \`claude --version\` |
+| Anthropic APIキーを保存した | \`security find-generic-password -s "ANTHROPIC_API_KEY" -w\` |
+`
+        }
+      ]
+    },
+
+    // =====================================================================
+    // PART 2: FIRST APP — 最初のアプリを作る
+    // =====================================================================
+    {
+      id: "first-app",
+      title: "最初のアプリを作る",
+      description: "実際にAIに指示してアプリを作る体験",
+      chapters: [
+        {
+          id: "app-walkthrough",
+          title: "実例: 経費管理アプリを作る",
+          content: `
+## 実例: 経費管理アプリを30分で作る
+
+ここでは、「経費の記録・集計ができるWebアプリ」を実際に作る過程を、会話の全文付きで紹介します。同じ手順で、どんなアプリでも作れます。
+
+---
+
+### ステップ1: フォルダを作ってClaude Codeを起動する
+
+ターミナルで:
 \`\`\`
-あなた: 経費を記録・集計できるWebアプリを作ってください
-Claude: 承知しました。以下のファイルを作成します:
-        - index.html（メイン画面）
-        - style.css（デザイン）
-        - app.js（動作ロジック）
-        [ファイル作成の提案が表示される]
-あなた: y（承認）
-Claude: ファイルを作成しました。localhost:3000で確認できます。
-あなた: テーブルの文字をもう少し大きくして
-Claude: style.cssを修正します。[変更の提案]
+mkdir ~/projects/apps/expense-tracker
+cd ~/projects/apps/expense-tracker
+claude
+\`\`\`
+
+Claude Codeが起動すると、入力欄が表示されます。ここに日本語で指示を入力します。
+
+---
+
+### ステップ2: AIに依頼する
+
+以下のように入力して \`Enter\` を押します:
+
+\`\`\`
+経費を管理するWebアプリを作ってください。
+
+【機能】
+- 日付、カテゴリ（交通費・会議費・消耗品など）、金額、メモを入力できる
+- 登録した経費の一覧を表示する
+- 月別の合計金額を表示する
+- CSVファイルでダウンロードできる
+
+【デザイン】
+- シンプルで見やすいデザイン
+- スマホでも使えるように
+
+1つのHTMLファイルで完結させてください。
+\`\`\`
+
+---
+
+### ステップ3: AIの提案を承認する
+
+AIが「以下のファイルを作成します」と提案してきます。内容を確認して:
+- \`y\` を押す → 承認（ファイルが作成される）
+- \`n\` を押す → 拒否（やり直し）
+
+**実際の会話例:**
+\`\`\`
+Claude: index.htmlを作成します。経費入力フォーム、一覧表示、
+       月別集計、CSV出力機能を含む単一ファイルアプリです。
+       [ファイルの内容が表示される]
+
 あなた: y
-あなた: 保存して
-Claude: GitHubにpushしました。
+
+Claude: ファイルを作成しました。ブラウザで index.html を
+       開いて確認してください。
 \`\`\`
 
 ---
 
-### フォルダの準備
+### ステップ4: ブラウザで確認する
 
-Claude Codeで作業するには、作業フォルダが必要です。新しいアプリを作る場合:
+Finderで \`~/projects/apps/expense-tracker/index.html\` をダブルクリックするとブラウザで開きます。
 
-\`\`\`
-mkdir ~/projects/apps/アプリの英語名
-cd ~/projects/apps/アプリの英語名
-claude
-\`\`\`
-
-**フォルダ名のルール（重要）:**
-- **半角英数字** と **ハイフン（-）** だけを使う
-- 日本語、スペース、特殊文字（!@#など）は使わない
-- すべて小文字にする
-
-| OK | NG | 理由 |
-|---|---|---|
-| \`expense-checker\` | \`経費チェッカー\` | 日本語はエラーの原因になる |
-| \`meeting-notes\` | \`Meeting Notes\` | スペースと大文字は避ける |
-| \`report-2026\` | \`report 2026!\` | スペースと特殊文字はNG |
+アプリが表示されたら、実際に使ってみてください:
+1. 日付、カテゴリ、金額を入力して「追加」ボタンを押す
+2. 一覧に表示されることを確認
+3. 月別集計を確認
 
 ---
 
-### 他の利用方法（参考）
+### ステップ5: 修正を依頼する
 
-Claude Codeはターミナル以外でも使えます。自分に合った環境を選んでください。
-
-| 環境 | 特徴 | いつ使うか |
-|---|---|---|
-| **CLI（ターミナル）** | 最もフル機能。本マニュアルの推奨 | 日常の開発作業 |
-| **デスクトップアプリ** | CLIと同等の機能をGUIで | ターミナルに慣れない場合 |
-| **Webアプリ（claude.ai/code）** | ブラウザから利用。インストール不要 | 外出先や別のPC |
-| **VS Code / Cursor 拡張** | エディタ内でClaude Codeが使える | コードを目で見ながら作業したい場合 |
-
-どの環境でも同じAIモデルが使われます。本マニュアルではCLIを前提に解説しますが、他の環境でも手順は同じです。
-
----
-
-### この章のまとめ
-
-| やること | 状態 |
-|---|---|
-| Claude Code CLIをインストールした | □ |
-| \`claude --version\` でバージョンが表示された | □ |
-| 初回ログインを完了した | □ |
-| フォルダ名のルールを理解した | □ |
-`
-        }
-      ]
-    },
-
-    // =====================================================================
-    // PART 2: SERVICES GUIDE
-    // =====================================================================
-    {
-      id: "services",
-      title: "サービス接続ガイド",
-      description: "各外部サービスの登録・設定・接続の手順",
-      chapters: [
-        {
-          id: "svc-github",
-          title: "GitHub（コードの保管）",
-          content: `
-## GitHub — コードを安全に保管する
-
-### GitHubの役割
-
-あなたがClaude Codeでアプリを作ると、パソコンの中にファイルが作られます。しかし、このままではパソコンが壊れたらファイルが消えてしまいますし、他の人と共有することもできません。
-
-GitHubは、これらのファイルをインターネット上に安全に保存してくれるサービスです。
-
-**GitHubがやってくれること:**
-- ファイルのバックアップ（パソコンが壊れても安心）
-- 変更履歴の自動記録（いつ、何を変えたかが全部残る）
-- 他のメンバーとの共有
-- Vercel（公開サービス）との自動連携
-
-<div class="diagram"><div class="diagram-title">あなたのPC・GitHub・Vercel の関係</div><div class="diagram-body"><div class="arch"><div class="arch-box local"><div class="arch-icon">&#128187;</div><div class="arch-label">あなたのPC</div><div class="arch-desc">Cursorで作業する場所。ファイルはここに作られる</div></div><div class="arch-arrow">&#10132;</div><div class="arch-box cloud"><div class="arch-icon">&#128193;</div><div class="arch-label">GitHub</div><div class="arch-desc">ファイルのバックアップ先。変更履歴も自動記録</div></div><div class="arch-arrow">&#10132;</div><div class="arch-box public"><div class="arch-icon">&#127760;</div><div class="arch-label">Vercel</div><div class="arch-desc">アプリを公開する場所。URLが発行される</div></div></div></div></div>
-
----
-
-### 知っておくべき用語
-
-GitHubを使っていると、AIが以下の言葉を使うことがあります。難しく考える必要はありませんが、意味を知っておくとAIの動作が理解しやすくなります。
-
-| AIが言うこと | 意味 | あなたの日常に例えると |
-|---|---|---|
-| 「リポジトリを作成します」 | アプリ専用の保管フォルダを作る | Googleドライブに新しいフォルダを作るようなもの |
-| 「コミットします」 | 変更を記録する | 「上書き保存」のようなもの（ただし履歴が残る） |
-| 「プッシュします」 | 記録した変更をGitHubに送信する | ファイルをクラウドにアップロードするようなもの |
-| 「プルします」 | GitHubから最新の状態を取得する | クラウドからファイルをダウンロードするようなもの |
-
----
-
-### 基本的な操作（Claude Codeが自動で行う）
-
-以下は、Claude Codeに「保存して」と伝えたときにAIが自動で行うことです。あなたが直接操作する必要はありません。
-
-**初めてのアプリを保存するとき:**
+気になる点があれば、Claude Codeに伝えます:
 \`\`\`
-git init                              ← フォルダを「Git管理下」に置く
-git add -A                            ← すべてのファイルを保存対象にする
-git commit -m "最初のバージョン"        ← 変更を記録する
-gh repo create アプリ名 --private      ← GitHubにフォルダ（リポジトリ）を作る
-git push                              ← ファイルをGitHubに送信する
+以下を修正してください:
+- テーブルの文字をもう少し大きくして
+- カテゴリに「通信費」「交際費」を追加して
+- 金額に3桁区切りのカンマを表示して
 \`\`\`
 
-**2回目以降の保存:**
-\`\`\`
-git add -A                            ← 変更されたファイルを保存対象にする
-git commit -m "○○を修正"              ← 変更を記録する
-git push                              ← GitHubに送信する
-\`\`\`
+AIが修正を提案するので、\`y\` で承認。ブラウザをリロード（\`Command\` + \`R\`）して確認します。
+
+**修正のコツ:**
+- 何度でも修正できます。納得いくまで繰り返してください
+- スクリーンショットを撮って（\`Command\` + \`Shift\` + \`4\`）Claude Codeに渡すと、さらに正確に修正してくれます
+- 「ここの色を変えたい」のような抽象的な指示より「ヘッダーの背景色を#7A4033にして」のように具体的に伝えると正確です
 
 ---
 
-### リポジトリの「公開」と「非公開」
+### ステップ6: 保存する
 
-GitHubのリポジトリ（保管フォルダ）には2つの状態があります:
+完成したら:
+\`\`\`
+GitHubに保存してください
+\`\`\`
 
-| 設定 | 意味 | 使い分け |
-|---|---|---|
-| Private（非公開） | 自分（と許可した人）だけがコードを見れる | 社内ツール、業務アプリ |
-| Public（公開） | 誰でもコードを見れる | 公開するダッシュボード、資料サイト |
-
-Claude Codeに「プライベートで」「パブリックで」と指定できます。指定しなければ、通常はプライベートで作成されます。
+AIが自動でGitHubにファイルを保存します。これで、パソコンが壊れてもファイルは安全です。
 
 ---
 
-### GitHubの画面で確認する方法
+### おめでとうございます！
 
-ブラウザで \`github.com\` にログインすると:
-- **自分のリポジトリ一覧**: トップページに表示される
-- **コードの中身**: リポジトリをクリック → ファイルの一覧と中身が見れる
-- **変更履歴**: リポジトリ内の「Commits」タブで、過去のすべての変更が見れる
-
-普段はClaude Codeがすべて操作してくれるので、GitHubの画面を使う機会は少ないかもしれません。ただ、「ちゃんと保存されているかな」と確認したいときに便利です。
+経費管理アプリが完成しました。この時点では自分のパソコンの中だけで動いています。次の章で、インターネットに公開する方法を説明します。
 `
         },
         {
-          id: "svc-vercel",
-          title: "Vercel（アプリの公開）",
+          id: "app-templates",
+          title: "すぐ使える依頼テンプレート",
           content: `
-## Vercel — アプリをインターネットに公開する
+## すぐ使える依頼テンプレート
 
-### Vercelの役割
-
-アプリを作った段階では、あなたのパソコンの中でしか動いていません。他の人がブラウザからアクセスできるようにするには、アプリを「インターネット上のコンピュータ」に置く必要があります。この作業を「デプロイ（公開）」と呼びます。
-
-Vercelは、このデプロイを自動的にやってくれるサービスです。
-
-**Vercelがやってくれること:**
-- アプリをインターネットに公開する
-- \`https://あなたのアプリ名.vercel.app\` というURLを自動で発行する
-- GitHubにコードを保存するたびに、自動で最新版に更新してくれる
-- 世界中からアクセスできるように高速化してくれる
-- HTTPS（セキュリティ付きの通信）を自動で設定してくれる
+Claude Codeへの最初の依頼文は、アプリの出来を大きく左右します。以下のテンプレートをコピーして、自分の目的に書き換えてください。
 
 ---
 
-### デプロイの手順（Claude Codeが自動で行う）
+### 基本テンプレート
 
-Claude Codeに「公開して」と伝えると、以下が自動で行われます:
-
-**ステップ1 — GitHubに保存する**
-\`\`\`
-git add -A && git commit -m "説明" && git push
-\`\`\`
-→ 最新のコードがGitHubに送信される
-
-**ステップ2 — Vercelと接続する（初回のみ）**
-\`\`\`
-npx vercel link --yes
-\`\`\`
-→ 「このフォルダとVercelを紐づけますよ」という設定が行われる
-
-**ステップ3 — 本番公開する**
-\`\`\`
-npx vercel --prod --yes
-\`\`\`
-→ 数秒〜数十秒で公開完了。URLが表示される
-
-**ステップ4 — 以降の更新**
-GitHubに保存（push）するだけで、Vercelが自動的に最新版に更新してくれる。手動で「公開して」と言う必要はない。
-
----
-
-### 公開後のURLについて
-
-公開が完了すると、こんなURLが発行されます:
-\`\`\`
-https://アプリ名.vercel.app
-\`\`\`
-
-このURLを他の人に共有すれば、誰でもブラウザからアプリにアクセスできます。
-
-**注意:** このURLを知っている人なら誰でもアクセスできます。社内だけで使いたい場合は:
-- URLを社内メンバーにだけ共有する
-- Claude Codeに「パスワード認証をつけて」と依頼する
-
----
-
-### 環境変数の設定
-
-アプリがAPIキー（AIの鍵やメール送信の鍵など）を使う場合、その情報をVercelに教える必要があります。コードの中に直接書くと、GitHubで公開したときに鍵が漏れてしまうからです。
-
-**環境変数とは:** アプリに渡す「秘密の設定値」です。コードとは別の場所に保管され、アプリが動くときだけ参照されます。
-
-**設定方法（ブラウザから）:**
-1. \`vercel.com\` にログイン
-2. プロジェクト（アプリ）を選択
-3. 「Settings」タブ →「Environment Variables」
-4. 「Key」に変数名、「Value」に値を入力
-5. 「Save」をクリック
-
-**設定方法（ターミナルから、Claude Codeが行うことが多い）:**
-\`\`\`
-npx vercel env add 変数名
-\`\`\`
-→ 値の入力を求められるので入力する
-
-**よく設定する環境変数の例:**
-
-| 変数名 | 何のため | どんなアプリで必要か |
-|---|---|---|
-| ANTHROPIC_API_KEY | AIの機能を使うため | AI機能があるアプリ |
-| SENDGRID_API_KEY | メールを送信するため | メール送信機能があるアプリ |
-| TURSO_DATABASE_URL | データベースに接続するため | データを保存するアプリ |
-| TURSO_AUTH_TOKEN | データベースの認証 | 同上 |
-| NEXT_PUBLIC_SUPABASE_URL | Supabaseに接続するため | ログイン機能があるアプリ |
-
----
-
-### もう一つの公開方法: GitHub Pages
-
-Vercelのほかに、GitHub Pagesという無料の公開方法もあります。
-
-| | Vercel | GitHub Pages |
-|---|---|---|
-| 向いているアプリ | 本格的なWebアプリ | 静的なサイト（HTML/CSS/JSだけ） |
-| サーバー処理 | できる | できない |
-| URL | xxx.vercel.app | ユーザー名.github.io/リポジトリ名 |
-| 費用 | 無料（制限あり） | 完全無料 |
-
-Claude Codeに「GitHub Pagesで公開して」と伝えれば、GitHub Pagesでの公開も可能です。
-`
-        },
-        {
-          id: "svc-database",
-          title: "データベース（データの保存）",
-          content: `
-## データベース — アプリのデータを保存する
-
-### データベースとは
-
-アプリで扱うデータ（顧客情報、イベント参加者、経費の記録など）を、整理して保存しておく仕組みです。
-
-「Excelの超強力版」と考えてください。Excelと同じように行と列でデータを管理しますが、10万件・100万件のデータでも問題なく動き、複数人が同時に使えます。
-
----
-
-### どのデータベースを使えばいい？
-
-データベースにはいくつかの種類があります。Claude Codeに「○○を管理するアプリを作って」と依頼すれば、AIが適切なものを選んでくれますが、それぞれの特徴を知っておくと、AIとの相談がスムーズになります。
-
-<div class="diagram"><div class="diagram-title">どのデータベースを使う？</div><div class="diagram-body"><div class="decision"><div class="decision-q">アプリを自分のPCだけで使う？</div><div class="decision-branches"><div class="decision-branch" style="background:#FAF4EE"><div class="label">はい</div><div class="answer">SQLite</div><div class="detail">設定不要。ファイル1つで動く</div></div><div class="decision-branch"><div class="label">いいえ（公開する）</div><div class="answer">&#8595; 次の質問へ</div><div class="detail"></div></div></div></div><div class="decision"><div class="decision-q">ユーザーのログイン機能が必要？</div><div class="decision-branches"><div class="decision-branch" style="background:#F5EFE8"><div class="label">はい</div><div class="answer">Supabase</div><div class="detail">ログイン機能が最初から付いている</div></div><div class="decision-branch"><div class="label">いいえ</div><div class="answer">&#8595; 次の質問へ</div><div class="detail"></div></div></div></div><div class="decision"><div class="decision-q">データがリアルタイムで更新される？</div><div class="decision-branches"><div class="decision-branch" style="background:#FFF4EC"><div class="label">はい</div><div class="answer">Firebase</div><div class="detail">画面を開いたまま最新データが反映</div></div><div class="decision-branch" style="background:#F5EFE8"><div class="label">いいえ</div><div class="answer">Turso</div><div class="detail">無料枠が大きく設定も簡単</div></div></div></div></div></div></div>
-
-| やりたいこと | 最適なデータベース | 理由 |
-|---|---|---|
-| 自分のパソコンだけで使う | **SQLite** | 設定不要。ファイル1つで動く |
-| 公開アプリでデータを保存する | **Turso** | 無料枠が大きく、設定が簡単 |
-| ユーザーのログイン機能も欲しい | **Supabase** | ログイン機能が最初から付いている |
-| データがリアルタイムで変わる | **Firebase** | 画面を開いたまま最新データが反映される |
-
----
-
-### SQLite（最もシンプル）
-
-**特徴:** アプリのフォルダ内に \`.db\` という1つのファイルとして保存される。アカウント作成不要、インターネット接続不要。
-
-**使う場面:** 自分のパソコンでだけ使うアプリ。試作段階のアプリ。
-
-**Claude Codeへの伝え方:**
-\`\`\`
-データはSQLiteで保存してください。
-\`\`\`
-
-**バックアップ方法:** \`.db\` ファイルをコピーするだけ。
-
----
-
-### Turso（公開アプリ向け）
-
-**特徴:** SQLiteをクラウドに置いたもの。公開アプリで複数人がアクセスしてもOK。
-
-**アカウント作成:**
-1. ブラウザで <a href="https://turso.tech/" target="_blank" rel="noopener">turso.tech</a> にアクセス
-2. 「Sign up」→ GitHubアカウントで登録
-
-**データベースの作成（ターミナルで）:**
-\`\`\`
-brew install tursodatabase/tap/turso
-turso auth login
-turso db create 好きな名前
-\`\`\`
-
-**接続に必要な情報を取得する:**
-\`\`\`
-turso db show 好きな名前 --url
-turso db tokens create 好きな名前
-\`\`\`
-
-1つ目のコマンドで表示される URL → 環境変数 \`TURSO_DATABASE_URL\` に設定
-2つ目のコマンドで表示されるトークン → 環境変数 \`TURSO_AUTH_TOKEN\` に設定
-
-**Vercelの環境変数に設定する（公開アプリの場合）:**
-Vercelのダッシュボード → プロジェクト → Settings → Environment Variables で上の2つを設定。
-
----
-
-### Supabase（ログイン機能付き）
-
-**特徴:** データベースに加えて、ユーザーのログイン機能（メール+パスワード、Googleログインなど）が最初から組み込まれている。
-
-**アカウント作成:**
-1. ブラウザで <a href="https://supabase.com/dashboard" target="_blank" rel="noopener">supabase.com</a> にアクセス
-2. 「Start your project」→ GitHubアカウントで登録
-3. 「New project」をクリック
-4. プロジェクト名を入力
-5. データベースのパスワードを設定（メモしておく！）
-6. リージョン（サーバーの場所）は「Northeast Asia (Tokyo)」を選択
-7. 「Create new project」をクリック
-
-**接続に必要な情報を取得する:**
-プロジェクトのダッシュボード → 「Settings」→「API」
-
-| 変数名 | 画面上の表示 | 説明 |
-|---|---|---|
-| NEXT_PUBLIC_SUPABASE_URL | Project URL | https://xxxxx.supabase.co の形式 |
-| NEXT_PUBLIC_SUPABASE_ANON_KEY | anon public | ブラウザから使える公開キー |
-| SUPABASE_SERVICE_ROLE_KEY | service_role secret | サーバーだけで使う管理キー。**絶対に公開しない** |
-
----
-
-### Firebase（リアルタイム更新）
-
-**特徴:** データが更新されると、アプリを開いている全員の画面にリアルタイムで反映される。Googleが運営しているので信頼性が高い。
-
-**アカウント作成:**
-1. ブラウザで <a href="https://console.firebase.google.com/" target="_blank" rel="noopener">console.firebase.google.com</a> にアクセス
-2. Googleアカウントでログイン
-3. 「プロジェクトを追加」をクリック
-4. プロジェクト名を入力
-5. Google アナリティクスは「無効」でOK
-6. 「プロジェクトを作成」をクリック
-
-**接続に必要な情報を取得する:**
-プロジェクト設定（歯車アイコン）→「全般」→「マイアプリ」→ ウェブアプリを追加
-表示される設定情報（apiKey, authDomain, projectId 等）をコピー。
-
-Claude Codeに「Firebaseで作って」と伝えれば、AIがこれらの情報をもとにアプリを構築してくれます。
-`
-        },
-        {
-          id: "svc-email",
-          title: "SendGrid（メール送信）",
-          content: `
-## SendGrid — アプリからメールを送る
-
-### SendGridの役割
-
-アプリから自動でメールを送りたいとき（イベントの案内、パスワードリセット、通知メールなど）に使うサービスです。
-
-通常、メールを送るには自分でメールサーバーを用意する必要がありますが、SendGridを使えばその手間がなくなります。
-
----
-
-### アカウント作成と設定
-
-**ステップ1 — アカウント作成:**
-1. ブラウザで <a href="https://signup.sendgrid.com/" target="_blank" rel="noopener">sendgrid.com</a> にアクセス
-2. 「Start For Free」をクリック
-3. メールアドレス、パスワードを入力して登録
-4. 会社情報やWebサイトの入力を求められることがある（任意のもので可）
-
-**ステップ2 — APIキーを作成:**
-1. ログイン後、左メニュー「Settings」→「API Keys」
-2. 「Create API Key」をクリック
-3. キーの名前を入力（例: 「my-app」）
-4. 「Full Access」を選択
-5. 「Create & View」をクリック
-6. 表示されたキー（\`SG.\` で始まる文字列）を**必ずコピー**
-
-**ステップ3 — キーを安全に保存:**
-\`\`\`
-security add-generic-password -s "SENDGRID_API_KEY" -a "sendgrid" -w "SG.ここにコピーしたキーを貼り付け"
-\`\`\`
-
-**ステップ4 — 送信元メールアドレスの認証:**
-SendGridでメールを送るには、「このアドレスから送りますよ」という認証が必要です:
-1. 左メニュー「Settings」→「Sender Authentication」
-2. 「Verify a Single Sender」をクリック
-3. 送信元にしたいメールアドレスと名前を入力
-4. そのアドレスに確認メールが届くので、リンクをクリック
-
----
-
-### Vercelの環境変数に設定する
-
-公開アプリでSendGridを使う場合:
-
-| 変数名 | 値 |
-|---|---|
-| SENDGRID_API_KEY | SG.で始まるAPIキー |
-| SENDGRID_FROM_EMAIL | 認証済みの送信元アドレス |
-| SENDGRID_FROM_NAME | 送信者の表示名 |
-
----
-
-### 無料枠と料金
-
-| プラン | メール数 | 月額 |
-|---|---|---|
-| Free | 月100通まで | 無料 |
-| Essentials | 月50,000通まで | $19.95〜 |
-| Pro | 月100,000通まで | $89.95〜 |
-
-テスト段階では無料枠で十分です。本格運用する場合は有料プランを検討してください。
-`
-        },
-        {
-          id: "svc-stripe",
-          title: "Stripe（決済）",
-          content: `
-## Stripe — アプリで決済を受け付ける
-
-### Stripeの役割
-
-アプリでクレジットカード決済を受け付けるためのサービスです。イベントの参加費、会員制サービスの月額課金などに使います。
-
----
-
-### テスト環境と本番環境
-
-Stripeには必ず2つの環境があります:
-
-| | テスト環境 | 本番環境 |
-|---|---|---|
-| 目的 | 開発中の動作確認 | 実際のお金のやりとり |
-| お金 | 動かない（架空の決済） | 動く（本物の決済） |
-| カード番号 | テスト用の番号を使う | 実際のカードを使う |
-| 切り替え | ダッシュボードのトグルスイッチ | 同左 |
-
-**テスト用カード番号:** \`4242 4242 4242 4242\`（有効期限・CVVは適当でOK）
-
----
-
-### アカウント作成
-
-1. ブラウザで <a href="https://dashboard.stripe.com/register" target="_blank" rel="noopener">stripe.com</a> にアクセス
-2. 「今すぐ始める」をクリック
-3. メールアドレス、名前、パスワードを入力
-
-**本番環境を使うには追加の設定が必要:**
-- ビジネス情報の入力（法人名、住所）
-- 銀行口座の登録（売上の入金先）
-- 本人確認書類の提出
-
-テスト環境はアカウント作成直後から使えます。
-
----
-
-### APIキーの取得
-
-1. Stripeダッシュボードにログイン
-2. 左メニュー「開発者」→「APIキー」
-3. 以下の2種類のキーを確認:
-
-| キーの種類 | 先頭の文字列 | 用途 | 公開してよいか |
-|---|---|---|---|
-| 公開可能キー | \`pk_test_\` または \`pk_live_\` | ブラウザ側の処理 | はい |
-| シークレットキー | \`sk_test_\` または \`sk_live_\` | サーバー側の処理 | **絶対にNo** |
-
-**シークレットキーの保存:**
-\`\`\`
-security add-generic-password -s "STRIPE_SECRET_KEY" -a "stripe" -w "sk_test_ここにキー"
-\`\`\`
-`
-        },
-        {
-          id: "svc-other",
-          title: "その他のサービス",
-          content: `
-## その他のサービス
-
-必要になったときに参照してください。Claude Codeが「○○のAPIキーが必要です」と言ったとき、このページで該当サービスの手順を確認します。
-
----
-
-### Brave Search API（Web検索機能を追加する）
-
-**何のため:** アプリの中でWeb検索ができるようにする
-**取得方法:**
-1. <a href="https://brave.com/search/api/" target="_blank" rel="noopener">brave.com/search/api</a> にアクセス
-2. 「Get Started」でアカウント作成
-3. 「Free」プランを選択（月2,000回まで無料）
-4. APIキーを取得
-
-**キーの保存:**
-\`\`\`
-security add-generic-password -s "BRAVE_API_KEY" -a "brave" -w "取得したキー"
-\`\`\`
-
----
-
-### Google Books API（書籍情報を検索する）
-
-**何のため:** 書名やISBNから書籍の情報（著者、出版社、表紙画像など）を取得する
-**取得方法:**
-1. <a href="https://console.cloud.google.com/" target="_blank" rel="noopener">console.cloud.google.com</a> にアクセス（Googleアカウントでログイン）
-2. 「新しいプロジェクト」を作成
-3. 「APIとサービス」→「ライブラリ」→「Books API」を検索して有効化
-4. 「認証情報」→「認証情報を作成」→「APIキー」
-
-**キーの保存:**
-\`\`\`
-security add-generic-password -s "google-books-api" -a "google-books-api" -w "取得したキー"
-\`\`\`
-
----
-
-### Zoom API（会議を自動作成する）
-
-**何のため:** アプリからZoomミーティングを自動的に作成する
-**取得方法:**
-1. <a href="https://marketplace.zoom.us/" target="_blank" rel="noopener">marketplace.zoom.us</a> にアクセス（Zoomアカウントでログイン）
-2. 「Develop」→「Build App」
-3. 「Server-to-Server OAuth」を選択
-4. アプリ名を入力して作成
-
-**取得する情報:**
-
-| 変数名 | 取得場所 |
-|---|---|
-| ZOOM_ACCOUNT_ID | App Credentials → Account ID |
-| ZOOM_CLIENT_ID | App Credentials → Client ID |
-| ZOOM_CLIENT_SECRET | App Credentials → Client Secret |
-
----
-
-### Slack API（Slackと連携する）
-
-**何のため:** アプリからSlackにメッセージを送る、Slackの情報を読み取る
-**取得方法:**
-1. <a href="https://api.slack.com/apps" target="_blank" rel="noopener">api.slack.com/apps</a> にアクセス
-2. 「Create New App」→「From scratch」
-3. アプリ名とワークスペースを選択
-4. 「OAuth & Permissions」→ 必要な権限（Scopes）を追加
-5. 「Install to Workspace」でインストール
-6. 「Bot User OAuth Token」（\`xoxb-\` で始まる）をコピー
-
-**変数名:** \`SLACK_BOT_TOKEN\`
-
----
-
-### Notion API（Notionと連携する）
-
-**何のため:** アプリからNotionのページを作成・編集・検索する
-**取得方法:**
-1. <a href="https://developers.notion.com/" target="_blank" rel="noopener">developers.notion.com</a> にアクセス
-2. 「+ New integration」をクリック
-3. 名前を入力、ワークスペースを選択
-4. 「Submit」で作成
-5. 表示される「Internal Integration Secret」（\`ntn_\` で始まる）をコピー
-6. **Notion側で、連携したいページで「接続先を追加」から、作ったインテグレーションを選択する**（この手順を忘れると、APIからページにアクセスできない）
-
-**変数名:** \`NOTION_TOKEN\`
-
----
-
-### その他のAPI（参考）
-
-上記以外にも、アプリの目的に応じてさまざまなAPIが利用できます。Claude Codeに「○○の機能が欲しい」と伝えれば、適切なサービスとAPIを提案してくれます。
-
-APIキーの管理は同じパターンです: サービスでアカウント作成 → APIキーを発行 → Keychainに保存 → 公開アプリならVercelの環境変数にも設定。
-
-### （参考）EDINET API（企業の財務情報を取得する）
-
-**何のため:** 有価証券報告書などの企業開示情報を取得する
-**取得方法:**
-1. <a href="https://disclosure2dl.edinet-fsa.go.jp/" target="_blank" rel="noopener">disclosure2dl.edinet-fsa.go.jp</a> にアクセス
-2. ユーザー登録（メールアドレスと個人情報）
-3. API利用申請
-4. 承認後、APIキーがメールで届く
-
-**変数名:** \`EDINET_API_KEY\`
-`
-        }
-      ]
-    },
-
-    // =====================================================================
-    // PART 3: CREDENTIALS MANAGEMENT
-    // =====================================================================
-    {
-      id: "credentials",
-      title: "認証情報の管理",
-      description: "APIキー・パスワードを安全に扱う方法",
-      chapters: [
-        {
-          id: "cred-keychain",
-          title: "macOS Keychainの使い方",
-          content: `
-## macOS Keychain — APIキーの安全な保管庫
-
-### Keychainとは
-
-APIキー（各サービスを使うための「鍵」）は、万が一漏洩すると他人に悪用されるリスクがあります。たとえば、決済サービスのキーが漏洩すれば、不正な取引が行われる可能性があります。
-
-macOS Keychainは、これらの鍵を暗号化して安全に保管する仕組みです。Macのログインパスワードで保護されているので、パソコンを直接操作しない限りアクセスできません。
-
----
-
-<div class="diagram"><div class="diagram-title">Keychain のイメージ</div><div class="diagram-body"><div class="concept-cards"><div class="concept-card" style="background:#fde8e8;border-color:#f0c0c0"><div class="icon">&#9888;</div><div class="title">やってはいけない方法</div><div class="body">コードの中にAPIキーを直接書く → GitHubにアップロード → 世界中から丸見え</div></div><div class="concept-card" style="background:#e8f8e8;border-color:#c0e8c0"><div class="icon">&#128274;</div><div class="title">安全な方法（Keychain）</div><div class="body">APIキーをMacの暗号化された保管庫に保存 → アプリが必要なときだけ自動で取り出す</div></div></div></div></div>
-
-### 基本操作
-
-すべてターミナルで行います。
-
-**キーを保存する:**
-\`\`\`
-security add-generic-password -s "サービス名" -a "アカウント名" -w "キーの値"
-\`\`\`
-
-例:
-\`\`\`
-security add-generic-password -s "ANTHROPIC_API_KEY" -a "anthropic" -w "sk-ant-api03-xxxxx"
-\`\`\`
-
-コマンドの意味:
-- \`-s\`: サービス名（ラベル）。あとで検索するときに使う
-- \`-a\`: アカウント名。メモ代わり
-- \`-w\`: 保存したい値（APIキー本体）
-
-**保存したキーを確認する:**
-\`\`\`
-security find-generic-password -s "サービス名" -w
-\`\`\`
-
-例:
-\`\`\`
-security find-generic-password -s "ANTHROPIC_API_KEY" -w
-\`\`\`
-→ 保存したキーが表示される
-
-**キーを更新する（新しいキーに差し替える）:**
-
-古いキーを削除してから、新しいキーを保存します:
-\`\`\`
-security delete-generic-password -s "サービス名"
-security add-generic-password -s "サービス名" -a "アカウント名" -w "新しいキー"
-\`\`\`
-
----
-
-### 保存すべきキーの一覧
-
-| サービス名（-sの値） | アカウント名（-aの値） | 何のキーか |
-|---|---|---|
-| ANTHROPIC_API_KEY | anthropic | Claude AI |
-| SENDGRID_API_KEY | sendgrid | メール送信 |
-| BRAVE_API_KEY | brave | Web検索 |
-| google-books-api | google-books-api | 書籍検索 |
-| STRIPE_SECRET_KEY | stripe | 決済 |
-| PLAUD_TOKEN | plaud | 録音API |
-
----
-
-### Pythonアプリが自動でキーを取得する仕組み
-
-Claude Codeが作るPythonアプリには、以下のような仕組みが組み込まれています:
-
-\`\`\`
-手順:
-1. まず「環境変数」にキーが設定されているか確認
-2. なければ、macOS Keychainから取得
-\`\`\`
-
-つまり、一度Keychainにキーを保存しておけば、あとはアプリが自動で取り出してくれます。コードの中にキーを直接書く必要はありません。
-
----
-
-### やってはいけないこと
-
-| NG | 理由 | 代わりにやること |
-|---|---|---|
-| コードの中にキーを直接書く | GitHubにアップロードしたときに漏洩する | Keychainまたは環境変数に保存 |
-| Slackやメールでキーを送る | 受信者以外にも見える可能性 | 直接会って伝える、またはパスワード管理ツール |
-| CLAUDE.mdにキーを書く | テキストファイルなので簡単に見える | Keychainに保存 |
-`
-        },
-        {
-          id: "cred-env",
-          title: "環境変数の設定方法",
-          content: `
-## 環境変数 — アプリに秘密の設定を渡す
-
-### 環境変数とは
-
-アプリが動くときに必要な設定情報（APIキー、データベースの接続先など）を、コードとは別の場所に保管して渡す仕組みです。
-
-なぜ必要かというと:
-- コードはGitHubに保存される → 公開リポジトリなら誰でも見られる
-- APIキーをコードに書くと → キーが漏洩するリスクがある
-- 環境変数に分離すれば → コードを公開してもキーは安全
-
----
-
-### ローカル開発での環境変数（自分のPCで動かすとき）
-
-方法は2つあります:
-
-<div class="concept-cards"><div class="concept-card"><div class="icon">&#128187;</div><div class="title">ローカル開発</div><div class="body">自分のPCでアプリを動かすとき<br>→ Keychain または .env ファイル</div></div><div class="concept-card"><div class="icon">&#127760;</div><div class="title">本番環境（Vercel）</div><div class="body">インターネットに公開するとき<br>→ Vercelの環境変数設定画面</div></div></div>
-
-**方法A: macOS Keychainを使う（推奨）**
-前のページで説明した方法です。Pythonアプリは自動でKeychainからキーを取得します。
-
-**方法B: .envファイルを使う**
-プロジェクトのフォルダに \`.env.local\` というファイルを作り、設定を書きます:
-
-\`\`\`
-ANTHROPIC_API_KEY=sk-ant-api03-xxxxx
-SENDGRID_API_KEY=SG.xxxxx
-TURSO_DATABASE_URL=libsql://xxxxx.turso.io
-TURSO_AUTH_TOKEN=eyJhbGciOiJFZDI1NTE5...
-\`\`\`
-
-**重要なルール:**
-- \`.env.local\` は絶対にGitHubにアップロードしてはいけない
-- 通常、Claude Codeが \`.gitignore\` というファイルに自動で登録してくれる（\`.gitignore\` = 「GitHubに送らないファイルのリスト」）
-- 他の人と環境変数の「名前だけ」を共有したい場合は、\`.env.example\` という値を空にしたファイルを用意する
-
----
-
-### 本番環境での環境変数（Vercelで公開するとき）
-
-Vercelで公開するアプリの場合、環境変数はVercelの管理画面で設定します。
-
-**設定手順:**
-1. ブラウザで \`vercel.com\` にログイン
-2. 対象のプロジェクト（アプリ）をクリック
-3. 上部メニューの「Settings」をクリック
-4. 左メニューの「Environment Variables」をクリック
-5. 「Key」に変数名（例: \`ANTHROPIC_API_KEY\`）を入力
-6. 「Value」に値（例: \`sk-ant-api03-xxxxx\`）を入力
-7. 環境を選択（通常は「Production」「Preview」「Development」すべてにチェック）
-8. 「Save」をクリック
-
-設定した環境変数は、次回のデプロイから反映されます。すぐに反映したい場合は、Claude Codeに「再デプロイして」と伝えてください。
-
----
-
-### 変数名の命名規則（Next.jsの場合）
-
-Next.jsで作ったアプリには特別なルールがあります:
-
-| 変数名の先頭 | 意味 | 例 |
-|---|---|---|
-| \`NEXT_PUBLIC_\` が付く | ブラウザからも見える（公開してよい情報） | \`NEXT_PUBLIC_SUPABASE_URL\` |
-| 何も付かない | サーバーだけが使う（秘密の情報） | \`SUPABASE_SERVICE_ROLE_KEY\` |
-
-\`NEXT_PUBLIC_\` が付いた変数は、ブラウザの開発者ツールで見ることができます。APIキーなどの秘密情報には絶対に \`NEXT_PUBLIC_\` を付けないでください。
-`
-        }
-      ]
-    },
-
-    // =====================================================================
-    // PART 4: DEVELOPMENT WORKFLOW
-    // =====================================================================
-    {
-      id: "workflow",
-      title: "開発ワークフロー",
-      description: "アプリを作る・動かす・公開する一連の手順",
-      chapters: [
-        {
-          id: "wf-create",
-          title: "新しいアプリを作る",
-          content: `
-## 新しいアプリを作る — 手順の全体像
-
-ここでは、ゼロからアプリを作ってインターネットに公開するまでの、一連の手順を説明します。
-
----
-
-### 全体の流れ
-
-<div class="diagram"><div class="diagram-title">ゼロから公開までの8ステップ</div><div class="diagram-body"><div class="flow-diagram"><div class="flow-d-step"><div class="flow-d-icon gray">1</div><div class="flow-d-label">フォルダ作成<br>+ claude起動</div><div class="flow-d-sub">30秒</div></div><div class="flow-d-arrow">&#10132;</div><div class="flow-d-step"><div class="flow-d-icon blue">2</div><div class="flow-d-label">AIに依頼</div><div class="flow-d-sub">数分</div></div><div class="flow-d-arrow">&#10132;</div><div class="flow-d-step"><div class="flow-d-icon blue">3</div><div class="flow-d-label">AIが作成</div><div class="flow-d-sub">数分〜数十分</div></div><div class="flow-d-arrow">&#10132;</div><div class="flow-d-step"><div class="flow-d-icon orange">4</div><div class="flow-d-label">ブラウザ確認</div><div class="flow-d-sub">数分</div></div><div class="flow-d-arrow">&#10132;</div><div class="flow-d-step"><div class="flow-d-icon orange">5</div><div class="flow-d-label">修正依頼</div><div class="flow-d-sub">繰り返し</div></div><div class="flow-d-arrow">&#10132;</div><div class="flow-d-step"><div class="flow-d-icon green">6</div><div class="flow-d-label">GitHub保存</div><div class="flow-d-sub">自動</div></div><div class="flow-d-arrow">&#10132;</div><div class="flow-d-step"><div class="flow-d-icon red">7</div><div class="flow-d-label">公開!</div><div class="flow-d-sub">自動</div></div></div></div></div>
-
----
-
-### 手順1: フォルダを作ってClaude Codeを起動する
-
-ターミナルで以下を実行します:
-\`\`\`
-mkdir ~/projects/apps/アプリの英語名
-cd ~/projects/apps/アプリの英語名
-claude
-\`\`\`
-
-例: 助成金データベースを作る場合
-\`\`\`
-mkdir ~/projects/apps/grant-db
-cd ~/projects/apps/grant-db
-claude
-\`\`\`
-
-「~/projects/apps/」は「ホームフォルダの中のprojectsフォルダの中のappsフォルダ」という意味です。アプリはすべてここに作るとわかりやすくなります。
-
-### 手順2: AIに依頼する
-
-Claude Codeが起動したら、作りたいものを日本語で入力します。
-
-**最初のメッセージのテンプレート:**
 \`\`\`
 【作りたいもの】
 ○○を管理するWebアプリを作ってください。
@@ -1190,503 +443,625 @@ Claude Codeが起動したら、作りたいものを日本語で入力します
 - 機能3の説明
 
 【使う人】
-社内のスタッフ○名。ITに詳しくない。
+○○のスタッフ○名。ITに詳しくない。
 
 【デザイン】
 シンプルで余白が多く、見やすいデザイン。
 スマホでも使えるように。
 \`\`\`
 
-AIがファイルの作成を提案してきます。内容を確認して \`y\` で承認してください。
+---
+
+### 業務別テンプレート
+
+**イベント参加者管理:**
+\`\`\`
+イベントの参加者を管理するWebアプリを作ってください。
+
+- 参加者の名前、所属、メールアドレス、参加区分（登壇者/一般）を登録できる
+- 参加者一覧を表示し、検索・フィルタできる
+- 参加者数の集計を表示する
+- CSVでエクスポートできる
+
+スマホでも操作できるデザインにしてください。
+\`\`\`
+
+**アンケート集計:**
+\`\`\`
+アンケート結果を集計・可視化するWebアプリを作ってください。
+
+- CSVファイルをアップロードすると、自動で集計する
+- 設問ごとの回答分布をグラフ（棒グラフ・円グラフ）で表示
+- 自由記述の回答を一覧表示
+- 集計結果をPDFでダウンロード可能
+
+データはブラウザ内に保存（サーバー不要）。
+\`\`\`
+
+**書籍・文献管理:**
+\`\`\`
+読んだ本や論文を管理するWebアプリを作ってください。
+
+- タイトル、著者、出版年、カテゴリ、メモを登録
+- タグで分類できる
+- キーワードで全文検索できる
+- 「読みたい」「読書中」「読了」のステータス管理
+
+データはSQLiteに保存。
+\`\`\`
 
 ---
 
-### 実際に作った例 — こんなアプリが30分〜1時間でできる
+### 依頼のコツ
 
-**例1: 助成金データベース（grant-db）**
-\`\`\`
-助成金・補助金の情報を管理するWebアプリを作ってください。
-- 名称、助成元、金額、締切日、対象分野を登録できる
-- 一覧画面でフィルタ・検索ができる
-- 締切が近い順にソートできる
-- データはSQLiteに保存
-\`\`\`
-→ 3,669件の助成金情報を管理するアプリがVercelで公開中
-
-**例2: 科研費申請書作成ツール（kakenhi-writer）**
-\`\`\`
-科研費の申請書を作成支援するWebアプリを作ってください。
-- 研究テーマを入力すると、AIが申請書の各セクションの下書きを生成
-- 編集・保存・PDF出力ができる
-\`\`\`
-→ AI活用で申請書のたたき台を素早く作れるツール
-
-**例3: 産学連携マッチング（sangaku-matcher）**
-\`\`\`
-研究者と企業をマッチングするWebアプリを作ってください。
-- 研究キーワードを入力すると、関連する企業ニーズを表示
-- マッチングスコアを表示
-\`\`\`
-→ 研究シーズとビジネスニーズを接続するアプリ
-
----
-
-### 手順3: ブラウザで確認する
-
-AIが「\`http://localhost:3000\` で確認できます」のように伝えてきます。ブラウザのアドレスバーにそのURLを入力して Enter を押してください。
-
-HTMLファイル1つで完結するアプリの場合は、Finderからindex.htmlを直接開くこともできます。
-
-### 手順4: 修正を依頼する
-
-気になる点があれば、そのまま伝えます:
-\`\`\`
-いくつか修正をお願いします。
-- テーブルの文字をもう少し大きくして
-- 「追加」ボタンの色を青に変えて
-- スマホで見たとき、サイドバーが邪魔なので非表示にして
-\`\`\`
-
-何度でも修正できます。スクリーンショットを撮って（\`Command\` + \`Shift\` + \`4\`）Claude Codeに渡すと、さらに正確に修正してくれます。
-
-### 手順5: 保存と公開
-
-\`\`\`
-完成です。GitHubに保存して、Vercelで公開してください。
-\`\`\`
-
-AIが自動ですべて行い、公開URLを教えてくれます。
-
----
-
-### AIへの依頼のコツ
-
-| コツ | 悪い例 | 良い例 |
-|---|---|---|
-| 具体的に伝える | 「アプリを作って」 | 「経費を日付・カテゴリ・金額で記録し、月別集計できるアプリを作って」 |
-| 使う人を伝える | （何も言わない） | 「ITに詳しくないスタッフ5名が使います」 |
-| 段階的に作る | 「全機能を一気に作って」 | 「まず基本の入力・一覧機能だけ作って。OKだったら機能を追加します」 |
-| 参考を見せる | 「いい感じで」 | 「このサイト（URL）のような雰囲気で」 |
-| まず計画を見せてもらう | いきなり「作って」 | 「まず計画を見せて」→ 確認 → 「OK、作って」 |
-`
-        },
-        {
-          id: "wf-maintain",
-          title: "既存アプリの修正・更新",
-          content: `
-## 既存アプリを修正・更新する
-
-一度作ったアプリに機能を追加したり、不具合を直したりする手順です。
-
----
-
-### 修正の基本手順
-
-1. **ターミナルでアプリのフォルダに移動してClaude Codeを起動する**
-   \`cd ~/projects/apps/アプリ名 && claude\`
-
-2. **AIに修正内容を伝える**
-   日本語で指示を入力
-
-3. **ブラウザで確認する**
-   修正前と変わっているかをチェック
-
-4. **「保存して」と伝える**
-   AIがGitHubに保存 → Vercel連携済みなら自動で公開版にも反映
-
----
-
-### 修正依頼の書き方
-
-**機能を追加するとき:**
-\`\`\`
-このアプリにCSVエクスポート機能を追加してください。
-一覧画面に「CSV出力」ボタンを置いて、
-表示中の全データをCSVファイルとしてダウンロードできるようにしてください。
-\`\`\`
-
-**見た目を変えるとき:**
-\`\`\`
-以下のデザインを変更してください:
-- ヘッダーの背景色を黒（#1a1a1a）に変更
-- 全体のフォントサイズを1段階大きくして
-- ボタンの角を少し丸くして
-\`\`\`
-
-**バグを直すとき:**
-\`\`\`
-以下の問題を修正してください:
-- 「日付」の欄に未来の日付も入力できてしまう。今日以前だけにして
-- 金額が0のデータを保存するとエラーが出る
-- ブラウザをリロードすると、フィルタ設定がリセットされてしまう
-\`\`\`
-
-**コツ:** 「おかしい」「変」という抽象的な表現ではなく、「○○をしたときに△△になる。本来は□□であるべき」と具体的に伝えるほうが、AIが正確に修正できます。
-
----
-
-### 更新を公開に反映する
-
-修正が終わったら:
-\`\`\`
-保存して公開に反映してください。
-\`\`\`
-
-AIが以下を自動実行します:
-1. 変更をGitHubに保存（git commit + push）
-2. Vercelが検知して自動で再デプロイ（通常10-30秒）
-
-公開URLにアクセスすると、最新の状態が反映されています。
-`
-        },
-        {
-          id: "wf-local",
-          title: "ローカルサーバーの操作",
-          content: `
-## ローカルサーバー — 自分のPCでアプリを動かす
-
-### ローカルサーバーとは
-
-アプリをインターネットに公開する前に、自分のパソコンの中だけで動かして確認するための仕組みです。
-
-ブラウザに \`http://localhost:3000\` のようなURLを入力してアクセスします。「localhost」は「自分自身のパソコン」を意味します。つまり、他の人からはアクセスできません。
-
----
-
-### よく見るURL
-
-| URL | 意味 |
+| やること | やらないこと |
 |---|---|
-| \`http://localhost:3000\` | 自分のPCのポート3000で動いているアプリ |
-| \`http://localhost:5210\` | 自分のPCのポート5210で動いているアプリ |
-| \`http://127.0.0.1:8000\` | localhostと同じ意味（数字表記版） |
+| **何を実現したいか**を伝える | 実装方法を細かく指定する |
+| 使う人の技術レベルを伝える | 何も言わない（AIは技術者向けに作ってしまう） |
+| まず最小限の機能で始める | 全機能を一度に頼む |
+| 「まず計画を見せて」で確認する | いきなり「全部作って」 |
 
-「ポート」とは、パソコンの中の「部屋番号」のようなものです。同時に複数のアプリを動かすとき、それぞれ別のポート（部屋）で動きます。
+**大きな変更をする前は、必ず「まず計画を見せて」と伝えましょう。** AIが作業方針を提示してくれるので、方向性を確認してから実行に移せます。これだけで「思っていたのと違う」という手戻りが大幅に減ります。
+`
+        }
+      ]
+    },
+
+    // =====================================================================
+    // PART 3: PUBLISH — 公開する
+    // =====================================================================
+    {
+      id: "publish",
+      title: "公開する",
+      description: "作ったアプリをインターネットに公開する",
+      chapters: [
+        {
+          id: "pub-github",
+          title: "GitHubに保存する",
+          content: `
+## GitHubに保存する
+
+GitHubは、作ったファイルをインターネット上に安全に保管する場所です。パソコンが壊れてもファイルが残り、変更の履歴も自動で記録されます。
 
 ---
 
-### 起動と停止
+### 保存方法
 
-**起動:**
-通常、Claude Codeがアプリを作った時点で自動的にサーバーを起動してくれます。
-手動で起動する場合は、ターミナルでアプリのフォルダに移動してからコマンドを実行:
+Claude Codeに「保存して」と伝えるだけです。AIが以下を自動で行います:
 
-| アプリの種類 | コマンド | URL |
+1. ファイルの変更を記録する
+2. GitHubにアップロードする
+3. 完了を報告する
+
+**初めて保存するとき:**
+\`\`\`
+GitHubにプライベートリポジトリを作って保存してください
+\`\`\`
+
+AIが自動で:
+- GitHubに専用の保管フォルダ（リポジトリ）を作成
+- すべてのファイルをアップロード
+- 以後の変更も自動で追跡
+
+**2回目以降:**
+\`\`\`
+保存して
+\`\`\`
+
+これだけで、変更がGitHubに送信されます。
+
+---
+
+### ブラウザで確認する
+
+\`github.com\` にログインすると、自分のリポジトリ一覧が見えます。リポジトリをクリックすれば、ファイルの中身や変更履歴を確認できます。普段は確認する必要はありませんが、「ちゃんと保存されているかな」と不安なときに便利です。
+
+---
+
+### 公開設定
+
+| 設定 | 意味 | 使い分け |
 |---|---|---|
-| Next.js | \`npm run dev\` | http://localhost:3000 |
-| Python (Flask) | \`python app.py\` | http://localhost:5000〜 |
-| 静的HTMLファイル | \`python3 -m http.server 8000\` | http://localhost:8000 |
+| Private（非公開） | 自分だけがコードを見れる | 社内ツール、業務アプリ（通常はこちら） |
+| Public（公開） | 誰でもコードを見れる | 公開ダッシュボード、資料サイト |
 
-**停止:**
-ターミナルで \`Ctrl\` + \`C\` を押す（キーボードのControlキーとCキーを同時に押す）。
+Claude Codeに「プライベートで」「パブリックで」と指定できます。指定しなければプライベートで作成されます。
+`
+        },
+        {
+          id: "pub-vercel",
+          title: "インターネットに公開する",
+          content: `
+## インターネットに公開する
+
+GitHubに保存しただけでは、自分のパソコンとGitHub上にファイルがあるだけです。他の人がブラウザからアクセスできるようにするには、Vercelで「公開」します。
 
 ---
 
-### よくあるトラブル
+### 公開方法
 
-**「Address already in use」（ポートが使用中）エラー:**
-
+Claude Codeに伝えるだけです:
 \`\`\`
-OSError: [Errno 48] Address already in use
-\`\`\`
-
-同じポート番号で別のアプリが既に動いています。解決方法:
-\`\`\`
-lsof -ti:ポート番号 | xargs kill
+Vercelにデプロイしてください
 \`\`\`
 
-例: ポート3000が使用中の場合
+AIが自動で:
+1. GitHubに最新のファイルを送信
+2. Vercelと接続
+3. 公開完了後、URLを教えてくれる
+
+公開されたURLの例:
+\`\`\`
+https://expense-tracker-abc123.vercel.app
+\`\`\`
+
+このURLを他の人に共有すれば、誰でもブラウザからアプリにアクセスできます。
+
+---
+
+### 更新の反映
+
+一度Vercelと接続すれば、以降はGitHubに保存（\`保存して\`）するだけで、自動的に公開版も最新に更新されます。手動で「公開して」と言う必要はありません。
+
+---
+
+### 環境変数（AIの鍵をVercelに設定する）
+
+アプリの中でAI機能を使っている場合、APIキーをVercelにも教える必要があります。
+
+**設定方法:**
+1. ブラウザで \`vercel.com\` にログイン
+2. プロジェクトを選択 → 「Settings」→「Environment Variables」
+3. 変数名と値を入力して「Save」
+
+| よく設定する変数 | 何のため |
+|---|---|
+| ANTHROPIC_API_KEY | アプリ内でAI機能を使うため |
+| SENDGRID_API_KEY | アプリからメールを送信するため |
+
+Claude Codeに「Vercelの環境変数を設定して」と伝えれば、ターミナルからも設定できます。
+
+---
+
+### もう一つの公開方法: GitHub Pages
+
+静的なサイト（HTMLファイルだけで動くもの）なら、GitHub Pagesでも公開できます。完全無料で、Claude Codeに「GitHub Pagesで公開して」と伝えるだけです。
+
+| | Vercel | GitHub Pages |
+|---|---|---|
+| 向いているアプリ | サーバー処理が必要なアプリ | HTML/CSS/JSだけのアプリ |
+| URL | xxx.vercel.app | ユーザー名.github.io/アプリ名 |
+| 費用 | 無料（制限あり） | 完全無料 |
+`
+        }
+      ]
+    },
+
+    // =====================================================================
+    // PART 4: TROUBLESHOOTING — 困ったときは
+    // =====================================================================
+    {
+      id: "trouble",
+      title: "困ったときは",
+      description: "よくある問題と対処法",
+      chapters: [
+        {
+          id: "trouble-common",
+          title: "よくあるエラーと対処法",
+          content: `
+## よくあるエラーと対処法
+
+エラーが出ることは正常です。プログラミングでは「エラー → 修正 → 確認」の繰り返しが日常です。焦らず、以下の手順で対処してください。
+
+---
+
+### 基本の対処法（困ったらまずこれ）
+
+**エラーメッセージが出たら、そのままClaude Codeに貼り付ける:**
+\`\`\`
+このエラーが出ました。修正してください:
+[ここにエラーメッセージを貼り付け]
+\`\`\`
+
+多くの場合、AIが原因を特定して修正してくれます。
+
+---
+
+### インストール・セットアップ時のエラー
+
+**「command not found: brew」**
+→ Homebrewのパス設定が必要です:
+\`\`\`
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+eval "$(/opt/homebrew/bin/brew shellenv)"
+\`\`\`
+
+**「command not found: node」**
+→ Node.jsがインストールされていません:
+\`\`\`
+brew install node
+\`\`\`
+
+**「command not found: claude」**
+→ Claude Codeのインストールをやり直してください:
+\`\`\`
+curl -fsSL https://claude.ai/install.sh | bash
+\`\`\`
+
+**パスワード入力で何も表示されない**
+→ 正常です。画面には表示されませんが入力されています。そのまま入力して \`Enter\` を押してください。
+
+---
+
+### アプリ開発中のエラー
+
+**「Address already in use」**
+→ 同じポートで別のアプリが動いています。以下で止めてから再起動:
 \`\`\`
 lsof -ti:3000 | xargs kill
 \`\`\`
+（\`3000\` の部分は、エラーメッセージに表示されたポート番号に置き換え）
 
-そのあと、もう一度サーバーを起動してください。
+**「npm install」で大量のエラー**
+→ 最後の行を確認してください。「added XX packages」と書かれていれば成功です。途中の警告（WARN）は問題ありません。最後が「ERR!」の場合は、AIに「npm installでエラーが出ました。解決してください」と伝えます。
 
-**ブラウザでアクセスしても何も表示されない:**
-- サーバーが起動しているか確認（ターミナルにエラーが出ていないか）
-- URLが正しいか確認（ポート番号が合っているか）
-- ブラウザをリロード（\`Command\` + \`R\`）
+**「APIキーが設定されていません」**
+→ キーがKeychainに保存されているか確認:
+\`\`\`
+security find-generic-password -s "ANTHROPIC_API_KEY" -w
+\`\`\`
+キーが表示されない場合は、「アカウントを作る」の章に戻ってAPIキーを保存してください。
 
-**「command not found: npm」エラー:**
-Node.jsがインストールされていません。「環境構築」の章に戻ってインストールしてください。
+---
+
+### Claude Codeの操作に関する問題
+
+**AIが意図しない操作をしている:**
+1. \`Escape\` キーを押す → AIの操作がキャンセルされます（最も安全）
+2. それでも止まらなければ \`Ctrl\` + \`C\` を押す
+3. 「直前の変更をすべて取り消して」と伝えれば元に戻せます
+
+**AIが同じ間違いを繰り返す:**
+\`\`\`
+この方法では2回試しても直りません。
+別のアプローチで解決してください。
+\`\`\`
+
+**セッションが長くなってAIの反応がおかしい:**
+1. \`/compact\` と入力 → 会話が圧縮されてリフレッシュ
+2. それでもダメなら \`/clear\` → 会話をリセットして新しく始める
+
+**AIの許可を求めるダイアログが出た:**
+→ 内容を確認して \`y\`（承認）を押してください。セキュリティのための確認です。
+
+---
+
+### 公開後のエラー
+
+**デプロイしたのに古い画面のまま:**
+1. \`Command\` + \`Shift\` + \`R\` でキャッシュクリアして再読み込み
+2. ブラウザのシークレットウィンドウで開いてみる
+
+**GitHubへのpushが失敗:**
+→ Claude Codeに「pushが失敗しました。解決してください」と伝えればAIが自動で対処します。
+
+---
+
+### それでも解決しないとき
+
+1. **新しいセッションで始める**: \`/clear\` でリセット。長い会話はAIの精度を下げることがあります
+2. **問題を具体的に伝える**: 「動きません」ではなく「○○をクリックすると△△というエラーが表示される」
+3. **スクリーンショットを渡す**: \`Command\` + \`Shift\` + \`4\` で撮影してClaude Codeにドラッグ&ドロップ
+4. **エラーメッセージ全文をコピーして渡す**: 赤い文字をそのまま貼り付ける
+`
+        },
+        {
+          id: "trouble-faq",
+          title: "FAQ（よくある質問）",
+          content: `
+## よくある質問
+
+### Q. プログラミングの知識がなくても本当に使えますか？
+はい。Claude Codeは日本語で指示するだけで動きます。コードの中身を理解する必要はありません。ただし、「何を作りたいか」を具体的に伝える力は必要です。
+
+### Q. 作ったアプリが壊れたらどうなりますか？
+GitHubに保存してあれば、いつでも前の状態に戻せます。Claude Codeに「前回のコミットに戻して」と伝えてください。
+
+### Q. 費用はどれくらいかかりますか？
+Claude Code本体の利用料（月額約$20〜のClaude Proプラン、またはAPI従量課金）が最低限必要です。GitHub、Vercel、データベースなどは無料枠で始められます。
+
+### Q. 他の人と一緒に使えますか？
+はい。GitHubのリポジトリを共有すれば、複数人で同じアプリを開発できます。ただし、同じファイルを同時に編集すると「コンフリクト（衝突）」が起きることがあります。その場合はClaude Codeに解決を依頼してください。
+
+### Q. セキュリティは大丈夫ですか？
+APIキー（各サービスの鍵）をコードの中に直接書かず、Keychainや環境変数で管理していれば安全です。本マニュアルの手順に従えば、基本的なセキュリティは確保されます。
+
+### Q. アプリを作った後のメンテナンスは必要ですか？
+使い続ける限り、定期的な更新が必要になることがあります。たとえば「新しい機能を追加したい」「表示がおかしくなった」場合は、Claude Codeで修正できます。アプリを放置しても壊れることは通常ありません。
+
+### Q. 1つのHTMLファイルで作るアプリと、複数ファイルで作るアプリの違いは？
+1つのHTMLファイルで完結するアプリは最もシンプルで、ブラウザで直接開けます。データの保存が不要な小さなツールに最適です。複数ファイルのアプリ（Next.jsなど）は、ログイン機能やデータベース連携が必要な本格的なアプリに使います。最初は1ファイルのアプリから始めることをおすすめします。
+
+### Q. Claude Codeが作るコードの品質は信頼できますか？
+基本的に高品質ですが、AIは完璧ではありません。特にセキュリティやデータ処理の正確性については、実際に動かして確認することが重要です。業務で使う場合は、公開前に動作確認を十分に行ってください。
 `
         }
       ]
     },
 
     // =====================================================================
-    // PART 5: TROUBLESHOOTING
+    // PART 5: EXPAND — もっと使いこなす
     // =====================================================================
     {
-      id: "troubleshoot",
-      title: "トラブルシューティング",
-      description: "よくある問題と解決方法",
+      id: "expand",
+      title: "もっと使いこなす",
+      description: "データベース、メール送信、外部サービスとの連携",
       chapters: [
         {
-          id: "ts-common",
-          title: "よくある問題と解決方法",
+          id: "exp-database",
+          title: "データベースを使う",
           content: `
-## よくある問題と解決方法
+## データベースを使う
 
-### AIが「許可が必要です」と言ってきた
-
-**状況:** AIがファイルを作成・変更しようとしたとき、確認ダイアログが表示される
-**対応:** 内容を確認して「Accept」「Allow」「Yes」をクリック。これはセキュリティのための確認です。
+アプリでデータを永続的に保存したい場合（会員情報、記録、履歴など）、データベースが必要です。「Excelの超強力版」と考えてください。
 
 ---
 
-### 「npm install」で大量のエラーが出る
+### どのデータベースを選ぶ？
 
-**状況:** AIが \`npm install\` を実行したとき、赤い文字でエラーが大量に表示される
-**対応:**
-1. まず、最後に「added XX packages」と表示されているか確認。表示されていれば、途中のメッセージは警告であり、問題ない場合が多い
-2. 最後が「ERR!」で終わっている場合は、AIに「npm installでエラーが出ました。解決してください」と伝える
+Claude Codeに「○○を管理するアプリを作って」と伝えれば、AIが適切なものを選んでくれます。自分で選びたい場合は以下を参考にしてください。
 
----
+| やりたいこと | 選ぶべきDB | 理由 |
+|---|---|---|
+| 自分のPCだけで使う | **SQLite** | 設定不要。ファイル1つで動く |
+| Webに公開するアプリでデータ保存 | **Turso** | 無料枠が大きく設定が簡単 |
+| ログイン機能も欲しい | **Supabase** | DB + ログイン機能がセット |
+| リアルタイムでデータが更新される | **Firebase** | 全員の画面が同時に最新化 |
 
-### デプロイしたのに古い画面のまま
-
-**状況:** Vercelに公開したが、ブラウザに古い内容が表示される
-**対応:**
-1. ブラウザで \`Command\` + \`Shift\` + \`R\` を押す（キャッシュを無視してリロード）
-2. それでもダメなら、ブラウザの「シークレットウィンドウ」（プライベートウィンドウ）で開いてみる
-3. デプロイが完了しているか確認。AIに「Vercelのデプロイ状況を確認して」と聞く
+**迷ったら:** まずSQLiteで作り、公開するタイミングでTursoやSupabaseに移行するのが安全です。Claude Codeに「SQLiteからTursoに移行して」と伝えれば、AIが自動で変更してくれます。
 
 ---
 
-### GitHubへのpushが失敗する
+### SQLite（最もシンプル）
 
-**状況:** 「rejected」「failed to push」のようなエラーが出る
-**対応:** AIに「pushが失敗しました。解決してください」と伝える。多くの場合、AIが自動で解決してくれます。
+設定不要。Claude Codeに「データはSQLiteで保存して」と伝えるだけ。アプリのフォルダに \`.db\` ファイルが作られます。
 
 ---
 
-### 「APIキーが設定されていません」エラー
+### Turso（公開アプリ向け）
 
-**状況:** アプリを起動したとき、APIキーがない旨のエラーが表示される
-**対応:**
-1. 該当するAPIキーがKeychainに保存されているか確認:
+1. <a href="https://turso.tech/" target="_blank" rel="noopener">turso.tech</a> でGitHubアカウントでサインアップ
+2. ターミナルで:
 \`\`\`
-security find-generic-password -s "キーの名前" -w
+brew install tursodatabase/tap/turso
+turso auth login
+turso db create my-app-db
 \`\`\`
-2. 保存されていなければ、「サービス接続ガイド」の該当サービスの章を見て設定する
-3. Vercel上のアプリの場合、Vercelの環境変数に設定されているか確認する
+3. 接続情報を取得:
+\`\`\`
+turso db show my-app-db --url
+turso db tokens create my-app-db
+\`\`\`
+4. Vercelの環境変数に設定:
+   - \`TURSO_DATABASE_URL\` → 表示されたURL
+   - \`TURSO_AUTH_TOKEN\` → 表示されたトークン
 
 ---
 
-### Claude Codeが意図しない操作をしているとき
+### Supabase（ログイン機能付き）
 
-**状況:** AIが大量のファイルを変更し続けている、想定と違う方向に進んでいる
-**対応（段階的に試してください）:**
-1. **\`Escape\` キーを押す** — AIの操作をキャンセルできます。最も安全な止め方です
-2. **\`Ctrl\` + \`C\` を押す** — Escapeで止まらない場合。Claude Codeが停止します
-3. **「直前の変更をすべて取り消して」と伝える** — AIが \`git checkout\` で変更を元に戻してくれます
-4. **別の方法を指示する** — 「その方法ではなく、○○のアプローチで試して」と明確に方向を示す
+1. <a href="https://supabase.com/dashboard" target="_blank" rel="noopener">supabase.com</a> でGitHubアカウントでサインアップ
+2. 「New project」→ プロジェクト名を入力 → リージョンは「Northeast Asia (Tokyo)」→ 作成
+3. 「Settings」→「API」から接続情報を取得
 
-大量のファイル変更が始まった場合は、早めに \`Escape\` を押して一度止め、「まず計画を見せて」と伝えてから進めるのが安全です。
+| 変数名 | 説明 |
+|---|---|
+| NEXT_PUBLIC_SUPABASE_URL | プロジェクトURL |
+| NEXT_PUBLIC_SUPABASE_ANON_KEY | 公開用キー |
+| SUPABASE_SERVICE_ROLE_KEY | 管理用キー（**絶対に公開しない**） |
+`
+        },
+        {
+          id: "exp-services",
+          title: "外部サービスと連携する",
+          content: `
+## 外部サービスと連携する
+
+アプリに特定の機能を追加したい場合、外部サービスのAPIを使います。Claude Codeに「○○の機能を追加して」と伝えれば、AIが適切なサービスを提案してくれます。
 
 ---
 
-### セッションが長くなってAIの反応が遅い・おかしい
+### よく使うサービス一覧
 
-**状況:** 長時間使い続けると、AIが以前の指示を忘れたり、同じことを繰り返す
-**対応:**
-1. \`/compact\` コマンドを実行して会話を圧縮する
-2. それでもダメなら \`/clear\` で会話をリセットして新しく始める
-3. 重要な指示はCLAUDE.mdに書いておけば、セッションをまたいでも忘れない
+| サービス | 何ができるか | 費用 |
+|---|---|---|
+| **SendGrid** | アプリからメールを自動送信 | 月100通まで無料 |
+| **Stripe** | クレジットカード決済 | 手数料のみ |
+| **Slack API** | Slackにメッセージを送信 | 無料 |
+| **Notion API** | Notionのページを操作 | 無料 |
+| **Google Books API** | 書籍情報を検索 | 無料 |
+| **Brave Search API** | Web検索機能を追加 | 月2,000回まで無料 |
 
 ---
 
-### 何をしてもうまくいかないとき
+### APIキーの管理方法（共通）
 
-1. **新しいセッションを始める**: \`/clear\` または Claude Codeを再起動する。長い会話はAIの精度を下げる
-2. **問題を具体的に伝える**: 「動きません」ではなく「○○をクリックすると△△というエラーが表示される」
-3. **エラーメッセージをコピーして渡す**: 赤い文字のエラーメッセージをそのままAIに貼り付ける
-4. **スクリーンショットを渡す**: Claude Codeは画像を理解できるので、画面のスクリーンショットをドラッグ&ドロップで渡せる
-5. **担当者に相談する**: それでもダメなら、エラーの画面をスクリーンショットに撮って共有
+すべてのサービスで、手順は同じです:
+
+1. サービスでアカウントを作る
+2. APIキーを発行する
+3. macOSのKeychainに安全に保存する:
+\`\`\`
+security add-generic-password -s "サービス名" -a "アカウント名" -w "キーの値"
+\`\`\`
+4. 公開アプリの場合、Vercelの環境変数にも設定する
+
+**絶対にやってはいけないこと:**
+- コードの中にAPIキーを直接書く → GitHubにアップロードしたときに漏洩する
+- SlackやメールでAPIキーを送る → 他の人に見える可能性がある
+
+---
+
+### SendGrid（メール送信）のセットアップ例
+
+1. <a href="https://signup.sendgrid.com/" target="_blank" rel="noopener">sendgrid.com</a> でアカウント作成
+2. 「Settings」→「API Keys」→「Create API Key」→ キーをコピー
+3. キーを保存:
+\`\`\`
+security add-generic-password -s "SENDGRID_API_KEY" -a "sendgrid" -w "SG.コピーしたキー"
+\`\`\`
+4. 送信元メールアドレスを認証:「Settings」→「Sender Authentication」→「Verify a Single Sender」
+
+Vercelの環境変数に \`SENDGRID_API_KEY\`、\`SENDGRID_FROM_EMAIL\`、\`SENDGRID_FROM_NAME\` を設定すれば、公開アプリからもメール送信可能です。
+`
+        },
+        {
+          id: "exp-tips",
+          title: "効果的な指示の出し方",
+          content: `
+## 効果的な指示の出し方
+
+Claude Codeを使い込んで分かった、生産性を大きく上げるコツをまとめます。
+
+---
+
+### 1.「まず計画を見せて」で始める
+
+大きな作業の前に、いきなり「作って」と言わず、まず計画を確認します。
+
+\`\`\`
+経費管理アプリに月別レポート機能を追加したい。
+まず計画を見せてください。
+\`\`\`
+
+AIが「こうやって実装します」と方針を提示するので、確認してからOKを出します。
+
+---
+
+### 2. スクリーンショットを活用する
+
+Claude Codeは画像を理解できます。「ここのデザインを変えたい」というとき、スクリーンショットを見せたほうが圧倒的に速く正確です。
+
+\`Command\` + \`Shift\` + \`4\` で撮影して、Claude Codeにドラッグ&ドロップするだけです。
+
+---
+
+### 3. 段階的に作る
+
+一度に完璧なアプリを目指すのではなく、「最小限 → 追加 → 追加」と段階的に作ります。
+
+\`\`\`
+まず基本の入力・一覧機能だけ作ってください。
+追加機能は後から依頼します。
+\`\`\`
+
+---
+
+### 4. 修正が2回失敗したら方向転換
+
+同じ問題をAIが2回修正しても直らない場合:
+\`\`\`
+この方法では直りません。別のアプローチで試してください。
+\`\`\`
+
+---
+
+### 5. セッションが長くなったら圧縮する
+
+1時間以上の作業では \`/compact\` で会話を圧縮。話題が変わるなら \`/clear\` でリセット。
+
+---
+
+### 6. よく使う操作一覧
+
+| やりたいこと | Claude Codeへの指示 |
+|---|---|
+| アプリを新規作成 | 「○○ができるWebアプリを作って」 |
+| 機能を追加 | 「このアプリに○○機能を追加して」 |
+| バグを修正 | 「○○をすると△△になる。□□になるように直して」 |
+| GitHubに保存 | 「保存して」 |
+| インターネットに公開 | 「Vercelにデプロイして」 |
+| 変更を元に戻す | 「直前の変更を取り消して」 |
+| 計画を見る | 「まず計画を見せて」 |
+| 会話を圧縮 | \`/compact\` |
+| 会話をリセット | \`/clear\` |
+| 終了 | \`/exit\` または \`Ctrl+C\` を2回 |
 `
         }
       ]
     },
 
     // =====================================================================
-    // PART 6: ADVANCED TECHNIQUES
+    // PART 6: ADVANCED — 上級テクニック
     // =====================================================================
     {
       id: "advanced",
-      title: "実践テクニック",
-      description: "Claude Codeをより効果的に使いこなすための上級テクニック",
+      title: "上級テクニック",
+      description: "CLAUDE.md、コマンド、MCPサーバー連携など、生産性を上げる実践テクニック（10個以上のアプリを作った方向け）",
       chapters: [
         {
           id: "adv-claudemd",
-          title: "CLAUDE.mdの書き方",
+          title: "CLAUDE.md（AIへの指示書）",
           content: `
-## CLAUDE.md — プロジェクトのルールブック
+## CLAUDE.md — AIが毎回読む指示書
 
-### CLAUDE.mdとは
+CLAUDE.mdは、Claude Codeに「このプロジェクトではこういうルールで作業して」と伝えるファイルです。毎回のセッション開始時に自動で読み込まれます。
 
-CLAUDE.mdは、Claude Codeに対して「このプロジェクトではこういうルールで作業してほしい」と伝えるためのファイルです。人間でいえば「業務マニュアル」や「引き継ぎ資料」のようなものです。
+---
 
-このファイルがあると、Claude Codeは毎回のセッション開始時に自動で読み込み、ルールに従って作業してくれます。
+### なぜ必要か
 
-**なぜ必要なの？**
-- セッションが変わるたびに同じ指示を繰り返さなくて済む
-- チーム内でAIの動作を統一できる
-- プロジェクトの方針をAIが「覚えている」状態を作れる
+セッションが変わるたびに「日本語で対応して」「シンプルなデザインにして」と繰り返す必要がなくなります。
+
+---
+
+### 初心者向けテンプレート
+
+プロジェクトフォルダに \`CLAUDE.md\` というファイルを作り、以下を書きます:
+
+\`\`\`markdown
+# プロジェクトルール
+
+- 日本語で対応してください
+- シンプルで読みやすいコードを優先
+- スマホ対応必須
+- 完成したらGitHubに自動保存
+- コミットメッセージは英語で feat:, fix:, docs: で始める
+\`\`\`
+
+Claude Codeに「CLAUDE.mdを作って」と依頼すれば、AIが作成してくれます。
 
 ---
 
 ### 配置場所
 
-| ファイルの場所 | 効果範囲 | 用途 |
-|---|---|---|
-| \`プロジェクトフォルダ/CLAUDE.md\` | そのプロジェクトだけ | アプリ固有のルール |
-| \`~/.claude/CLAUDE.md\` | すべてのプロジェクト | 自分の共通ルール |
-| \`~/.claude/rules/ファイル名.md\` | 条件付きで適用 | 特定の条件で使うルール |
-
-最もよく使うのは、プロジェクトフォルダ直下の \`CLAUDE.md\` です。
-
----
-
-### 書き方の実例
-
-以下は、社内アプリを開発するときのCLAUDE.mdの例です:
-
-\`\`\`markdown
-# プロジェクトルール
-
-## 言語
-- 日本語で対応してください
-- コードのコメントとコミットメッセージは英語
-
-## コーディング
-- シンプルで読みやすいコードを優先
-- フレームワークはNext.jsを使用
-
-## Git運用
-- コミットメッセージは feat:, fix:, docs: で始める
-- 完成したら自動でGitHubにpush
-
-## デザイン
-- 配色はブラウン系（#7A4033）を基調
-- モバイル対応必須
-\`\`\`
-
----
-
-### 書くときのコツ
-
-| やるべきこと | やりがちな間違い |
+| 場所 | 効果 |
 |---|---|
-| 短く具体的に書く | 長い文章で説明しすぎる |
-| 「○○してください」と明確に指示 | 「できれば○○のほうがいいかも」と曖昧に書く |
-| 本当に守ってほしいルールだけ書く | 思いつく限りのルールを詰め込む |
-| コードから読み取れないことを書く | ファイル構造やコード規約をコピペする |
-
-**重要:** CLAUDE.mdは「AIへの指示書」です。人間向けのREADMEとは別のファイルとして管理してください。
+| プロジェクトフォルダ直下 | そのプロジェクトだけに適用 |
+| \`~/.claude/CLAUDE.md\` | すべてのプロジェクトに共通適用 |
 
 ---
 
-### Rulesファイル — 条件付きルール
+### Rulesファイル
 
-CLAUDE.mdに加えて、\`~/.claude/rules/\` フォルダにルールファイルを配置できます。ルールファイルは特定の条件やテーマごとにルールを分離できるため、CLAUDE.mdが肥大化するのを防げます。
-
-**フォルダ構成例:**
-\`\`\`
-~/.claude/
-  CLAUDE.md            ← 共通ルール（常に読み込まれる）
-  rules/
-    apps-development.md  ← アプリ開発時のルール
-    research-writing.md  ← リサーチ・執筆のルール
-    integrations.md      ← 外部サービス連携の設定
-\`\`\`
-
-**ルールファイルの例（apps-development.md）:**
-\`\`\`markdown
-# App Development Rules
-
-## Tech Standards
-- Favicon: esse-sense.comの反転版（黒背景、白い'e'）
-- 完成したら自動でGitHub保存
-- Notionのアプリ一覧に登録
-
-## Security
-- APIキーは環境変数またはKeychainに保存
-- ハードコードは絶対禁止
-\`\`\`
-
-**ポイント:**
-- プロジェクトのCLAUDE.mdには、そのプロジェクト固有のルールだけを書く
-- 共通のルール（言語設定、コーディング規約など）はグローバルなCLAUDE.mdに書く
-- 特定の作業カテゴリのルールはrulesファイルに分離する
-- ルールファイルが増えすぎたら整理する — 10ファイル以下が目安
+CLAUDE.mdが大きくなったら、\`~/.claude/rules/\` フォルダにテーマ別のルールファイルを分離できます。
 `
         },
         {
           id: "adv-commands",
-          title: "コマンドとモード",
+          title: "コマンドとショートカット",
           content: `
-## コマンドとモード — Claude Codeの操作を覚える
+## コマンドとショートカット
 
 ### よく使うコマンド
 
-Claude Codeのチャット中に、\`/\` で始まるコマンドを入力すると特別な操作ができます。
-
-| コマンド | 何をするか | いつ使うか |
-|---|---|---|
-| \`/help\` | 使い方ガイドを表示 | 操作に迷ったとき |
-| \`/clear\` | 会話履歴をリセット | 話題を変えたいとき |
-| \`/compact\` | 会話を要約して圧縮 | セッションが長くなったとき |
-| \`/exit\` | Claude Codeを終了 | 作業を終えるとき |
-
----
-
-### Plan Mode（計画モード）
-
-Plan Modeは、AIに「まずは計画だけ立てて、実行はまだしないで」と伝えるモードです。大きな変更をする前に、方針を確認してから実行に移せます。
-
-**使い方:**
-- キーボードで \`Shift\` + \`Tab\` を押すと、Plan Mode のオン/オフが切り替わる
-- または、チャットで「まず計画を見せて」と伝えるだけでもOK
-
-**どんなときに使う？**
-- 新しい機能を追加する前に、影響範囲を確認したいとき
-- 「この変更で他の部分が壊れないかな？」と心配なとき
-- AIの作業方針を事前に確認・修正したいとき
-
-**Plan Modeのイメージ:**
-
-<div class="diagram"><div class="diagram-title">通常モード vs Plan Mode</div><div class="diagram-body"><div class="arch"><div class="arch-box local"><div class="arch-icon">&#9889;</div><div class="arch-label">通常モード</div><div class="arch-desc">指示 → すぐに実行。手軽だが大きな変更は不安</div></div><div class="arch-arrow">vs</div><div class="arch-box cloud"><div class="arch-icon">&#128221;</div><div class="arch-label">Plan Mode</div><div class="arch-desc">指示 → 計画を提示 → 承認 → 実行。安全で確実</div></div></div></div></div>
-
----
-
-### Fast Mode（高速モード）
-
-Fast Modeは、AIの出力速度を上げるモードです。同じモデルが使われますが、応答が速くなります。
-
-**使い方:** チャットで \`/fast\` と入力してオン/オフを切り替え
-
-**いつ使う？** 小さな修正や、定型的な作業を素早く終わらせたいとき
-
----
-
-### カスタムコマンド
-
-よく使う指示をコマンドとして保存できます。
-
-**やること:**
-1. \`~/.claude/commands/\` フォルダの中に \`.md\` ファイルを作る
-2. ファイルの中身に、実行したい指示を書く
-
-**例: レビューコマンドを作る**
-
-\`~/.claude/commands/review.md\` というファイルを作り、中身に:
-\`\`\`
-現在のブランチの変更をレビューしてください。
-バグ、セキュリティ問題、改善点を指摘してください。
-\`\`\`
-
-これで、Claude Codeのチャットで \`/review\` と入力するだけで、このレビュー指示が実行されます。
+| コマンド | 何をするか |
+|---|---|
+| \`/help\` | 使い方ガイドを表示 |
+| \`/clear\` | 会話をリセット |
+| \`/compact\` | 会話を圧縮 |
+| \`/exit\` | 終了 |
+| \`/fast\` | 高速モードのオン/オフ |
 
 ---
 
@@ -1696,615 +1071,117 @@ Fast Modeは、AIの出力速度を上げるモードです。同じモデルが
 |---|---|
 | \`Enter\` | メッセージを送信 |
 | \`Escape\` | AIの操作をキャンセル |
-| \`Shift + Tab\` | Plan Modeのオン/オフ |
+| \`Shift + Tab\` | Plan Mode（計画モード）のオン/オフ |
 | \`Ctrl + C\` | 強制終了（2回押す） |
-| \`上矢印キー\` | 前のメッセージを再表示 |
 
 ---
 
-### 利用環境 — CLI以外の選択肢
+### Plan Mode（計画モード）
 
-Claude CodeはターミナルのCLI版だけでなく、複数の環境で利用できます。
-
-| 環境 | 特徴 | おすすめの場面 |
-|---|---|---|
-| **CLI（ターミナル）** | 最もフル機能。すべてのツールが使える | 本格的な開発作業 |
-| **デスクトップアプリ** | Mac/Windows対応。CLI同様の機能 | 日常的な作業 |
-| **Webアプリ（claude.ai/code）** | ブラウザから利用。インストール不要 | 外出先や別のPC |
-| **VS Code拡張** | エディタ内でClaude Codeが使える | コード編集に集中したいとき |
-| **JetBrains拡張** | IntelliJ系IDEに対応 | Java/Kotlin開発者 |
-
-**ポイント:** どの環境でも同じClaudeモデルが使われます。違いはUI/UXと一部のツールの利用可否です。CLIが最も高機能なので、メインの開発にはCLIまたはデスクトップアプリをおすすめします。
+\`Shift + Tab\` を押すと、AIは「計画だけ提示して、実行はしない」モードになります。大きな変更の前に方針を確認するのに便利です。
 
 ---
 
-### 権限管理 — 安全な運用のために
+### カスタムコマンド
 
-Claude Codeはファイルの編集やコマンドの実行ができます。安全に使うために、権限の仕組みを理解しましょう。
+よく使う指示をファイルに保存して、\`/コマンド名\` で呼び出せます。
 
-**権限モード:**
-
-Claude Codeのツール実行時に、許可を求めるプロンプトが表示されることがあります。これは安全のための仕組みです。
-
-- **常に許可（Allow）**: そのツールの実行を今後も許可する
-- **今回だけ許可**: この1回だけ許可する
-- **拒否（Deny）**: 実行しない
-
-**許可リスト（Allowlist）の設定:**
-
-よく使う安全なコマンドは、設定ファイルで事前に許可しておけます。\`~/.claude/settings.json\` で設定します:
-
-\`\`\`json
-{
-  "permissions": {
-    "allow": [
-      "Bash(npm run dev)",
-      "Bash(git status)",
-      "Bash(git diff)",
-      "Read",
-      "Glob",
-      "Grep"
-    ]
-  }
-}
+\`~/.claude/commands/review.md\` に:
+\`\`\`
+現在のブランチの変更をレビューしてください。
+バグ、セキュリティ問題、改善点を指摘してください。
 \`\`\`
 
-**おすすめの考え方:**
-- 読み取り系（Read, Grep, Glob）は許可しても安全
-- ファイル書き込み（Edit, Write）は確認を残すのが安全
-- \`git push\` や \`rm\` は毎回確認するのがおすすめ
+これで \`/review\` と入力するだけでレビューが実行されます。
 `
         },
         {
           id: "adv-mcp",
-          title: "MCPサーバーの活用",
+          title: "MCPサーバー（外部ツール連携）",
           content: `
 ## MCPサーバー — 外部ツールとの接続
 
-### MCPサーバーとは
+MCPサーバーは、Claude Codeに「外部ツールを操作する能力」を追加する仕組みです。
 
-MCP（Model Context Protocol）サーバーは、Claude Codeに「外部ツールを使う能力」を追加する仕組みです。たとえば:
-
-- **GitHub MCP**: Claude CodeからGitHubのIssueを作成・管理できる
-- **Playwright MCP**: ブラウザを操作して、Webサイトのスクリーンショットを撮ったりテストできる
-- **Notion MCP**: Notionのページを検索・作成できる
-- **Slack MCP**: Slackにメッセージを送信できる
-
-人間でいえば、「秘書にメール送信やスケジュール管理の権限を与える」ようなものです。
-
----
-
-### どんなMCPサーバーがある？
-
-| MCPサーバー | できること | 活用例 |
-|---|---|---|
-| GitHub | Issue管理、PR作成、コード検索 | 「このバグのIssueを作って」 |
-| Playwright | ブラウザ操作、スクリーンショット | 「このページの表示を確認して」 |
-| Notion | ページ検索・作成 | 「Notionに議事録を作って」 |
-| Slack | メッセージ送受信 | 「Slackの最新メッセージを確認して」 |
-| Google Workspace | Docs, Sheets, Calendar操作 | 「今日の予定を確認して」 |
-| Fetch | Webページの内容を取得 | 「このURLの内容を読んで」 |
-
----
-
-### 設定方法
-
-MCPサーバーの設定は、Claude Codeに「○○のMCPサーバーを設定して」と依頼すれば、設定を手伝ってくれます。Claude Codeの \`/install-github-mcp\` のように、主要なMCPサーバーはコマンド一つでインストールできるものもあります。
-
-設定はClaude Codeのプラグインシステムまたは \`settings.json\` で管理されます。
-
-**注意点:**
-- MCPサーバーを増やしすぎると、Claude Codeの起動が遅くなります
-- 最初は必要なものだけ（GitHub、Playwright程度）にとどめるのがおすすめです
-- 各MCPサーバーにはAPIキーやアクセストークンが必要な場合があります
-`
-        },
-        {
-          id: "adv-tips",
-          title: "効果的な指示の出し方",
-          content: `
-## 効果的な指示の出し方 — 実践で学んだコツ
-
-半年以上Claude Codeを使い込んで分かった、生産性を大きく上げるコツをまとめます。
-
----
-
-### 1.「まず計画を見せて」で始める
-
-大きな作業を始めるとき、いきなり「作って」と言うのではなく、「まず計画を見せて」と伝えましょう。AIが作業方針を提示してくれるので、方向性を確認してから実行に移せます。
-
-\`\`\`
-経費管理アプリに月別レポート機能を追加したい。
-まず計画を見せてください。
-\`\`\`
-
-これにより「思っていたのと違う」という手戻りを防げます。
-
----
-
-### 2. スクリーンショットを活用する
-
-Claude Codeは画像を理解できます。「ここのデザインを変えたい」というとき、言葉で説明するよりスクリーンショットを見せたほうが圧倒的に速く正確です。
-
-**やり方:**
-- スクリーンショットを撮る（\`Command\` + \`Shift\` + \`4\`）
-- Claude Codeのチャットにドラッグ&ドロップ
-- 「この画像の○○を△△に変えて」と指示
-
----
-
-### 3.「保存して」の意味を明確にする
-
-Claude Codeに「保存して」と伝えると、通常は以下の一連の操作が行われます:
-
-1. \`git add\` — 変更をステージング
-2. \`git commit\` — 変更を記録
-3. \`git push\` — GitHubに送信
-
-Vercelと連携済みなら、pushだけで自動的に本番にも反映されます。
-
----
-
-### 4. 修正が2回失敗したら別アプローチを試す
-
-同じ問題をAIが2回修正しても直らない場合、同じ方法を繰り返しても解決しません。明確に「別のアプローチを試して」と伝えましょう。
-
-\`\`\`
-この方法では2回試しても直りません。
-別のアプローチで解決してください。
-\`\`\`
-
----
-
-### 5. セッションが長くなったら圧縮する
-
-Claude Codeとの会話が長くなると、AIが以前の文脈を忘れたり、応答が遅くなることがあります。
-
-**対策:**
-- \`/compact\` で会話を圧縮する（要約されて短くなる）
-- 話題が完全に変わるなら \`/clear\` でリセット
-- 重要な指示はCLAUDE.mdに書いておけば、リセットしても失われない
-
----
-
-### 6. 具体的に、でもやりすぎない
-
-| 悪い指示 | 良い指示 |
+| MCPサーバー | できること |
 |---|---|
-| 「いい感じにして」 | 「ヘッダーの背景色を#7A4033に、文字色を白に変えて」 |
-| 「全部直して」 | 「日付の表示形式をYYYY/MM/DDに統一して」 |
-| 「React使ってボタンコンポーネントを作って、propsはlabel, onClick, variant, size, disabled, loading, icon, className, styleを受け取って...」 | 「送信ボタンを作って。ローディング中は"送信中..."と表示して」 |
+| GitHub | Issue管理、PR作成 |
+| Playwright | ブラウザ操作、テスト |
+| Notion | ページの検索・作成 |
+| Slack | メッセージの送受信 |
+| Google Workspace | Docs, Sheets, Calendar操作 |
 
-最後の例のように、実装の詳細まで指定しすぎると、かえってAIの良い判断を妨げます。**何を実現したいか**を伝え、**どう実装するか**はAIに任せるのが最も効果的です。
+Claude Codeに「SlackのMCPサーバーを設定して」と依頼すれば、AIが設定を手伝ってくれます。
+
+**注意:** MCPサーバーを増やしすぎると起動が遅くなります。必要なものだけにしましょう。
+`
+        },
+        {
+          id: "adv-memory",
+          title: "メモリとサブエージェント",
+          content: `
+## メモリ — セッションを超えた記憶
+
+Claude Codeはセッションが終わると会話内容を忘れます。メモリシステムは、重要な情報を自動的にファイルに保存し、次のセッションで読み込むことで「共有知識」を蓄積します。
+
+**記憶させたいことがあれば:**
+\`\`\`
+これを覚えておいて: APIキーはKeychainの「myapp-api」に保存してある
+\`\`\`
+
+作業中の修正指示やプロジェクトの重要な決定も、AIが自動的にメモリに保存します。
 
 ---
 
-### 7. よく使う指示パターン
+## サブエージェント — 専門家チーム
 
-| やりたいこと | 指示の書き方 |
+Claude Codeは、別の専門AIを呼び出して特定のタスクを委任できます。
+
+| エージェント | 役割 |
 |---|---|
-| 新規作成 | 「○○ができるWebアプリを作って」 |
-| 機能追加 | 「このアプリに○○機能を追加して」 |
-| バグ修正 | 「○○をすると△△になる。□□になるように直して」 |
-| 保存 | 「保存して」（= commit + push） |
-| デプロイ | 「Vercelにデプロイして」 |
-| 状況確認 | 「このプロジェクトの状況をまとめて」 |
-| コードレビュー | 「今回の変更をレビューして」 |
-`
-        }
-      ]
-    },
+| Explore | コードベースの調査 |
+| researcher | Web調査 |
+| reviewer | コードレビュー |
+| security-auditor | セキュリティ監査 |
 
-    // =====================================================================
-    // PART 7: ADVANCED PRACTICAL TECHNIQUES
-    // =====================================================================
-    {
-      id: "mastery",
-      title: "上級実践テクニック",
-      description: "60以上のアプリを運用してきた実体験から生まれた、Claude Codeの真価を引き出すテクニック",
-      chapters: [
-        {
-          id: "mastery-hooks",
-          title: "Hooks（フック）",
-          content: `
-## Hooks — ツール実行時の自動処理
-
-### Hooksとは
-
-Hooksは、Claude Codeがツールを実行する「前」や「後」に、自動的にシェルコマンドを実行する仕組みです。人間でいえば、「書類を提出する前に必ず上司に確認を取る」「提出した後に記録をつける」というルーティンを自動化するようなものです。
-
-**活用例:**
-- ファイルを保存した後に自動でリンターを走らせる
-- Git pushの前にテストを実行する
-- 特定のコマンドを実行した後に通知を送る
-
----
-
-### 設定方法
-
-\`~/.claude/settings.json\` に設定を追加します:
-
-\`\`\`json
-{
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "command": "echo 'File modified: $CLAUDE_FILE_PATH'"
-      }
-    ],
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "command": "echo 'About to run command'"
-      }
-    ]
-  }
-}
+通常はClaude Codeが判断して自動的に起動しますが、明示的に指示することもできます:
+\`\`\`
+セキュリティレビューをしてほしい。専門のエージェントを使って。
 \`\`\`
 
 ---
 
-### Hookの種類
+## コンテキスト管理
 
-| Hook名 | いつ実行されるか | 活用例 |
-|---|---|---|
-| \`PreToolUse\` | ツール実行の直前 | 危険なコマンドの確認、入力の検証 |
-| \`PostToolUse\` | ツール実行の直後 | ログ記録、フォーマッター実行 |
-| \`Notification\` | AIからの通知時 | デスクトップ通知、音を鳴らす |
-| \`Stop\` | AIが応答を完了した時 | 完了通知を送る |
+長い会話では、AIが以前の内容を忘れることがあります。対策:
 
----
-
-### 実践的な活用パターン
-
-**コード品質の自動チェック:**
-ファイルを編集するたびに自動でフォーマッターを実行すれば、コードスタイルが常に統一されます。
-
-**安全装置として:**
-\`rm\` や \`git push --force\` などの危険なコマンドの前に確認ステップを入れることで、事故を防げます。
-
-**注意点:**
-- Hookが失敗するとClaude Codeの動作が止まることがあります
-- まずはシンプルなHookから始め、徐々に増やしていくのがおすすめです
-- Hookの中でClaude Codeに依存するコマンドは避けてください
+- **CLAUDE.mdに重要ルールを書く** — 圧縮されても消えない
+- **\`/compact\`で圧縮** — 同じ話題を続けるとき
+- **\`/clear\`でリセット** — 話題を変えるとき
+- **探索はサブエージェントに委任** — メインの会話をクリーンに保つ
 `
         },
         {
-          id: "mastery-memory",
-          title: "メモリシステム",
-          content: `
-## メモリシステム — セッションを超えた記憶
-
-### なぜメモリが必要か
-
-Claude Codeは、セッション（会話）が終わると、その内容を忘れます。毎回「私はこういう人です」「このプロジェクトではこうしてください」と説明するのは非効率です。
-
-メモリシステムは、この問題を解決します。AIが自動的に重要な情報をファイルに保存し、次のセッションで読み込むことで、あなたとの「共有知識」を蓄積していきます。
-
----
-
-### メモリの種類
-
-| 種類 | 何を保存するか | 例 |
-|---|---|---|
-| **user** | ユーザーの役割・専門性・好み | 「非営利団体の代表。人類学研究者」 |
-| **feedback** | AIの動作への修正指示 | 「メール作成時は必ずCRM形式UIを使う」 |
-| **project** | プロジェクトの状況・背景 | 「メンバーシップサイトはデプロイ設定待ち」 |
-| **reference** | 外部リソースへのポインタ | 「APIキーはmacOSキーチェーンに保存」 |
-
----
-
-### メモリの仕組み
-
-メモリは \`~/.claude/projects/（プロジェクト名）/memory/\` フォルダに保存されます。
-
-\`\`\`
-memory/
-  MEMORY.md          ← メモリの一覧（インデックス）
-  user_role.md       ← ユーザー情報メモリ
-  feedback_email.md  ← フィードバックメモリ
-  project_app_x.md   ← プロジェクトメモリ
-  reference_api.md   ← リファレンスメモリ
-\`\`\`
-
-\`MEMORY.md\` はインデックスファイルで、各メモリファイルへのリンクと1行の説明が並んでいます。Claude Codeはセッション開始時にこのファイルを読み、必要なメモリを参照します。
-
----
-
-### メモリを活用するコツ
-
-**明示的に記憶させる:**
-\`\`\`
-これを覚えておいて：APIキーはKeychainの「myapp-api」に保存してある
-\`\`\`
-
-**自動で記憶される:**
-作業中にAIが「これは今後も使える情報だ」と判断した場合、自動的にメモリに保存します。たとえば:
-- あなたの修正指示（「こうしないで」「こうして」）
-- プロジェクトの重要な決定
-- 外部サービスの接続情報
-
-**メモリの整理:**
-メモリが増えすぎると逆効果です。月に1回程度、「メモリを整理して」と依頼すると、古くなった情報を更新・削除してくれます。
-
-**注意:**
-- メモリはあくまで「補助的な記憶」です。確実に守ってほしいルールはCLAUDE.mdに書きましょう
-- メモリは時間とともに古くなります。AIは重要な判断の前にメモリの内容を現在の状態と照合します
-`
-        },
-        {
-          id: "mastery-agents",
-          title: "サブエージェントの活用",
-          content: `
-## サブエージェント — チームで働かせる
-
-### サブエージェントとは
-
-Claude Codeの強力な機能の1つが「サブエージェント」です。メインのAIが別の専門AIを呼び出して、特定のタスクを委任できます。
-
-人間の組織でいえば、プロジェクトマネージャーが専門チームに仕事を振り分けるようなものです。
-
----
-
-### なぜサブエージェントを使うのか
-
-**1. コンテキストの分離:**
-メインの会話が調査結果や詳細なコードで埋まると、AIが重要な文脈を見失うことがあります。サブエージェントに探索や調査を委任すれば、メインの会話をクリーンに保てます。
-
-**2. 並列処理:**
-複数のサブエージェントを同時に起動して、それぞれ別の調査やレビューを行わせることができます。
-
-**3. 専門性:**
-セキュリティ監査、UXレビュー、パフォーマンステストなど、専門的な視点でのチェックを専門のサブエージェントに任せられます。
-
----
-
-### サブエージェントの種類（例）
-
-| エージェント | 役割 | 使い方 |
-|---|---|---|
-| **Explore** | コードベースの探索 | 「この関数がどこで使われているか調べて」 |
-| **researcher** | Web調査 | 「このライブラリのベストプラクティスを調べて」 |
-| **reviewer** | コードレビュー | 「今回の変更をレビューして」 |
-| **security-auditor** | セキュリティ監査 | 「認証コードのセキュリティを確認して」 |
-| **qa-lead** | 品質検証統括 | 「アプリ全体のQAを実施して」 |
-| **sentinel** | 最終承認ゲート | 「デプロイ前の最終チェック」 |
-
----
-
-### 実際の使い方
-
-サブエージェントは通常、Claude Codeが判断して自動的に起動します。ただし、明示的に指示することもできます:
-
-\`\`\`
-このアプリのセキュリティレビューをしてほしい。
-専門のエージェントを使って、OWASP Top 10の観点でチェックして。
-\`\`\`
-
-\`\`\`
-QAチームを使って、このアプリの品質レビューをお願い。
-機能テスト、UXレビュー、セキュリティチェックを並列で実行して。
-\`\`\`
-
----
-
-### サブエージェントの使い分けのコツ
-
-| 状況 | 推奨 |
-|---|---|
-| 特定のファイルを探すだけ | サブエージェント不要。直接検索 |
-| 複数ファイルにまたがる調査 | Exploreエージェント |
-| Webで情報収集 | researcherエージェント |
-| コード実装 | engineerスキル |
-| 品質確認 | qa-lead（複数の専門家を束ねる） |
-
-**注意:** サブエージェントは便利ですが、使いすぎると処理時間とコストが増えます。単純な作業には直接対応してもらいましょう。
-`
-        },
-        {
-          id: "mastery-context",
-          title: "コンテキスト管理",
-          content: `
-## コンテキスト管理 — 長時間セッションの極意
-
-### コンテキストウィンドウとは
-
-Claude Codeには「コンテキストウィンドウ」という、一度に扱える情報量の上限があります。本でいえば「作業デスクの広さ」です。デスクが資料で埋まると、新しい資料を置くために古い資料を片付ける必要があります。
-
-長い会話を続けると、古いメッセージが自動的に圧縮（要約）されます。これは正常な動作ですが、重要な情報が失われることもあります。
-
----
-
-### コンテキスト管理の基本戦略
-
-**1. CLAUDE.mdに重要な指示を書く**
-
-CLAUDE.mdはセッション開始時に必ず読み込まれ、圧縮されても消えません。「常に守ってほしいルール」はここに書きましょう。
-
-**2. 話題が変わったら \`/clear\`**
-
-全く別のプロジェクトの話に移るなら、\`/clear\` でリセットしたほうが効率的です。前の話題の情報がノイズになることを防げます。
-
-**3. 長くなったら \`/compact\`**
-
-同じ話題を続けているが会話が長くなった場合は、\`/compact\` で圧縮します。AIが会話を要約して、重要な情報だけを残してくれます。
-
-**4. 探索はサブエージェントに任せる**
-
-コードの調査や検索結果は大量のテキストを消費します。サブエージェントに委任すれば、結果の要約だけがメインの会話に返ってくるため、コンテキストを節約できます。
-
----
-
-### よくある問題と対策
-
-| 症状 | 原因 | 対策 |
-|---|---|---|
-| AIが前に話した内容を忘れる | コンテキストが圧縮された | 重要な情報はCLAUDE.mdに書く |
-| 応答が遅くなる | コンテキストが大きすぎる | \`/compact\` で圧縮する |
-| 同じ間違いを繰り返す | 修正指示が圧縮で消えた | メモリに保存する or CLAUDE.mdに追記 |
-| 大きなファイルの編集で混乱 | 一度に多くの変更 | 変更を小さく分割して段階的に行う |
-
----
-
-### 実践的なセッション管理パターン
-
-**短いセッション（30分以内）:**
-特に工夫は不要。普通に会話するだけでOK。
-
-**中程度のセッション（1-2時間）:**
-- 1時間経ったら \`/compact\` を検討
-- 大きな作業の節目でcommitする
-- 次のタスクに移る前に「ここまでの状況をまとめて」
-
-**長時間のセッション（2時間以上）:**
-- タスクごとにセッションを分ける
-- 重要な決定事項はメモリに保存
-- 実装 → テスト → コミットの小さなサイクルを繰り返す
-`
-        },
-        {
-          id: "mastery-commands",
-          title: "カスタムコマンドの実践",
-          content: `
-## カスタムコマンド — 自分だけの指示ライブラリ
-
-### 基本のおさらい
-
-カスタムコマンドは、よく使う指示をファイルに保存して、\`/コマンド名\` で呼び出せる機能です。
-
-保存場所:
-- **グローバル:** \`~/.claude/commands/コマンド名.md\`（全プロジェクト共通）
-- **プロジェクト:** \`プロジェクト/. claude/commands/コマンド名.md\`（そのプロジェクト専用）
-
----
-
-### 実践的なコマンドライブラリ
-
-実際に60以上のアプリを運用する中で整備したコマンドライブラリの例を紹介します。
-
-**開発系:**
-| コマンド | ファイルの中身（指示内容） | 用途 |
-|---|---|---|
-| \`/engineer\` | 開発チームとしてコード実装 | 機能追加・修正 |
-| \`/fix-issue\` | GitHub Issueを分析して修正 | バグ対応 |
-| \`/review\` | コード変更をレビュー | 品質チェック |
-| \`/qa-review\` | QAチーム全体でレビュー | リリース前検証 |
-
-**リサーチ系:**
-| コマンド | 用途 |
-|---|---|
-| \`/research\` | Webで調査してまとめる |
-| \`/deep-research\` | 複数ソースで徹底調査 |
-| \`/academic-search\` | 学術論文を検索 |
-
-**運用系:**
-| コマンド | 用途 |
-|---|---|
-| \`/briefing\` | 朝のブリーフィング（予定・タスク・メール） |
-| \`/slack-catchup\` | Slackの最新状況を確認 |
-| \`/status\` | プロジェクトの現状確認 |
-| \`/save-research\` | 調査結果をダッシュボードに保存 |
-
----
-
-### コマンドファイルの書き方のコツ
-
-**1. 役割を明確にする:**
-\`\`\`markdown
-あなたは○○の専門家です。以下の手順で作業してください:
-1. ...
-2. ...
-\`\`\`
-
-**2. 引数を使う:**
-コマンドファイル内で \`$ARGUMENTS\` と書くと、コマンド呼び出し時の引数が代入されます。
-
-\`\`\`markdown
-# /fix-issue コマンド
-GitHub Issue $ARGUMENTS を分析して修正してください。
-\`\`\`
-
-使い方: \`/fix-issue 42\` → 「GitHub Issue 42 を分析して修正してください」
-
-**3. 段階的な指示を書く:**
-\`\`\`markdown
-以下の手順で作業してください:
-1. まず現状を分析する
-2. 計画を提示して承認を得る
-3. 実装する
-4. テストする
-5. GitHubに保存する
-\`\`\`
-
----
-
-### コマンドを増やしていく方法
-
-最初から大量のコマンドを作る必要はありません:
-
-1. **まず3つ** — よく使う操作を3つだけコマンド化する
-2. **使いながら追加** — 「これもコマンドにしたい」と思ったら追加
-3. **定期的に整理** — 使わなくなったコマンドは削除
-
-**実体験のポイント:** 80以上のコマンドを持つ環境でも、日常的に使うのは10〜15個程度です。残りは「たまに使う特殊コマンド」として、必要なときだけ呼び出しています。
-`
-        },
-        {
-          id: "mastery-workflow",
+          id: "adv-workflow",
           title: "実践的な開発ワークフロー",
           content: `
-## 実践的な開発ワークフロー — 60アプリ運用から学んだ型
+## 実践的な開発ワークフロー
+
+60以上のアプリを開発・運用する中で確立した開発の型を紹介します。
+
+---
 
 ### 7段階循環モデル
 
-60以上のアプリを開発・運用する中で確立した開発ワークフローを紹介します。これは「Claude Codeに任せきりにする」のではなく、「人間とAIが最適な分担で協力する」ためのフレームワークです。
-
-<div class="diagram"><div class="diagram-title">7段階循環開発モデル</div><div class="diagram-body"><div class="arch"><div class="arch-box local"><div class="arch-icon">&#128221;</div><div class="arch-label">Stage 0: 仕様</div><div class="arch-desc">何を作るか決める</div></div><div class="arch-arrow">→</div><div class="arch-box local"><div class="arch-icon">&#128270;</div><div class="arch-label">Stage 1: 調査</div><div class="arch-desc">ベストプラクティスを調べ、設計する</div></div><div class="arch-arrow">→</div><div class="arch-box cloud"><div class="arch-icon">&#9881;</div><div class="arch-label">Stage 2: 実装</div><div class="arch-desc">コードを書く</div></div><div class="arch-arrow">→</div><div class="arch-box cloud"><div class="arch-icon">&#9989;</div><div class="arch-label">Stage 3: QA</div><div class="arch-desc">品質検証</div></div><div class="arch-arrow">→</div><div class="arch-box local"><div class="arch-icon">&#128295;</div><div class="arch-label">Stage 4: 改善</div><div class="arch-desc">QA結果を反映</div></div><div class="arch-arrow">→</div><div class="arch-box cloud"><div class="arch-icon">&#128640;</div><div class="arch-label">Stage 5: デプロイ</div><div class="arch-desc">公開・保存</div></div><div class="arch-arrow">→</div><div class="arch-box local"><div class="arch-icon">&#128065;</div><div class="arch-label">Stage 6: 観測</div><div class="arch-desc">使って改善点を見つける</div></div></div></div></div>
-
----
-
-### 各ステージの詳細
-
-**Stage 0 — 仕様策定（人間主導）**
-
-何を作るかを自然言語で定義します。このステップを飛ばすと「思っていたのと違う」という手戻りが頻発します。
-
-\`\`\`
-経費管理アプリを作りたい。
-- 社員が領収書の写真をアップロードする
-- AIが金額と項目を自動認識する
-- 月末にPDFレポートを出力する
-まず仕様を整理して。
-\`\`\`
-
-**Stage 1 — 調査・設計（AI主導、人間承認）**
-
-AIがベストプラクティスを調査し、技術選定と設計を提案します。人間が承認してから次に進みます。
-
-**Stage 2 — 実装（AI主導）**
-
-承認された設計に基づいてコードを書きます。テストも同時に作成します。
-
-**Stage 3 — 品質検証（専門エージェント）**
-
-**重要:** 実装したAIとは別のエージェントが検証します。自分で作ったものを自分でレビューすると、バイアスがかかるためです。
-
-- 機能テスト：動作確認
-- UXレビュー：使いやすさ
-- セキュリティチェック：脆弱性
-
-**Stage 4 — 改善（最大3ラウンド）**
-
-QAで見つかった問題を修正します。3ラウンド以内に収まらない場合は、仕様（Stage 0）か設計（Stage 1）に問題がある可能性が高いので、戻って見直します。
-
-**Stage 5 — デプロイ（承認→公開）**
-
-Git push → Vercelが自動デプロイ → 使い方ガイドの更新 → Notionに記録。
-
-**Stage 6 — 観測（次のサイクルへ）**
-
-公開後の利用状況を見て、次の改善サイクルにフィードバックします。
+| Stage | やること | 誰が主導 |
+|---|---|---|
+| 0. 仕様 | 「何を作るか」を決める | あなた |
+| 1. 調査・設計 | ベストプラクティスを調べ、設計する | AI（あなたが承認） |
+| 2. 実装 | コードを書く | AI |
+| 3. 品質検証 | 動作・デザイン・セキュリティを確認 | 別のAIエージェント |
+| 4. 改善 | 問題を修正（最大3ラウンド） | AI |
+| 5. デプロイ | GitHubに保存、Vercelに公開 | AI（あなたが承認） |
+| 6. 観測 | 使いながら改善点を見つけ、次のサイクルへ | あなた |
 
 ---
 
@@ -2312,33 +1189,19 @@ Git push → Vercelが自動デプロイ → 使い方ガイドの更新 → Not
 
 | レベル | 例 | 進め方 |
 |---|---|---|
-| **L1（フル管理）** | 新しいアプリの開発 | 全ステージを順番に。各ステップで確認 |
-| **L2（部分委任）** | 既存アプリへの機能追加 | 計画を確認後、実装〜デプロイはAIに任せる |
-| **L3（完全委任）** | ドキュメント更新、テスト追加 | 結果報告だけ受け取る |
+| L1（フル管理） | 新しいアプリ開発 | 各ステップで確認。「まず計画を見せて」 |
+| L2（部分委任） | 機能追加 | 計画確認後、実装〜デプロイはAI任せ |
+| L3（完全委任） | ドキュメント更新 | 結果報告だけ受け取る |
 
 ---
 
-### 実体験からのアドバイス
+### 心得
 
-**1. 「まず計画を見せて」は最強の呪文**
-
-大きな作業の前に必ずこの一言を入れましょう。AIが計画を立て、あなたが承認してから実行に移れます。手戻りが劇的に減ります。
-
-**2. 小さく作って、小さくリリース**
-
-一度に完璧なアプリを目指すのではなく、最小限の機能（MVP）でまず公開し、使いながら改善していく方が成功率が高いです。
-
-**3. 保存は頻繁に**
-
-大きな変更をした後は必ず「保存して」で Git に保存しましょう。万が一の時に前の状態に戻せます。
-
-**4. 壊れたら戻せる**
-
-GitHubに保存してあれば、どんな変更も取り消せます。怖がらずに実験してみましょう。
-
-\`\`\`
-前回のコミットに戻して（今の変更は取り消して）
-\`\`\`
+1. **「まず計画を見せて」は最強の呪文** — 手戻りが劇的に減る
+2. **小さく作って、小さくリリース** — 最小限で公開して、使いながら改善
+3. **保存は頻繁に** — 大きな変更の後は必ず「保存して」
+4. **壊れたら戻せる** — GitHubに保存してあれば「前回のコミットに戻して」で復元
+5. **AIは副操縦士** — 完全に任せきりにせず、方向性はあなたが決める
 `
         }
       ]

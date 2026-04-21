@@ -149,18 +149,18 @@
 
   <!-- Learning Map -->
   <div class="map">
-    <div class="map-title">学習マップ — ゼロから公開まで</div>
+    <div class="map-title">最短ルート — ゼロから公開まで約1時間半</div>
     <div class="flow">
 
       <div class="flow-step active">
         <div class="flow-num">1</div>
         <div class="flow-body">
-          <h3>環境を準備する</h3>
-          <p>Macに必要なソフトウェアをインストールし、外部サービスのアカウントを作成します。最初の1回だけの作業です。</p>
+          <h3>準備する（30分）</h3>
+          <p>Macにソフトをインストールし、3つのアカウントを作ります。最初の1回だけの作業です。</p>
           <div class="flow-chapters">
-            <a href="ops.html#env-mac" class="flow-chip" onclick="goTo('env','env-mac')">macOSの準備 <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#env-accounts" class="flow-chip" onclick="goTo('env','env-accounts')">アカウントを作る <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#env-cursor" class="flow-chip" onclick="goTo('env','env-cursor')">開発環境のセットアップ <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#setup-mac" class="flow-chip" onclick="goTo('setup','setup-mac')">Macの準備 <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#setup-accounts" class="flow-chip" onclick="goTo('setup','setup-accounts')">アカウントを作る <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#setup-install" class="flow-chip" onclick="goTo('setup','setup-install')">Claude Codeをインストール <span class="arrow">&#8599;</span></a>
           </div>
         </div>
       </div>
@@ -168,15 +168,11 @@
       <div class="flow-step">
         <div class="flow-num">2</div>
         <div class="flow-body">
-          <h3>サービスを接続する</h3>
-          <p>アプリに必要な外部サービス（データベース、メール送信、決済など）の設定を行います。必要になったときにその都度参照してください。</p>
+          <h3>最初のアプリを作る（30分〜1時間）</h3>
+          <p>日本語で「こういうものが欲しい」と伝えるだけ。AIがコードを書いてくれます。</p>
           <div class="flow-chapters">
-            <a href="ops.html#svc-github" class="flow-chip" onclick="goTo('services','svc-github')">GitHub <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#svc-vercel" class="flow-chip" onclick="goTo('services','svc-vercel')">Vercel <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#svc-database" class="flow-chip" onclick="goTo('services','svc-database')">データベース <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#svc-email" class="flow-chip" onclick="goTo('services','svc-email')">SendGrid <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#svc-stripe" class="flow-chip" onclick="goTo('services','svc-stripe')">Stripe <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#svc-other" class="flow-chip" onclick="goTo('services','svc-other')">その他 <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#app-walkthrough" class="flow-chip" onclick="goTo('first-app','app-walkthrough')">実例: 経費管理アプリを作る <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#app-templates" class="flow-chip" onclick="goTo('first-app','app-templates')">依頼テンプレート集 <span class="arrow">&#8599;</span></a>
           </div>
         </div>
       </div>
@@ -184,11 +180,11 @@
       <div class="flow-step">
         <div class="flow-num">3</div>
         <div class="flow-body">
-          <h3>認証情報を管理する</h3>
-          <p>APIキー（各サービスの「鍵」）を安全に保管・運用する方法を学びます。セキュリティの基礎です。</p>
+          <h3>公開する（10分）</h3>
+          <p>作ったアプリをインターネットに公開し、URLを共有できるようにします。</p>
           <div class="flow-chapters">
-            <a href="ops.html#cred-keychain" class="flow-chip" onclick="goTo('credentials','cred-keychain')">macOS Keychain <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#cred-env" class="flow-chip" onclick="goTo('credentials','cred-env')">環境変数の設定 <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#pub-github" class="flow-chip" onclick="goTo('publish','pub-github')">GitHubに保存 <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#pub-vercel" class="flow-chip" onclick="goTo('publish','pub-vercel')">インターネットに公開 <span class="arrow">&#8599;</span></a>
           </div>
         </div>
       </div>
@@ -196,12 +192,11 @@
       <div class="flow-step">
         <div class="flow-num">4</div>
         <div class="flow-body">
-          <h3>アプリを作る・公開する</h3>
-          <p>実際にClaude Codeでアプリを作り、インターネットに公開するまでの手順です。</p>
+          <h3>困ったときは</h3>
+          <p>エラーが出たとき、AIが思い通りに動かないときの対処法。</p>
           <div class="flow-chapters">
-            <a href="ops.html#wf-create" class="flow-chip" onclick="goTo('workflow','wf-create')">新しいアプリを作る <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#wf-maintain" class="flow-chip" onclick="goTo('workflow','wf-maintain')">修正・更新する <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#wf-local" class="flow-chip" onclick="goTo('workflow','wf-local')">ローカルサーバー <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#trouble-common" class="flow-chip" onclick="goTo('trouble','trouble-common')">よくあるエラーと対処法 <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#trouble-faq" class="flow-chip" onclick="goTo('trouble','trouble-faq')">FAQ <span class="arrow">&#8599;</span></a>
           </div>
         </div>
       </div>
@@ -209,10 +204,12 @@
       <div class="flow-step">
         <div class="flow-num">5</div>
         <div class="flow-body">
-          <h3>困ったときは</h3>
-          <p>よくあるエラーとその対処法をまとめています。</p>
+          <h3>もっと使いこなす</h3>
+          <p>データベース、メール送信、効果的な指示の出し方など。必要になったら参照。</p>
           <div class="flow-chapters">
-            <a href="ops.html#ts-common" class="flow-chip" onclick="goTo('troubleshoot','ts-common')">トラブルシューティング <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#exp-database" class="flow-chip" onclick="goTo('expand','exp-database')">データベース <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#exp-services" class="flow-chip" onclick="goTo('expand','exp-services')">外部サービス連携 <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#exp-tips" class="flow-chip" onclick="goTo('expand','exp-tips')">指示のコツ <span class="arrow">&#8599;</span></a>
           </div>
         </div>
       </div>
@@ -220,29 +217,14 @@
       <div class="flow-step">
         <div class="flow-num">6</div>
         <div class="flow-body">
-          <h3>もっと使いこなす</h3>
-          <p>CLAUDE.md、コマンド、MCPサーバー連携、効果的な指示の出し方など、実践で磨いた上級テクニック。</p>
+          <h3>上級テクニック</h3>
+          <p>CLAUDE.md、MCPサーバー、メモリ、サブエージェント、7段階開発ワークフロー。10個以上アプリを作った方向け。</p>
           <div class="flow-chapters">
-            <a href="ops.html#adv-claudemd" class="flow-chip" onclick="goTo('advanced','adv-claudemd')">CLAUDE.md & Rules <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#adv-commands" class="flow-chip" onclick="goTo('advanced','adv-commands')">コマンドとモード <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#adv-mcp" class="flow-chip" onclick="goTo('advanced','adv-mcp')">MCPサーバー <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#adv-tips" class="flow-chip" onclick="goTo('advanced','adv-tips')">効果的な指示の出し方 <span class="arrow">&#8599;</span></a>
-          </div>
-        </div>
-      </div>
-
-      <div class="flow-step">
-        <div class="flow-num">7</div>
-        <div class="flow-body">
-          <h3>プロの実践テクニック</h3>
-          <p>60以上のアプリ運用から生まれた上級テクニック。Hooks、メモリシステム、サブエージェント、コンテキスト管理、カスタムコマンドライブラリ、実践ワークフロー。</p>
-          <div class="flow-chapters">
-            <a href="ops.html#mastery-hooks" class="flow-chip" onclick="goTo('mastery','mastery-hooks')">Hooks <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#mastery-memory" class="flow-chip" onclick="goTo('mastery','mastery-memory')">メモリシステム <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#mastery-agents" class="flow-chip" onclick="goTo('mastery','mastery-agents')">サブエージェント <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#mastery-context" class="flow-chip" onclick="goTo('mastery','mastery-context')">コンテキスト管理 <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#mastery-commands" class="flow-chip" onclick="goTo('mastery','mastery-commands')">カスタムコマンド実践 <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#mastery-workflow" class="flow-chip" onclick="goTo('mastery','mastery-workflow')">実践ワークフロー <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#adv-claudemd" class="flow-chip" onclick="goTo('advanced','adv-claudemd')">CLAUDE.md <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#adv-commands" class="flow-chip" onclick="goTo('advanced','adv-commands')">コマンド <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#adv-mcp" class="flow-chip" onclick="goTo('advanced','adv-mcp')">MCP連携 <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#adv-memory" class="flow-chip" onclick="goTo('advanced','adv-memory')">メモリ・エージェント <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#adv-workflow" class="flow-chip" onclick="goTo('advanced','adv-workflow')">開発ワークフロー <span class="arrow">&#8599;</span></a>
           </div>
         </div>
       </div>
@@ -254,42 +236,42 @@
   <div class="cards">
     <div class="cards-title">あなたの状況から探す</div>
     <div class="cards-grid">
-      <a href="ops.html#env-mac" class="card">
+      <a href="ops.html#intro-what" class="card">
         <div class="card-icon">&#9654;</div>
-        <h3>まだ何も始めていない</h3>
-        <p>環境構築の最初から順番に進めましょう。Macに必要なソフトを入れるところからスタート。</p>
+        <h3>Claude Codeって何？</h3>
+        <p>何ができるか、誰向けか、費用はいくらか。30秒で分かる概要。</p>
       </a>
-      <a href="ops.html#wf-create" class="card">
+      <a href="ops.html#setup-mac" class="card">
         <div class="card-icon">&#9633;</div>
-        <h3>環境は整った。アプリを作りたい</h3>
-        <p>フォルダの作り方からAIへの依頼テンプレート、公開までの一連の手順。</p>
+        <h3>まだ何も始めていない</h3>
+        <p>Macの準備からアカウント作成まで。最初の1回だけ、約30分の作業。</p>
       </a>
-      <a href="ops.html#svc-database" class="card">
+      <a href="ops.html#app-walkthrough" class="card">
         <div class="card-icon">&#9670;</div>
-        <h3>AIに「○○が必要」と言われた</h3>
-        <p>データベース、メール送信、決済など、各サービスの登録と接続手順。</p>
+        <h3>環境は整った。アプリを作りたい</h3>
+        <p>経費管理アプリを30分で作る実例。会話の全文付きで手順を解説。</p>
       </a>
-      <a href="ops.html#ts-common" class="card">
+      <a href="ops.html#trouble-common" class="card">
         <div class="card-icon">&#9651;</div>
         <h3>エラーが出て困っている</h3>
-        <p>「Address already in use」「npm install失敗」等のよくある問題と解決方法。</p>
+        <p>よくあるエラーと対処法。エラーメッセージをAIに渡すだけで解決。</p>
       </a>
-      <a href="ops.html#adv-claudemd" class="card">
+      <a href="ops.html#exp-tips" class="card">
         <div class="card-icon">&#9733;</div>
         <h3>もっと使いこなしたい</h3>
-        <p>CLAUDE.md、Plan Mode、MCPサーバー連携など、生産性を上げる実践テクニック。</p>
+        <p>効果的な指示の出し方、データベース、外部サービス連携。</p>
       </a>
-      <a href="ops.html#mastery-workflow" class="card">
+      <a href="ops.html#adv-workflow" class="card">
         <div class="card-icon">&#9672;</div>
-        <h3>本格的にアプリを量産したい</h3>
-        <p>60アプリ運用の実体験から生まれた7段階開発モデル、メモリ、サブエージェント、カスタムコマンド。</p>
+        <h3>本格的に使い込みたい</h3>
+        <p>CLAUDE.md、メモリ、サブエージェント、7段階開発モデル。</p>
       </a>
     </div>
   </div>
 
   <!-- Services Overview -->
   <div class="status">
-    <div class="status-title">使用するサービス一覧</div>
+    <div class="status-title">使用するサービス</div>
     <table>
       <thead>
         <tr>
@@ -297,93 +279,38 @@
           <th>役割</th>
           <th>必要度</th>
           <th>費用</th>
-          <th>マニュアル</th>
         </tr>
       </thead>
       <tbody>
         <tr>
+          <td><strong>Anthropic</strong></td>
+          <td>AIの頭脳（Claude Code本体）</td>
+          <td><span class="tag tag-required">必須</span></td>
+          <td>月額$20〜</td>
+        </tr>
+        <tr>
           <td><strong>GitHub</strong></td>
-          <td>コードの保管・バックアップ</td>
+          <td>ファイルの保管・バックアップ</td>
           <td><span class="tag tag-required">必須</span></td>
           <td><span class="tag tag-free">無料</span></td>
-          <td><a href="ops.html#svc-github">設定手順</a></td>
         </tr>
         <tr>
           <td><strong>Vercel</strong></td>
           <td>アプリのインターネット公開</td>
           <td><span class="tag tag-required">必須</span></td>
           <td><span class="tag tag-free">無料</span></td>
-          <td><a href="ops.html#svc-vercel">設定手順</a></td>
         </tr>
         <tr>
-          <td><strong>Anthropic</strong></td>
-          <td>AIの頭脳（APIキー）</td>
-          <td><span class="tag tag-required">必須</span></td>
-          <td>従量課金</td>
-          <td><a href="ops.html#env-accounts">設定手順</a></td>
-        </tr>
-        <tr>
-          <td><strong>Turso</strong></td>
-          <td>軽量データベース</td>
+          <td><strong>Supabase / Turso</strong></td>
+          <td>データベース</td>
           <td><span class="tag tag-optional">必要時</span></td>
-          <td><span class="tag tag-free">無料</span></td>
-          <td><a href="ops.html#svc-database">設定手順</a></td>
-        </tr>
-        <tr>
-          <td><strong>Supabase</strong></td>
-          <td>データベース + ログイン機能</td>
-          <td><span class="tag tag-optional">必要時</span></td>
-          <td><span class="tag tag-free">無料</span></td>
-          <td><a href="ops.html#svc-database">設定手順</a></td>
-        </tr>
-        <tr>
-          <td><strong>Firebase</strong></td>
-          <td>リアルタイムDB + 認証</td>
-          <td><span class="tag tag-optional">必要時</span></td>
-          <td><span class="tag tag-free">無料</span></td>
-          <td><a href="ops.html#svc-database">設定手順</a></td>
+          <td><span class="tag tag-free">無料枠あり</span></td>
         </tr>
         <tr>
           <td><strong>SendGrid</strong></td>
           <td>メール送信</td>
           <td><span class="tag tag-optional">必要時</span></td>
           <td>月100通無料</td>
-          <td><a href="ops.html#svc-email">設定手順</a></td>
-        </tr>
-        <tr>
-          <td><strong>Stripe</strong></td>
-          <td>クレジットカード決済</td>
-          <td><span class="tag tag-optional">必要時</span></td>
-          <td>手数料のみ</td>
-          <td><a href="ops.html#svc-stripe">設定手順</a></td>
-        </tr>
-        <tr>
-          <td><strong>Brave Search</strong></td>
-          <td>Web検索API</td>
-          <td><span class="tag tag-optional">必要時</span></td>
-          <td>月2,000回無料</td>
-          <td><a href="ops.html#svc-other">設定手順</a></td>
-        </tr>
-        <tr>
-          <td><strong>Slack API</strong></td>
-          <td>Slack連携</td>
-          <td><span class="tag tag-optional">必要時</span></td>
-          <td><span class="tag tag-free">無料</span></td>
-          <td><a href="ops.html#svc-other">設定手順</a></td>
-        </tr>
-        <tr>
-          <td><strong>Notion API</strong></td>
-          <td>Notion連携</td>
-          <td><span class="tag tag-optional">必要時</span></td>
-          <td><span class="tag tag-free">無料</span></td>
-          <td><a href="ops.html#svc-other">設定手順</a></td>
-        </tr>
-        <tr>
-          <td><strong>Zoom API</strong></td>
-          <td>会議の自動作成</td>
-          <td><span class="tag tag-optional">必要時</span></td>
-          <td><span class="tag tag-free">無料</span></td>
-          <td><a href="ops.html#svc-other">設定手順</a></td>
         </tr>
       </tbody>
     </table>
@@ -391,8 +318,8 @@
 
   <!-- Footer -->
   <div class="footer">
-    <p>Claude Code 活用マニュアル | 第2.0版 2026年4月</p>
-    <p style="margin-top:4px;">60以上のアプリ運用のベストプラクティスと実運用経験に基づいて設計。</p>
+    <p>Claude Code 活用マニュアル | 第3.0版 2026年4月</p>
+    <p style="margin-top:4px;">60以上のアプリ運用の実体験に基づいて設計。プログラミング知識不要。</p>
   </div>
 
   <script>
