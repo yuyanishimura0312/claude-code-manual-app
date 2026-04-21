@@ -120,6 +120,54 @@
     .tag-optional { background:#EDE8E2; color:var(--text-2); }
     .tag-free { background:#FFF4EC; color:#A86B50; }
 
+    /* Community */
+    .community {
+      max-width:840px; margin:0 auto; padding:0 32px 64px;
+    }
+    .community-box {
+      background:var(--surface); border:1px solid var(--border); border-radius:12px;
+      padding:40px; box-shadow:var(--shadow-sm);
+    }
+    .community-box h2 {
+      font-family:'Noto Serif JP',Georgia,serif; font-size:22px; font-weight:600;
+      margin-bottom:12px; color:var(--text);
+    }
+    .community-box .cq {
+      font-family:'Noto Serif JP',Georgia,serif; font-size:15px; color:var(--brown-dark);
+      line-height:1.7; padding:16px 20px; background:var(--accent-bg); border-radius:8px;
+      margin-bottom:20px; font-style:italic;
+    }
+    .community-box .cd {
+      font-size:15px; color:var(--text-2); line-height:1.8; margin-bottom:24px;
+    }
+    .community-form { display:flex; flex-direction:column; gap:10px; }
+    .community-form .fr { display:flex; gap:10px; }
+    .community-form input[type="text"],
+    .community-form input[type="email"] {
+      flex:1; padding:11px 14px; border:1px solid var(--border); border-radius:8px;
+      font-size:15px; font-family:inherit; background:var(--bg);
+    }
+    .community-form input:focus { outline:none; border-color:var(--terra); box-shadow:0 0 0 3px rgba(168,107,80,.1); }
+    .community-form .fc {
+      font-size:12px; color:var(--text-3); line-height:1.6; display:flex; align-items:flex-start; gap:8px;
+    }
+    .community-form .fc input[type="checkbox"] { margin-top:3px; flex-shrink:0; }
+    .community-form .cs {
+      padding:14px 28px; background:var(--brown); color:#fff; border:none; border-radius:8px;
+      font-size:16px; font-weight:500; font-family:inherit; cursor:pointer; transition:all .15s;
+      letter-spacing:.03em;
+    }
+    .community-form .cs:hover { background:var(--brown-dark); }
+    .community-form .cs:disabled { opacity:.5; cursor:not-allowed; }
+    .community-done { text-align:center; padding:24px; display:none; }
+    .community-done h3 { font-size:18px; color:var(--brown); margin-bottom:8px; }
+    .community-done p { font-size:14px; color:var(--text-2); line-height:1.7; }
+    @media(max-width:640px) {
+      .community { padding-left:20px; padding-right:20px; }
+      .community-box { padding:24px; }
+      .community-form .fr { flex-direction:column; }
+    }
+
     /* Footer */
     .footer {
       max-width:840px; margin:0 auto; padding:32px; border-top:1px solid var(--border);
@@ -316,6 +364,28 @@
     </table>
   </div>
 
+  <!-- Community -->
+  <div class="community">
+    <div class="community-box">
+      <h2>学び合い、創造するコミュニティへ</h2>
+      <div class="cq">「未来の理解はコモンズである」── 未来に対するアプローチや、そこで得られた情報は共通の財産です。</div>
+      <div class="cd">AIとの協働で「まだ形になっていない未来」を作る。その実践を一人で行うのではなく、学び合いながら進める場を用意しました。マニュアルの更新情報、実践者の事例、新しい活用法を共有するコミュニティです。<br><br>最初のはずみ車を回すところが少し困難かもしれません。でも、回してしまえばその後の回転はとても速い。一緒に回しませんか。</div>
+      <div class="community-form" id="idxForm">
+        <div class="fr">
+          <input type="text" id="idxName" placeholder="氏名">
+          <input type="text" id="idxOrg" placeholder="所属（任意）">
+        </div>
+        <input type="email" id="idxEmail" placeholder="メールアドレス">
+        <label class="fc"><input type="checkbox" id="idxConsent"> コミュニティからのメールマガジン配信に同意します。配信はいつでも停止できます。</label>
+        <button class="cs" id="idxBtn" onclick="submitIdx()">コミュニティに参加する</button>
+      </div>
+      <div class="community-done" id="idxDone">
+        <h3>ご参加ありがとうございます</h3>
+        <p>EMERGING FUTURE ── We already have.<br>一緒に未来を作っていきましょう。</p>
+      </div>
+    </div>
+  </div>
+
   <!-- Footer -->
   <div class="footer">
     <p>Claude Code 活用マニュアル | 第3.0版 2026年4月</p>
@@ -323,6 +393,31 @@
   </div>
 
   <script>
+    async function submitIdx() {
+      const name = document.getElementById('idxName').value.trim();
+      const org = document.getElementById('idxOrg').value.trim();
+      const email = document.getElementById('idxEmail').value.trim();
+      const consent = document.getElementById('idxConsent').checked;
+      const btn = document.getElementById('idxBtn');
+      if (!email || !email.includes('@')) { alert('メールアドレスを入力してください'); return; }
+      if (!name) { alert('氏名を入力してください'); return; }
+      if (!consent) { alert('メールマガジン配信への同意が必要です'); return; }
+      btn.disabled = true; btn.textContent = '送信中...';
+      try {
+        const res = await fetch('/api/community', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, org, email }),
+        });
+        if (!res.ok) throw new Error('registration failed');
+        document.getElementById('idxForm').style.display = 'none';
+        document.getElementById('idxDone').style.display = 'block';
+      } catch (e) {
+        alert('登録に失敗しました。しばらくしてから再度お試しください。');
+      }
+      btn.disabled = false; btn.textContent = 'コミュニティに参加する';
+    }
+
     // Navigate to ops.html with the right chapter open
     function goTo(partId, chapterId) {
       // Store target in sessionStorage so ops.html can pick it up
