@@ -200,6 +200,51 @@
     }
     @media print { .chat-side { display:none!important; } }
 
+    /* FAQ Section */
+    .chat-faq { border-bottom:1px solid var(--border); }
+    .chat-faq-header {
+      padding:10px 16px; font-size:12px; font-weight:600; color:var(--text-2);
+      cursor:pointer; display:flex; justify-content:space-between; align-items:center;
+      background:var(--surface-2); transition:background .15s;
+    }
+    .chat-faq-header:hover { background:var(--accent-bg); }
+    .chat-faq-list { max-height:240px; overflow-y:auto; }
+    .chat-faq-list::-webkit-scrollbar { width:4px; }
+    .chat-faq-list::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+    .chat-faq-item {
+      padding:10px 16px; border-bottom:1px solid var(--border-light);
+      cursor:pointer; font-size:12.5px; transition:background .12s;
+    }
+    .chat-faq-item:hover { background:var(--bg); }
+    .chat-faq-item .faq-q { font-weight:500; color:var(--brown); margin-bottom:0; line-height:1.5; }
+    .chat-faq-item .faq-a { color:var(--text-2); line-height:1.5; display:none; margin-top:6px; font-size:12px; }
+    .chat-faq-item.open .faq-a { display:block; }
+    .faq-empty { padding:10px 16px; font-size:11px; color:var(--text-3); text-align:center; }
+
+    /* Rate Limit */
+    .chat-limit-box {
+      padding:16px; text-align:center; background:var(--warn-bg);
+      border-top:1px solid var(--warn-border);
+    }
+    .chat-limit-box p { font-size:13px; color:var(--text-2); margin-bottom:6px; line-height:1.5; }
+    .chat-limit-box .limit-sub { font-size:11px; color:var(--text-3); margin-bottom:10px; }
+    .chat-reg-form { display:flex; gap:6px; }
+    .chat-reg-form input {
+      flex:1; padding:8px 10px; border:1px solid var(--border); border-radius:6px;
+      font-size:13px; font-family:inherit; background:var(--surface);
+    }
+    .chat-reg-form input:focus { outline:none; border-color:var(--terra); }
+    .chat-reg-form button {
+      padding:8px 14px; background:var(--brown); color:#fff; border:none;
+      border-radius:6px; font-size:13px; cursor:pointer; font-family:inherit; white-space:nowrap;
+    }
+    .chat-reg-form button:hover { background:var(--brown-dark); }
+    .chat-remaining { font-size:11px; color:var(--text-3); text-align:center; padding:4px 12px 0; }
+    .chat-registered-badge {
+      display:inline-block; background:var(--accent-bg); color:var(--brown);
+      font-size:10px; padding:2px 8px; border-radius:3px; margin-left:6px;
+    }
+
     /* Diagrams */
     .diagram { margin:24px 0; border-radius:10px; overflow:hidden; border:1px solid var(--border); background:var(--surface); }
     .diagram-title { background:var(--sidebar-bg); padding:10px 16px; font-size:12px; font-weight:600; color:var(--text-2); border-bottom:1px solid var(--border); letter-spacing:.03em; }
@@ -337,13 +382,31 @@
   <!-- Chat Side Panel (always visible on right) -->
   <aside class="chat-side" id="chatSide">
     <div class="chat-side-header">
-      <h3>わからないことがあれば</h3>
+      <h3>わからないことがあれば <span class="chat-registered-badge" id="regBadge" style="display:none">登録済み</span></h3>
       <p>読んでいるページの内容をもとに、AIが回答します</p>
+    </div>
+    <!-- FAQ Accumulation Section -->
+    <div class="chat-faq" id="chatFaq">
+      <div class="chat-faq-header" onclick="toggleFaqPanel()">
+        <span>みんなの質問 (<span id="faqCount">0</span>件)</span>
+        <span class="arrow" id="faqArrow" style="font-size:10px;transition:transform .2s">&#9654;</span>
+      </div>
+      <div class="chat-faq-list" id="faqList" style="display:none"></div>
     </div>
     <div class="chat-messages" id="chatMessages">
       <div class="chat-msg system">ここに質問を入力すると、今読んでいるページの内容をふまえて回答します。</div>
     </div>
-    <div class="chat-input-row">
+    <!-- Rate Limit / Registration -->
+    <div class="chat-limit-box" id="chatLimitBox" style="display:none">
+      <p>無料回答の上限に達しました</p>
+      <p class="limit-sub">メールアドレスを登録すると、あと7回ご利用いただけます</p>
+      <div class="chat-reg-form">
+        <input type="email" id="regEmail" placeholder="メールアドレス">
+        <button onclick="registerUser()">登録</button>
+      </div>
+    </div>
+    <div class="chat-remaining" id="chatRemaining"></div>
+    <div class="chat-input-row" id="chatInputRow">
       <textarea class="chat-input" id="chatInput" placeholder="ここに質問を入力..." rows="1"
         onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"
         oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,84)+'px'"></textarea>
@@ -658,17 +721,125 @@
     });
 
     // =========================================================
-    // Chat Bar
+    // Chat — FAQ Accumulation + Rate Limiting
     // =========================================================
     const chatHistory = [];
+    const FAQ_STORAGE_KEY = 'ccmanual_faq';
+    const USAGE_STORAGE_KEY = 'ccmanual_usage';
+    const REG_STORAGE_KEY = 'ccmanual_registered';
+    const LIMIT_ANONYMOUS = 3;
+    const LIMIT_REGISTERED = 10;
+
+    // --- FAQ Management ---
+    function loadFaqs() {
+      try { return JSON.parse(localStorage.getItem(FAQ_STORAGE_KEY) || '[]'); } catch { return []; }
+    }
+    function saveFaqEntry(q, a) {
+      const faqs = loadFaqs();
+      // Avoid near-duplicates (simple check)
+      const isDuplicate = faqs.some(f => f.q.length > 10 && q.includes(f.q.slice(0, 20)));
+      if (!isDuplicate) {
+        faqs.unshift({ q, a, ts: Date.now() });
+        if (faqs.length > 50) faqs.length = 50; // cap at 50
+        localStorage.setItem(FAQ_STORAGE_KEY, JSON.stringify(faqs));
+      }
+      renderFaqs();
+    }
+    function renderFaqs() {
+      const faqs = loadFaqs();
+      const listEl = document.getElementById('faqList');
+      const countEl = document.getElementById('faqCount');
+      countEl.textContent = faqs.length;
+      if (faqs.length === 0) {
+        listEl.innerHTML = '<div class="faq-empty">まだ質問がありません</div>';
+        return;
+      }
+      listEl.innerHTML = faqs.map((f, i) => `
+        <div class="chat-faq-item" onclick="this.classList.toggle('open')">
+          <div class="faq-q">Q. ${escapeHtml(f.q.slice(0, 80))}${f.q.length > 80 ? '...' : ''}</div>
+          <div class="faq-a">${escapeHtml(f.a).replace(/\n/g, '<br>')}</div>
+        </div>
+      `).join('');
+    }
+    function toggleFaqPanel() {
+      const list = document.getElementById('faqList');
+      const arrow = document.getElementById('faqArrow');
+      if (list.style.display === 'none') {
+        list.style.display = 'block';
+        arrow.style.transform = 'rotate(90deg)';
+      } else {
+        list.style.display = 'none';
+        arrow.style.transform = 'rotate(0deg)';
+      }
+    }
+
+    // --- Rate Limiting ---
+    function getUsageCount() {
+      return parseInt(localStorage.getItem(USAGE_STORAGE_KEY) || '0', 10);
+    }
+    function incrementUsage() {
+      const count = getUsageCount() + 1;
+      localStorage.setItem(USAGE_STORAGE_KEY, String(count));
+      return count;
+    }
+    function isRegistered() {
+      return !!localStorage.getItem(REG_STORAGE_KEY);
+    }
+    function getLimit() {
+      return isRegistered() ? LIMIT_REGISTERED : LIMIT_ANONYMOUS;
+    }
+    function updateRemainingDisplay() {
+      const remaining = getLimit() - getUsageCount();
+      const el = document.getElementById('chatRemaining');
+      if (remaining <= 0) {
+        el.textContent = '';
+        showLimitReached();
+      } else {
+        el.textContent = `残り${remaining}回`;
+      }
+    }
+    function showLimitReached() {
+      if (isRegistered()) {
+        // Registered user hit 10 limit
+        document.getElementById('chatLimitBox').style.display = 'block';
+        document.getElementById('chatLimitBox').innerHTML = '<p>本日の回答上限（10回）に達しました</p><p class="limit-sub">上のFAQもご活用ください。明日またご利用いただけます。</p>';
+        document.getElementById('chatInputRow').style.display = 'none';
+      } else {
+        // Anonymous user hit 3 limit
+        document.getElementById('chatLimitBox').style.display = 'block';
+        document.getElementById('chatInputRow').style.display = 'none';
+      }
+    }
+    function registerUser() {
+      const email = document.getElementById('regEmail').value.trim();
+      if (!email || !email.includes('@')) {
+        alert('有効なメールアドレスを入力してください');
+        return;
+      }
+      localStorage.setItem(REG_STORAGE_KEY, email);
+      document.getElementById('chatLimitBox').style.display = 'none';
+      document.getElementById('chatInputRow').style.display = 'flex';
+      document.getElementById('regBadge').style.display = 'inline-block';
+      updateRemainingDisplay();
+    }
+
+    // --- Init UI state ---
+    function initChatUI() {
+      renderFaqs();
+      if (isRegistered()) {
+        document.getElementById('regBadge').style.display = 'inline-block';
+      }
+      if (getUsageCount() >= getLimit()) {
+        showLimitReached();
+      }
+      updateRemainingDisplay();
+    }
 
     function getCurrentChapterContent() {
-      // Get the current chapter's raw markdown content for context
       if (!currentChapter) return '';
       for (const p of MANUAL.parts) {
         for (const c of p.chapters) {
           if (c.id === currentChapter) {
-            // Strip HTML tags from content, keep text
             return `[${p.title} > ${c.title}]\n` + c.content.replace(/<[^>]+>/g, '').trim();
           }
         }
@@ -681,6 +852,25 @@
       const question = input.value.trim();
       if (!question) return;
 
+      // Check rate limit before sending
+      if (getUsageCount() >= getLimit()) {
+        showLimitReached();
+        return;
+      }
+
+      // Check if FAQ already has an answer
+      const faqs = loadFaqs();
+      const qLower = question.toLowerCase();
+      const faqMatch = faqs.find(f => {
+        const fqLower = f.q.toLowerCase();
+        // Simple overlap check: if >60% of words match
+        const qWords = qLower.split(/\s+/).filter(w => w.length > 2);
+        const fWords = fqLower.split(/\s+/).filter(w => w.length > 2);
+        if (qWords.length === 0 || fWords.length === 0) return false;
+        const overlap = qWords.filter(w => fWords.some(fw => fw.includes(w) || w.includes(fw)));
+        return overlap.length / Math.max(qWords.length, 1) > 0.6;
+      });
+
       const messagesEl = document.getElementById('chatMessages');
       const sendBtn = document.getElementById('chatSend');
 
@@ -690,6 +880,18 @@
       input.value = '';
       input.style.height = 'auto';
       sendBtn.disabled = true;
+
+      // If FAQ match found, show it without API call
+      if (faqMatch) {
+        let answerHtml = escapeHtml(faqMatch.a)
+          .replace(/`([^`]+)`/g, '<code>$1</code>')
+          .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+          .replace(/\n/g, '<br>');
+        messagesEl.innerHTML += `<div class="chat-msg ai">${answerHtml}<br><span style="font-size:11px;color:var(--text-3)">(FAQ より回答 / API未使用)</span></div>`;
+        sendBtn.disabled = false;
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+        return;
+      }
 
       // Add typing indicator
       messagesEl.innerHTML += `<div class="chat-typing" id="chatTyping"><span></span><span></span><span></span></div>`;
@@ -702,7 +904,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             question,
-            context: context.slice(0, 4000), // Limit context size
+            context: context.slice(0, 4000),
             history: chatHistory.slice(-6),
           }),
         });
@@ -718,7 +920,14 @@
         const data = await res.json();
         chatHistory.push({ role: 'assistant', content: data.answer });
 
-        // Render answer with basic formatting
+        // Save to FAQ
+        saveFaqEntry(question, data.answer);
+
+        // Increment usage
+        incrementUsage();
+        updateRemainingDisplay();
+
+        // Render answer
         let answerHtml = escapeHtml(data.answer)
           .replace(/`([^`]+)`/g, '<code>$1</code>')
           .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
@@ -733,6 +942,9 @@
       sendBtn.disabled = false;
       messagesEl.scrollTop = messagesEl.scrollHeight;
     }
+
+    // Init chat UI after page load
+    initChatUI();
   </script>
 </body>
 </html>
