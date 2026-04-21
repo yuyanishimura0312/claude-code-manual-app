@@ -407,8 +407,8 @@
     </div>
     <div class="chat-remaining" id="chatRemaining"></div>
     <div class="chat-input-row" id="chatInputRow">
-      <textarea class="chat-input" id="chatInput" placeholder="ここに質問を入力..." rows="1"
-        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"
+      <textarea class="chat-input" id="chatInput" placeholder="ここに質問を入力... (⌘+Enterで送信)" rows="1"
+        onkeydown="if(event.key==='Enter'&&(event.metaKey||event.ctrlKey)){event.preventDefault();sendChat()}"
         oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,84)+'px'"></textarea>
       <button class="chat-send" id="chatSend" onclick="sendChat()" title="送信">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
