@@ -251,48 +251,124 @@
       font-size:10px; padding:2px 8px; border-radius:3px; margin-left:6px;
     }
 
-    /* Community Section */
+    /* Community Section — Premium Design */
     .community-section {
-      background:var(--surface); border:1px solid var(--border); border-radius:12px;
-      padding:32px; margin:48px 0; box-shadow:var(--shadow-sm);
+      background:linear-gradient(180deg, var(--surface) 0%, #FAF6F1 100%);
+      border:1px solid var(--border); border-radius:16px;
+      padding:0; margin:56px 0; box-shadow:var(--shadow-md); overflow:hidden;
     }
-    .community-section h3 {
+    .community-hero {
+      padding:40px 36px 0; text-align:center;
+    }
+    .community-hero .community-label {
+      font-size:11px; font-weight:600; color:var(--brown); letter-spacing:.14em;
+      margin-bottom:12px; display:block;
+    }
+    .community-hero h3 {
       font-family:'Noto Serif JP','Hiragino Mincho ProN',Georgia,serif;
-      font-size:20px; font-weight:600; margin:0 0 8px; border:none; padding:0; color:var(--text);
+      font-size:22px; font-weight:600; margin:0 0 20px; border:none; padding:0;
+      color:var(--text); line-height:1.45;
     }
-    .community-section .community-lead {
-      font-size:14px; color:var(--text-2); line-height:1.8; margin-bottom:20px;
+    .community-quote {
+      font-family:'Noto Serif JP',Georgia,serif; font-size:14.5px; color:var(--brown-dark);
+      line-height:1.75; padding:20px 24px; background:var(--accent-bg); border-radius:10px;
+      margin:0 36px 24px; font-style:italic; text-align:center; border:none;
     }
-    .community-section .community-quote {
-      font-family:'Noto Serif JP',Georgia,serif; font-size:15px; color:var(--brown-dark);
-      line-height:1.7; padding:16px 20px; background:var(--accent-bg); border-radius:8px;
-      margin-bottom:20px; font-style:italic;
+    .community-lead {
+      font-size:14.5px; color:var(--text-2); line-height:1.85; padding:0 36px;
+      text-align:center; margin-bottom:28px;
     }
-    .community-form { display:flex; flex-direction:column; gap:10px; }
-    .community-form .form-row { display:flex; gap:10px; }
-    .community-form input {
-      flex:1; padding:10px 14px; border:1px solid var(--border); border-radius:8px;
-      font-size:14px; font-family:inherit; background:var(--bg);
+    .community-divider {
+      width:40px; height:1.5px; background:var(--border); margin:0 auto 28px;
     }
-    .community-form input:focus { outline:none; border-color:var(--terra); box-shadow:0 0 0 3px rgba(168,107,80,.1); }
-    .community-form .form-consent {
-      font-size:11.5px; color:var(--text-3); line-height:1.6; display:flex; align-items:flex-start; gap:8px;
+    /* Multi-step form */
+    .community-form-wrap { padding:0 36px 36px; }
+    .community-step { display:none; animation:comFadeIn .4s ease; }
+    .community-step.active { display:block; }
+    @keyframes comFadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .community-form-wrap .com-field {
+      position:relative; margin-bottom:16px;
     }
-    .community-form .form-consent input[type="checkbox"] { margin-top:3px; flex-shrink:0; }
-    .community-form .community-submit {
-      padding:12px 24px; background:var(--brown); color:#fff; border:none; border-radius:8px;
-      font-size:15px; font-weight:500; font-family:inherit; cursor:pointer; transition:all .15s;
-      letter-spacing:.03em;
+    .community-form-wrap .com-input {
+      width:100%; padding:18px 16px 8px; border:1.5px solid var(--border); border-radius:10px;
+      font-size:15px; font-family:inherit; background:var(--surface); color:var(--text);
+      transition:border-color .2s, box-shadow .2s;
     }
-    .community-form .community-submit:hover { background:var(--brown-dark); }
-    .community-form .community-submit:disabled { opacity:.5; cursor:not-allowed; }
+    .community-form-wrap .com-input:focus {
+      outline:none; border-color:var(--brown);
+      box-shadow:0 0 0 3px rgba(122,64,51,.08);
+    }
+    .community-form-wrap .com-label {
+      position:absolute; top:14px; left:16px; font-size:14px; color:var(--text-3);
+      transition:all .2s ease; pointer-events:none; transform-origin:left top;
+    }
+    .community-form-wrap .com-input:focus ~ .com-label,
+    .community-form-wrap .com-input:not(:placeholder-shown) ~ .com-label {
+      transform:translateY(-10px) scale(.78); color:var(--brown); font-weight:500;
+    }
+    .community-form-wrap .com-row { display:flex; gap:12px; }
+    .community-form-wrap .com-row .com-field { flex:1; }
+    .com-btn {
+      width:100%; padding:14px 24px; border:none; border-radius:10px;
+      font-size:15px; font-weight:600; font-family:inherit; cursor:pointer;
+      transition:all .2s ease; letter-spacing:.02em;
+      display:flex; align-items:center; justify-content:center; gap:8px;
+    }
+    .com-btn-primary {
+      background:var(--brown); color:#fff;
+      box-shadow:0 2px 8px rgba(122,64,51,.2);
+    }
+    .com-btn-primary:hover {
+      background:var(--brown-dark); transform:translateY(-1px);
+      box-shadow:0 4px 16px rgba(122,64,51,.25);
+    }
+    .com-btn-primary:active { transform:translateY(0); }
+    .com-btn-primary:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+    .com-btn-primary .btn-arrow { transition:transform .2s; }
+    .com-btn-primary:hover .btn-arrow { transform:translateX(3px); }
+    .com-consent {
+      font-size:12px; color:var(--text-3); line-height:1.6; display:flex;
+      align-items:flex-start; gap:10px; margin:4px 0 16px;
+    }
+    .com-consent input[type="checkbox"] {
+      margin-top:2px; flex-shrink:0; width:16px; height:16px; accent-color:var(--brown);
+    }
+    .com-trust {
+      text-align:center; font-size:11.5px; color:var(--text-3); margin-top:12px; line-height:1.5;
+    }
+    /* Step indicator */
+    .com-steps-indicator {
+      display:flex; justify-content:center; gap:8px; margin-bottom:20px;
+    }
+    .com-step-dot {
+      width:8px; height:8px; border-radius:50%; background:var(--border); transition:all .3s;
+    }
+    .com-step-dot.active { background:var(--brown); width:24px; border-radius:4px; }
+    /* Success state */
     .community-success {
-      text-align:center; padding:24px; display:none;
+      text-align:center; padding:40px 36px; display:none;
+      animation:comFadeIn .5s ease;
     }
-    .community-success h4 { font-size:16px; color:var(--brown); margin-bottom:8px; }
-    .community-success p { font-size:13px; color:var(--text-2); line-height:1.7; }
+    .community-success .success-icon {
+      width:56px; height:56px; border-radius:50%; background:var(--accent-bg);
+      margin:0 auto 16px; display:flex; align-items:center; justify-content:center;
+      animation:successPop .5s cubic-bezier(.175,.885,.32,1.275);
+    }
+    @keyframes successPop { 0%{transform:scale(0)} 60%{transform:scale(1.1)} 100%{transform:scale(1)} }
+    @keyframes spin { to{transform:rotate(360deg)} }
+    .community-success .success-icon svg { width:24px; height:24px; color:var(--brown); }
+    .community-success h4 {
+      font-family:'Noto Serif JP',Georgia,serif;
+      font-size:18px; color:var(--text); margin-bottom:10px; font-weight:600;
+    }
+    .community-success p { font-size:14px; color:var(--text-2); line-height:1.75; }
     @media(max-width:640px) {
-      .community-form .form-row { flex-direction:column; }
+      .community-hero { padding:28px 24px 0; }
+      .community-quote { margin:0 24px 20px; padding:16px; }
+      .community-lead { padding:0 24px; }
+      .community-form-wrap { padding:0 24px 28px; }
+      .community-form-wrap .com-row { flex-direction:column; }
+      .community-success { padding:28px 24px; }
     }
 
     /* Diagrams */
@@ -1056,6 +1132,24 @@
     // =========================================================
     // Community Registration
     // =========================================================
+    // --- Community Multi-step Form ---
+    function comNextStep(s) {
+      const email = document.getElementById('comEmail' + s).value.trim();
+      if (!email || !email.includes('@')) {
+        const input = document.getElementById('comEmail' + s);
+        input.style.borderColor = '#c0392b';
+        input.focus();
+        setTimeout(() => input.style.borderColor = '', 2000);
+        return;
+      }
+      // Transition to step 2
+      document.getElementById('comStep1' + s).classList.remove('active');
+      document.getElementById('comStep2' + s).classList.add('active');
+      document.getElementById('comDot1' + s).classList.remove('active');
+      document.getElementById('comDot2' + s).classList.add('active');
+      document.getElementById('comName' + s).focus();
+    }
+
     async function submitCommunityForm(suffix) {
       const s = suffix || '';
       const name = document.getElementById('comName' + s).value.trim();
@@ -1064,12 +1158,11 @@
       const consent = document.getElementById('comConsent' + s).checked;
       const btn = document.getElementById('comSubmit' + s);
 
-      if (!email || !email.includes('@')) { alert('メールアドレスを入力してください'); return; }
-      if (!name) { alert('氏名を入力してください'); return; }
+      if (!name) { document.getElementById('comName' + s).focus(); return; }
       if (!consent) { alert('メールマガジン配信への同意が必要です'); return; }
 
       btn.disabled = true;
-      btn.textContent = '送信中...';
+      btn.innerHTML = '<span style="display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite"></span>';
 
       try {
         const res = await fetch('/api/community', {
@@ -1078,27 +1171,21 @@
           body: JSON.stringify({ name, org, email }),
         });
 
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({}));
-          throw new Error(err.error || 'registration failed');
-        }
+        if (!res.ok) throw new Error('registration failed');
 
-        // Show success
         document.getElementById('communityForm' + s).style.display = 'none';
         document.getElementById('communitySuccess' + s).style.display = 'block';
 
-        // Also register for chat (unlock 10 answers)
         localStorage.setItem(REG_STORAGE_KEY, email);
         if (document.getElementById('regBadge')) {
           document.getElementById('regBadge').style.display = 'inline-block';
         }
         updateRemainingDisplay();
       } catch (e) {
-        alert('登録に失敗しました: ' + e.message + '\nしばらくしてから再度お試しください。');
+        alert('登録に失敗しました。しばらくしてから再度お試しください。');
+        btn.disabled = false;
+        btn.textContent = 'コミュニティに参加する';
       }
-
-      btn.disabled = false;
-      btn.textContent = 'コミュニティに参加する';
     }
 
     function submitCommunity() { submitCommunityForm(''); }
