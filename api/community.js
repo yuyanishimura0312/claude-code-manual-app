@@ -50,7 +50,7 @@ export default async function handler(req, res) {
 
     // Step 3: Send welcome email
     const fromEmail = process.env.SENDGRID_FROM_EMAIL || 'info@emerging-future.org';
-    const fromName = process.env.SENDGRID_FROM_NAME || 'Emerging Future by ミラツク';
+    const fromName = process.env.SENDGRID_FROM_NAME || 'Living Futures Network by ミラツク';
     await fetch('https://api.sendgrid.com/v3/mail/send', {
       method: 'POST',
       headers: {
@@ -60,14 +60,14 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         personalizations: [{ to: [{ email, name }] }],
         from: { email: fromEmail, name: fromName },
-        subject: '【Emerging Future】コミュニティへようこそ',
+        subject: '【Living Futures Network】ご登録ありがとうございます',
         content: [{
           type: 'text/html',
           value: `
 <div style="font-family:'Hiragino Kaku Gothic ProN',sans-serif;max-width:600px;margin:0 auto;color:#3D2E22;">
   <div style="padding:32px 24px;background:#FDFAF7;">
-    <p style="font-size:11px;color:#7A4033;letter-spacing:.12em;font-weight:600;">EMERGING FUTURE by ミラツク</p>
-    <h1 style="font-size:22px;font-weight:600;margin:12px 0 24px;line-height:1.5;">コミュニティへのご参加<br>ありがとうございます</h1>
+    <p style="font-size:11px;color:#7A4033;letter-spacing:.12em;font-weight:600;">LIVING FUTURES NETWORK by ミラツク</p>
+    <h1 style="font-size:22px;font-weight:600;margin:12px 0 24px;line-height:1.5;">ご登録ありがとうございます</h1>
     <p style="font-size:15px;line-height:1.8;color:#6B5445;">
       ${name}さん${org ? '（' + org + '）' : ''}、ご登録ありがとうございます。
     </p>
@@ -91,7 +91,7 @@ export default async function handler(req, res) {
     <hr style="border:none;border-top:1px solid #E6D5C4;margin:32px 0;">
     <p style="font-size:12px;color:#7A7268;line-height:1.7;">
       Claude Code 活用マニュアル: <a href="https://claude-code-manual-app.vercel.app/" style="color:#7A4033;">https://claude-code-manual-app.vercel.app/</a><br>
-      NPO法人ミラツク | Emerging Future<br><br>
+      NPO法人ミラツク | Living Futures Network<br><br>
       <a href="https://claude-code-manual-app.vercel.app/" style="color:#7A7268;font-size:11px;">配信停止はこちら</a>
     </p>
   </div>

@@ -396,18 +396,18 @@
   <div class="community">
     <div class="community-box">
       <div class="c-hero">
-        <span class="c-label">EMERGING FUTURE COMMUNITY</span>
-        <h2>学び合い、創造する<br>コミュニティへ</h2>
+        <span class="c-label">LIVING FUTURES NETWORK</span>
+        <h2>共に学ぶ機会に参加する</h2>
       </div>
-      <div class="cq">「未来の理解はコモンズである」── 未来に対するアプローチや、そこで得られた情報は共通の財産です。</div>
-      <div class="cd">AIとの協働で「まだ形になっていない未来」を作る。<br>その実践を、学び合いながら進める場です。</div>
+      <div class="cq">AIとの協働で「まだ形になっていない未来」を作る。その実践を、共に学びながら進める場です。</div>
+      <div class="cd">マニュアルの更新情報、実践者の事例、<br>AI協働の最新動向を共有します。</div>
       <div class="c-divider"></div>
       <div class="c-form-wrap" id="idxForm">
         <div class="c-dots"><div class="c-dot active" id="idxDot1"></div><div class="c-dot" id="idxDot2"></div></div>
         <div class="c-step active" id="idxStep1">
           <div class="c-field">
             <input type="email" class="c-input" id="idxEmail" placeholder=" " autocomplete="email">
-            <label class="c-lbl">メールアドレス</label>
+            <label class="c-lbl">メールマガジンに登録する</label>
           </div>
           <button class="c-btn" onclick="idxNext()">次へ <span class="arr">&rarr;</span></button>
           <div class="c-trust">マニュアル更新・実践事例・AI協働の最新動向をお届けします</div>
@@ -424,12 +424,12 @@
             </div>
           </div>
           <label class="c-consent"><input type="checkbox" id="idxConsent" checked> メールマガジン配信に同意します。配信停止はいつでも可能です。</label>
-          <button class="c-btn" id="idxBtn" onclick="submitIdx()">コミュニティに参加する</button>
+          <button class="c-btn" id="idxBtn" onclick="submitIdx()">登録する</button>
         </div>
       </div>
       <div class="c-done" id="idxDone">
         <div class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <h3>ようこそ、コミュニティへ</h3>
+        <h3>ご登録ありがとうございます</h3>
         <p>確認メールをお送りしました。<br>一緒に未来を作っていきましょう。</p>
       </div>
     </div>
@@ -477,7 +477,7 @@
         document.getElementById('idxDone').style.display = 'block';
       } catch (e) {
         alert('登録に失敗しました。しばらくしてから再度お試しください。');
-        btn.disabled = false; btn.textContent = 'コミュニティに参加する';
+        btn.disabled = false; btn.textContent = '登録する';
       }
     }
 
