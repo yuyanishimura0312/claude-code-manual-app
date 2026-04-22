@@ -543,6 +543,8 @@ Claude Codeへの最初の依頼文は、アプリの出来を大きく左右し
 | 「まず計画を見せて」で確認する | いきなり「全部作って」 |
 
 **大きな変更をする前は、必ず「まず計画を見せて」と伝えましょう。** AIが作業方針を提示してくれるので、方向性を確認してから実行に移せます。これだけで「思っていたのと違う」という手戻りが大幅に減ります。
+
+<div class="cta-inline" id="ctaInline1"><div class="cta-inline-text"><span class="cta-il">LIVING FUTURES NETWORK</span><p>実践事例やテンプレートの最新情報をメールでお届けします</p></div><div class="cta-inline-form"><input type="email" placeholder="メールアドレス" autocomplete="email"><button onclick="submitInlineCta('ctaInline1')">登録</button></div></div>
 `
         }
       ]
@@ -825,6 +827,8 @@ APIキー（各サービスの鍵）をコードの中に直接書かず、Keych
 
 ### Q. Claude Codeが作るコードの品質は信頼できますか？
 基本的に高品質ですが、AIは完璧ではありません。特にセキュリティやデータ処理の正確性については、実際に動かして確認することが重要です。業務で使う場合は、公開前に動作確認を十分に行ってください。
+
+<div class="cta-inline" id="ctaInline2"><div class="cta-inline-text"><span class="cta-il">LIVING FUTURES NETWORK</span><p>エラー対処法やTipsの最新情報をメールでお届けします</p></div><div class="cta-inline-form"><input type="email" placeholder="メールアドレス" autocomplete="email"><button onclick="submitInlineCta('ctaInline2')">登録</button></div></div>
 `
         }
       ]
@@ -1027,6 +1031,8 @@ Claude Codeは画像を理解できます。「ここのデザインを変えた
 | 会話を圧縮 | \`/compact\` |
 | 会話をリセット | \`/clear\` |
 | 終了 | \`/exit\` または \`Ctrl+C\` を2回 |
+
+<div class="cta-inline" id="ctaInline3"><div class="cta-inline-text"><span class="cta-il">LIVING FUTURES NETWORK</span><p>AI共創の上級テクニックや最新事例をメールでお届けします</p></div><div class="cta-inline-form"><input type="email" placeholder="メールアドレス" autocomplete="email"><button onclick="submitInlineCta('ctaInline3')">登録</button></div></div>
 `
         }
       ]
