@@ -80,9 +80,10 @@
     /* Tables — warm theme */
     .table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; margin:16px 0 28px; }
     table { width:100%; border-collapse:collapse; font-size:14.5px; }
-    th { background:var(--surface-2); font-weight:600; font-size:12px; letter-spacing:.04em; text-align:left; padding:10px 14px; border:1px solid var(--border); color:var(--text-2); }
-    td { padding:10px 14px; border:1px solid var(--border); vertical-align:top; line-height:1.5; }
-    tr:hover td { background:var(--bg); }
+    th { background:var(--surface-2); font-weight:600; font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; text-align:left; padding:12px 16px; border:1px solid var(--border); color:var(--text-2); }
+    td { padding:13px 16px; border:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    tbody tr:nth-child(even) td { background:rgba(245,239,232,.5); }
+    tr:hover td { background:var(--surface-2); }
 
     /* Code — UX BP: distinct from prose, copy-friendly */
     pre { background:var(--code-bg); border-radius:8px; padding:18px 22px; overflow-x:auto; margin:16px 0 24px; font-size:13.5px; line-height:1.65; border:1px solid var(--border); font-family:'JetBrains Mono','SF Mono','Menlo',monospace; color:var(--text); }
@@ -538,6 +539,7 @@
     .term {
       border-bottom:1.5px dashed var(--terra); cursor:help; position:relative;
       color:inherit; font-weight:inherit;
+      background:rgba(168,107,80,.06); border-radius:2px; padding:0 2px;
     }
     .term-popup {
       display:none; position:absolute; bottom:calc(100% + 10px); left:50%; transform:translateX(-50%);
@@ -581,8 +583,8 @@
   <!-- Chat Side Panel (always visible on right) -->
   <aside class="chat-side" id="chatSide" role="complementary" aria-label="AI質問チャット">
     <div class="chat-side-header">
-      <h3>わからないことがあれば <span class="chat-registered-badge" id="regBadge" style="display:none">登録済み</span></h3>
-      <p>読んでいるページの内容をもとに、AIが回答します</p>
+      <h3>AIに質問する <span class="chat-registered-badge" id="regBadge" style="display:none">登録済み</span></h3>
+      <p>今読んでいるページの内容をもとに回答します。技術用語も日本語で説明します。</p>
     </div>
     <!-- Variant C: Sidebar Banner -->
     <div class="cta-banner-chat">
@@ -598,12 +600,12 @@
       <div class="chat-faq-list" id="faqList"></div>
     </div>
     <div class="chat-messages" id="chatMessages">
-      <div class="chat-msg system">ここに質問を入力すると、今読んでいるページの内容をふまえて回答します。</div>
+      <div class="chat-msg system">わからないことを気軽に聞いてください。技術的な言葉も分かりやすく説明します。</div>
     </div>
     <!-- Rate Limit / Registration -->
     <div class="chat-limit-box" id="chatLimitBox" style="display:none">
-      <p>無料回答の上限に達しました</p>
-      <p class="limit-sub">メールアドレスを登録すると、あと7回ご利用いただけます</p>
+      <p>今日の無料質問（3回）をお使いいただきました</p>
+      <p class="limit-sub">メールアドレスを登録すると、引き続き7回ご利用いただけます</p>
       <div class="chat-reg-form">
         <input type="email" id="regEmail" placeholder="メールアドレス">
         <button onclick="registerUser()">登録</button>
@@ -611,7 +613,7 @@
     </div>
     <div class="chat-remaining" id="chatRemaining"></div>
     <div class="chat-input-row" id="chatInputRow">
-      <textarea class="chat-input" id="chatInput" placeholder="ここに質問を入力... (⌘+Enterで送信)" rows="1"
+      <textarea class="chat-input" id="chatInput" placeholder="例: Homebrewって何ですか？" rows="1"
         onkeydown="if(event.key==='Enter'&&(event.metaKey||event.ctrlKey)){event.preventDefault();sendChat()}"
         oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,84)+'px'"></textarea>
       <button class="chat-send" id="chatSend" onclick="sendChat()" title="送信">
@@ -727,7 +729,19 @@
       document.querySelector('.chapter.active').insertAdjacentHTML('beforeend', navHtml);
 
       addCopyButtons();
+
+      // Glossary hint on first view
+      if (!sessionStorage.getItem('glossary_hint_shown') && document.querySelector('.term')) {
+        sessionStorage.setItem('glossary_hint_shown', '1');
+        const hint = document.createElement('div');
+        hint.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--text);color:#F5EFE8;padding:10px 18px;border-radius:8px;font-size:13px;z-index:9999;animation:fadeIn .3s ease;white-space:nowrap;pointer-events:none;';
+        hint.textContent = '下線のある単語をタップすると解説が表示されます';
+        document.body.appendChild(hint);
+        setTimeout(() => hint.remove(), 3500);
+      }
+
       window.scrollTo(0, 0);
+      history.pushState({ chId }, '', '#' + chId);
       currentChapter = chId;
 
       if (window.innerWidth <= 900) toggleSidebar();
@@ -937,12 +951,23 @@
           }
         }
       }
+      let visibleCount = 0;
       document.querySelectorAll('.nav-item').forEach(item => {
         const chId = item.id.replace('nav-', '');
         const content = filterNav._index[chId] || item.dataset.title.toLowerCase();
-        item.style.display = content.includes(q) ? '' : 'none';
+        const visible = content.includes(q);
+        item.style.display = visible ? '' : 'none';
+        if (visible) visibleCount++;
       });
       MANUAL.parts.forEach(p => { if (!openParts.has(p.id)) togglePart(p.id); });
+      // Empty state
+      const container = document.getElementById('nav-container');
+      const existing = container.querySelector('.search-empty');
+      if (existing) existing.remove();
+      if (q && visibleCount === 0) {
+        container.insertAdjacentHTML('beforeend',
+          '<div class="search-empty" style="padding:16px;font-size:12px;color:var(--text-3);text-align:center;line-height:1.6;">見つかりませんでした<br><span style="font-size:11px">別のキーワードをお試しください</span></div>');
+      }
     }
 
     function toggleSidebar() {
@@ -973,9 +998,9 @@
     }
 
     // Handle hash navigation (back/forward, direct URL access)
-    window.addEventListener('hashchange', () => {
-      const chId = location.hash.replace('#', '');
-      if (chId) showChapter(chId);
+    window.addEventListener('popstate', (e) => {
+      const chId = (e.state && e.state.chId) || location.hash.replace('#', '');
+      if (chId && chId !== currentChapter) showChapter(chId);
     });
 
     // =========================================================
@@ -1251,7 +1276,7 @@
       } catch (e) {
         const typing = document.getElementById('chatTyping');
         if (typing) typing.remove();
-        messagesEl.innerHTML += `<div class="chat-msg system">回答を取得できませんでした: ${escapeHtml(e.message)}</div>`;
+        messagesEl.innerHTML += `<div class="chat-msg system">回答を取得できませんでした。時間をおいてもう一度お試しください。上のFAQもご活用ください。</div>`;
       }
 
       sendBtn.disabled = false;

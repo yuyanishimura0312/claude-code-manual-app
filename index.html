@@ -24,17 +24,35 @@
 
     /* Hero */
     .hero {
-      max-width:840px; margin:0 auto; padding:80px 32px 48px;
+      max-width:840px; margin:0 auto; padding:96px 32px 56px;
     }
     .hero-label {
       font-size:12px; font-weight:600; color:var(--brown); letter-spacing:.12em;
     }
     .hero h1 {
-      font-family:'Noto Serif JP','Hiragino Mincho ProN',Georgia,serif; font-size:34px; font-weight:600; line-height:1.35; margin:12px 0 24px; color:var(--text);
+      font-family:'Noto Serif JP','Hiragino Mincho ProN',Georgia,serif; font-size:42px; font-weight:600; line-height:1.3; margin:16px 0 28px; color:var(--text); letter-spacing:-.02em;
     }
     .hero-lead {
-      font-size:17px; color:var(--text-2); line-height:1.8; max-width:640px;
+      font-size:17px; color:var(--text-2); line-height:1.9; max-width:640px;
     }
+    .hero-actions { margin-top:32px; display:flex; gap:14px; flex-wrap:wrap; }
+    .hero-cta-primary {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:14px 32px; background:var(--brown); color:#fff;
+      border:1.5px solid var(--brown); border-radius:8px;
+      font-size:15px; font-weight:600; text-decoration:none;
+      box-shadow:0 2px 8px rgba(122,64,51,.25);
+      transition:all .2s;
+    }
+    .hero-cta-primary:hover { background:var(--brown-dark); transform:translateY(-1px); box-shadow:0 6px 20px rgba(122,64,51,.3); text-decoration:none; }
+    .hero-cta-secondary {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:14px 24px; background:transparent; color:var(--brown);
+      border:1.5px solid var(--border); border-radius:8px;
+      font-size:15px; font-weight:500; text-decoration:none;
+      transition:all .2s;
+    }
+    .hero-cta-secondary:hover { border-color:var(--brown); background:var(--brown-light); text-decoration:none; }
 
     /* Map */
     .map {
@@ -100,7 +118,11 @@
       text-decoration:none; color:inherit; display:block; box-shadow: var(--shadow-sm);
     }
     .card:hover { border-color:var(--brown); box-shadow:var(--shadow-md); text-decoration:none; transform:translateY(-2px); }
-    .card-icon { font-size:24px; margin-bottom:12px; }
+    .card-icon {
+      width:40px; height:40px; background:var(--surface-2); border-radius:10px;
+      display:flex; align-items:center; justify-content:center; margin-bottom:14px;
+    }
+    .card-icon svg { width:20px; height:20px; }
     .card h3 { font-size:15px; font-weight:600; margin-bottom:6px; }
     .card p { font-size:13px; color:var(--text-2); margin:0; line-height:1.7; }
 
@@ -112,9 +134,10 @@
       font-size:12px; font-weight:700; color:var(--text-3); letter-spacing:.1em; text-transform:uppercase; margin-bottom:20px;
     }
     table { width:100%; border-collapse:collapse; font-size:14.5px; }
-    th { background:var(--surface-2); font-weight:600; font-size:12px; letter-spacing:.04em; text-align:left; padding:10px 14px; border:1px solid var(--border); color:var(--text-2); }
-    td { padding:10px 14px; border:1px solid var(--border); }
-    tr:hover td { background:var(--bg); }
+    th { background:var(--surface-2); font-weight:600; font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; text-align:left; padding:12px 16px; border:1px solid var(--border); color:var(--text-2); }
+    td { padding:13px 16px; border:1px solid var(--border); }
+    tbody tr:nth-child(even) td { background:rgba(245,239,232,.5); }
+    tr:hover td { background:var(--surface-2); }
     .tag { display:inline-block; padding:3px 10px; border-radius:4px; font-size:11px; font-weight:600; letter-spacing:.03em; }
     .tag-required { background:var(--brown-light); color:var(--brown); }
     .tag-optional { background:#EDE8E2; color:var(--text-2); }
@@ -209,6 +232,11 @@
       .cards-grid { grid-template-columns:1fr 1fr; }
       .flow::before { left:19px; }
       .flow-num { width:40px; height:40px; font-size:14px; }
+      .hero h1 { font-size:30px; }
+      .hero { padding:56px 20px 36px; }
+    }
+    @media(max-width:480px) {
+      .cards-grid { grid-template-columns:1fr; gap:12px; }
     }
   </style>
 </head>
@@ -221,9 +249,9 @@
     <p class="hero-lead">
       Claude Codeは、日本語で「こういうものが欲しい」と伝えるだけで、実際に動くWebアプリを作れるAIツールです。このマニュアルでは、環境の準備からアプリの公開まで、すべての手順を解説します。
     </p>
-    <div style="margin-top:28px; display:flex; gap:12px; flex-wrap:wrap;">
-      <a href="ops.html#setup-mac" class="flow-chip" style="background:var(--brown); color:#fff; border-color:var(--brown); padding:12px 28px; font-size:15px; font-weight:600; border-radius:8px; box-shadow:0 2px 8px rgba(122,64,51,.2);">Step 1: 準備を始める <span class="arrow" style="color:rgba(255,255,255,.7)">&#8599;</span></a>
-      <a href="ops.html#intro-what" class="flow-chip" style="padding:12px 24px; font-size:15px; border-radius:8px;">まずは概要を読む <span class="arrow">&#8599;</span></a>
+    <div class="hero-actions">
+      <a href="ops.html#setup-mac" class="hero-cta-primary">準備を始める <span style="opacity:.7">&#8594;</span></a>
+      <a href="ops.html#intro-what" class="hero-cta-secondary">Claude Codeとは何か <span>&#8594;</span></a>
     </div>
   </div>
 
@@ -317,32 +345,32 @@
     <div class="cards-title">あなたの状況から探す</div>
     <div class="cards-grid">
       <a href="ops.html#intro-what" class="card">
-        <div class="card-icon">&#9654;</div>
-        <h3>Claude Codeって何？</h3>
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brown)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+        <h3>Claude Codeがはじめての方へ</h3>
         <p>何ができるか、誰向けか、費用はいくらか。30秒で分かる概要。</p>
       </a>
       <a href="ops.html#setup-mac" class="card">
-        <div class="card-icon">&#9633;</div>
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brown)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
         <h3>まだ何も始めていない</h3>
         <p>Macの準備からアカウント作成まで。最初の1回だけ、約30分の作業。</p>
       </a>
       <a href="ops.html#app-walkthrough" class="card">
-        <div class="card-icon">&#9670;</div>
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brown)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
         <h3>環境は整った。アプリを作りたい</h3>
         <p>経費管理アプリを30分で作る実例。会話の全文付きで手順を解説。</p>
       </a>
       <a href="ops.html#trouble-common" class="card">
-        <div class="card-icon">&#9651;</div>
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brown)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
         <h3>エラーが出て困っている</h3>
         <p>よくあるエラーと対処法。エラーメッセージをAIに渡すだけで解決。</p>
       </a>
       <a href="ops.html#exp-tips" class="card">
-        <div class="card-icon">&#9733;</div>
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brown)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
         <h3>もっと使いこなしたい</h3>
         <p>効果的な指示の出し方、データベース、外部サービス連携。</p>
       </a>
       <a href="ops.html#adv-workflow" class="card">
-        <div class="card-icon">&#9672;</div>
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brown)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg></div>
         <h3>本格的に使い込みたい</h3>
         <p>CLAUDE.md、メモリ、サブエージェント、7段階開発モデル。</p>
       </a>
@@ -403,7 +431,8 @@
         <span class="c-label">LIVING FUTURES NETWORK</span>
         <h2>Living Futures Network</h2>
       </div>
-      <div class="cd">AIとの共創で「まだ形になっていない未来」をつくる。その実践のための場を運営しています。<br>※Living Futures Networkは招待制です。まずは、メルマガに登録してください。</div>
+      <div class="cd">このマニュアルの背景にある実践の記録 ── <a href="https://claude-code-documentary-report.vercel.app/" target="_blank" rel="noopener" style="color:var(--brown);text-decoration:underline;text-underline-offset:3px;">「3週間で126のプロジェクトが生まれた場所」</a>を読む</div>
+      <div class="cd" style="margin-top:8px;">AIとの共創で「まだ形になっていない未来」をつくる。その実践者が集まる場を運営しています。<br>※Living Futures Networkは招待制です。まずは、メルマガに登録してください。</div>
       <div class="c-divider"></div>
       <div class="c-form-wrap" id="idxForm">
         <div class="c-dots"><div class="c-dot active" id="idxDot1"></div><div class="c-dot" id="idxDot2"></div></div>
@@ -441,7 +470,7 @@
   <!-- Footer -->
   <div class="footer">
     <p>Claude Code 活用マニュアル | 第3.0版 2026年4月</p>
-    <p style="margin-top:4px;">60以上のアプリ運用の実体験に基づいて設計。プログラミング知識不要。</p>
+    <p style="margin-top:4px;">60以上のアプリを自ら作り・運用した経験をもとに執筆。西村勇哉 + Claude Code</p>
   </div>
 
   <script>
