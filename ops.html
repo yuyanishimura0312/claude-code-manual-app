@@ -402,17 +402,46 @@
       .cta-inline-form input[type="email"] { width:100%; flex:1; }
     }
 
-    /* Variant C: Chat Sidebar Banner */
+    /* Variant C: Chat Sidebar Banner — collapsible */
     .cta-banner-chat {
-      padding:10px 16px; background:var(--accent-bg); border-bottom:1px solid var(--border);
-      display:flex; align-items:center; justify-content:space-between; gap:12px; flex-shrink:0;
+      background:var(--accent-bg); border-bottom:1px solid var(--border); flex-shrink:0;
     }
-    .cta-banner-chat p { font-size:11.5px; color:var(--text-2); line-height:1.4; margin:0; }
-    .cta-banner-chat a {
-      font-size:11.5px; font-weight:600; color:var(--brown); text-decoration:none;
-      white-space:nowrap; transition:color .15s;
+    .cta-banner-header {
+      padding:10px 16px; display:flex; align-items:center; justify-content:space-between;
+      gap:12px; cursor:pointer; transition:background .15s;
     }
-    .cta-banner-chat a:hover { color:var(--brown-dark); text-decoration:underline; }
+    .cta-banner-header:hover { background:rgba(122,64,51,.08); }
+    .cta-banner-header p { font-size:11.5px; color:var(--text-2); line-height:1.4; margin:0; font-weight:600; }
+    .cta-banner-header .lfn-arrow {
+      font-size:10px; color:var(--text-3); transition:transform .2s; flex-shrink:0;
+    }
+    .cta-banner-header .lfn-arrow.open { transform:rotate(90deg); }
+    .cta-banner-detail {
+      max-height:0; overflow:hidden; transition:max-height .3s ease;
+    }
+    .cta-banner-detail.open { max-height:200px; }
+    .cta-banner-detail-inner {
+      padding:0 16px 12px; font-size:11.5px; color:var(--text-2); line-height:1.65;
+    }
+    .cta-banner-detail-inner a {
+      color:var(--brown); text-decoration:underline; text-underline-offset:2px;
+    }
+    .cta-banner-detail-inner a:hover { color:var(--brown-dark); }
+    .cta-banner-actions {
+      display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;
+    }
+    .cta-banner-actions a {
+      font-size:11px; font-weight:600; padding:5px 12px; border-radius:5px;
+      text-decoration:none; transition:all .15s;
+    }
+    .cta-banner-actions .lfn-primary {
+      background:var(--brown); color:#fff;
+    }
+    .cta-banner-actions .lfn-primary:hover { background:var(--brown-dark); }
+    .cta-banner-actions .lfn-secondary {
+      background:var(--surface); color:var(--brown); border:1px solid var(--border);
+    }
+    .cta-banner-actions .lfn-secondary:hover { border-color:var(--brown); }
 
     /* Diagrams */
     .diagram { margin:24px 0; border-radius:10px; overflow:hidden; border:1px solid var(--border); background:var(--surface); }
@@ -586,10 +615,21 @@
       <h3>AIに質問する <span class="chat-registered-badge" id="regBadge" style="display:none">登録済み</span></h3>
       <p>今読んでいるページの内容をもとに回答します。技術用語も日本語で説明します。</p>
     </div>
-    <!-- Variant C: Sidebar Banner -->
+    <!-- Variant C: Sidebar Banner — collapsible -->
     <div class="cta-banner-chat">
-      <p>Living Futures Network</p>
-      <a href="javascript:void(0)" onclick="scrollToCommunity()">メルマガ登録 &rarr;</a>
+      <div class="cta-banner-header" onclick="toggleLfnBanner()">
+        <p>Living Futures Network</p>
+        <span class="lfn-arrow" id="lfnArrow">&#9654;</span>
+      </div>
+      <div class="cta-banner-detail" id="lfnDetail">
+        <div class="cta-banner-detail-inner">
+          このマニュアルの背景にある実践の記録 ── プログラミング未経験から3週間で126のプロジェクトが生まれた協働の場。その実践者が集まるネットワークです。
+          <div class="cta-banner-actions">
+            <a href="https://claude-code-documentary-report.vercel.app/" target="_blank" rel="noopener" class="lfn-secondary">元記事を読む</a>
+            <a href="javascript:void(0)" onclick="scrollToCommunity()" class="lfn-primary">メルマガ登録</a>
+          </div>
+        </div>
+      </div>
     </div>
     <!-- FAQ Accumulation Section -->
     <div class="chat-faq" id="chatFaq">
@@ -1375,7 +1415,14 @@
       }
     }
 
-    // --- Variant C: Scroll to community ---
+    // --- Variant C: LFN banner toggle ---
+    function toggleLfnBanner() {
+      const detail = document.getElementById('lfnDetail');
+      const arrow = document.getElementById('lfnArrow');
+      detail.classList.toggle('open');
+      arrow.classList.toggle('open');
+    }
+
     function scrollToCommunity() {
       const t = document.querySelector('.community-section');
       if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
