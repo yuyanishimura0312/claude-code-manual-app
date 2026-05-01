@@ -14,7 +14,7 @@
       /* Surfaces */
       --bg: #FDFAF7; --surface: #FFFFFF; --surface-2: #F5EFE8;
       /* Text */
-      --text: #3D2E22; --text-2: #6B5445; --text-3: #7A7268;
+      --text: #3D2E22; --text-2: #5E4536; --text-3: #635A52;
       /* Borders & Shadows */
       --border: #E6D5C4; --border-light: #F0EDE6;
       /* Semantic */
@@ -80,9 +80,10 @@
     /* Tables — warm theme */
     .table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; margin:16px 0 28px; }
     table { width:100%; border-collapse:collapse; font-size:14.5px; }
-    th { background:var(--surface-2); font-weight:600; font-size:12px; letter-spacing:.04em; text-align:left; padding:10px 14px; border:1px solid var(--border); color:var(--text-2); }
-    td { padding:10px 14px; border:1px solid var(--border); vertical-align:top; line-height:1.5; }
-    tr:hover td { background:var(--bg); }
+    th { background:var(--surface-2); font-weight:600; font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; text-align:left; padding:12px 16px; border:1px solid var(--border); color:var(--text-2); }
+    td { padding:13px 16px; border:1px solid var(--border); vertical-align:top; line-height:1.5; }
+    tbody tr:nth-child(even) td { background:rgba(245,239,232,.5); }
+    tr:hover td { background:var(--surface-2); }
 
     /* Code — UX BP: distinct from prose, copy-friendly */
     pre { background:var(--code-bg); border-radius:8px; padding:18px 22px; overflow-x:auto; margin:16px 0 24px; font-size:13.5px; line-height:1.65; border:1px solid var(--border); font-family:'JetBrains Mono','SF Mono','Menlo',monospace; color:var(--text); }
@@ -200,6 +201,248 @@
     }
     @media print { .chat-side { display:none!important; } }
 
+    /* FAQ Section */
+    .chat-faq { border-bottom:1px solid var(--border); }
+    .chat-faq-header {
+      padding:10px 16px; font-size:12px; font-weight:600; color:var(--text-2);
+      cursor:pointer; display:flex; justify-content:space-between; align-items:center;
+      background:var(--surface-2); transition:background .15s;
+    }
+    .chat-faq-header:hover { background:var(--accent-bg); }
+    .chat-faq-list { max-height:240px; overflow-y:auto; transition:max-height .3s ease; }
+    .chat-faq-list.faq-closed { max-height:0; overflow:hidden; }
+    .chat-faq-list::-webkit-scrollbar { width:4px; }
+    .chat-faq-list::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+    .chat-faq-item {
+      padding:10px 16px; border-bottom:1px solid var(--border-light);
+      cursor:pointer; font-size:12.5px; transition:background .12s;
+    }
+    .chat-faq-item:hover { background:var(--bg); }
+    .chat-faq-item .faq-q { font-weight:500; color:var(--brown); margin-bottom:0; line-height:1.5; }
+    .chat-faq-item .faq-a { color:var(--text-2); line-height:1.5; display:none; margin-top:6px; font-size:12px; }
+    .chat-faq-item.open .faq-a { display:block; }
+    .faq-empty { padding:10px 16px; font-size:11px; color:var(--text-3); text-align:center; }
+    .faq-category-label {
+      padding:6px 16px 4px; font-size:10px; font-weight:700; color:var(--brown);
+      letter-spacing:.06em; background:var(--bg); border-bottom:1px solid var(--border-light);
+      position:sticky; top:0;
+    }
+
+    /* Rate Limit */
+    .chat-limit-box {
+      padding:16px; text-align:center; background:var(--warn-bg);
+      border-top:1px solid var(--warn-border);
+    }
+    .chat-limit-box p { font-size:13px; color:var(--text-2); margin-bottom:6px; line-height:1.5; }
+    .chat-limit-box .limit-sub { font-size:11px; color:var(--text-3); margin-bottom:10px; }
+    .chat-reg-form { display:flex; gap:6px; }
+    .chat-reg-form input {
+      flex:1; padding:8px 10px; border:1px solid var(--border); border-radius:6px;
+      font-size:13px; font-family:inherit; background:var(--surface);
+    }
+    .chat-reg-form input:focus { outline:none; border-color:var(--terra); }
+    .chat-reg-form button {
+      padding:8px 14px; background:var(--brown); color:#fff; border:none;
+      border-radius:6px; font-size:13px; cursor:pointer; font-family:inherit; white-space:nowrap;
+    }
+    .chat-reg-form button:hover { background:var(--brown-dark); }
+    .chat-remaining { font-size:11px; color:var(--text-3); text-align:center; padding:4px 12px 0; }
+    .chat-registered-badge {
+      display:inline-block; background:var(--accent-bg); color:var(--brown);
+      font-size:10px; padding:2px 8px; border-radius:3px; margin-left:6px;
+    }
+
+    /* Community Section — Premium Design */
+    .community-section {
+      background:linear-gradient(180deg, var(--surface) 0%, #FAF6F1 100%);
+      border:1px solid var(--border); border-radius:16px;
+      padding:0; margin:56px 0; box-shadow:var(--shadow-md); overflow:hidden;
+    }
+    .community-hero {
+      padding:40px 36px 0; text-align:center;
+    }
+    .community-hero .community-label {
+      font-size:11px; font-weight:600; color:var(--brown); letter-spacing:.14em;
+      margin-bottom:12px; display:block;
+    }
+    .community-hero h3 {
+      font-family:'Noto Serif JP','Hiragino Mincho ProN',Georgia,serif;
+      font-size:22px; font-weight:600; margin:0 0 20px; border:none; padding:0;
+      color:var(--text); line-height:1.45;
+    }
+    .community-quote {
+      font-family:'Noto Serif JP',Georgia,serif; font-size:14.5px; color:var(--brown-dark);
+      line-height:1.75; padding:20px 24px; background:var(--accent-bg); border-radius:10px;
+      margin:0 36px 24px; font-style:italic; text-align:center; border:none;
+    }
+    .community-lead {
+      font-size:14.5px; color:var(--text-2); line-height:1.85; padding:0 36px;
+      text-align:center; margin-bottom:28px;
+    }
+    .community-divider {
+      width:40px; height:1.5px; background:var(--border); margin:0 auto 28px;
+    }
+    /* Multi-step form */
+    .community-form-wrap { padding:0 36px 36px; }
+    .community-step { display:none; animation:comFadeIn .4s ease; }
+    .community-step.active { display:block; }
+    @keyframes comFadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .community-form-wrap .com-field {
+      position:relative; margin-bottom:16px;
+    }
+    .community-form-wrap .com-input {
+      width:100%; padding:18px 16px 8px; border:1.5px solid var(--border); border-radius:10px;
+      font-size:15px; font-family:inherit; background:var(--surface); color:var(--text);
+      transition:border-color .2s, box-shadow .2s;
+    }
+    .community-form-wrap .com-input:focus {
+      outline:none; border-color:var(--brown);
+      box-shadow:0 0 0 3px rgba(122,64,51,.08);
+    }
+    .community-form-wrap .com-label {
+      position:absolute; top:14px; left:16px; font-size:14px; color:var(--text-3);
+      transition:all .2s ease; pointer-events:none; transform-origin:left top;
+    }
+    .community-form-wrap .com-input:focus ~ .com-label,
+    .community-form-wrap .com-input:not(:placeholder-shown) ~ .com-label {
+      transform:translateY(-10px) scale(.78); color:var(--brown); font-weight:500;
+    }
+    .community-form-wrap .com-row { display:flex; gap:12px; }
+    .community-form-wrap .com-row .com-field { flex:1; }
+    .com-btn {
+      width:100%; padding:14px 24px; border:none; border-radius:10px;
+      font-size:15px; font-weight:600; font-family:inherit; cursor:pointer;
+      transition:all .2s ease; letter-spacing:.02em;
+      display:flex; align-items:center; justify-content:center; gap:8px;
+    }
+    .com-btn-primary {
+      background:var(--brown); color:#fff;
+      box-shadow:0 2px 8px rgba(122,64,51,.2);
+    }
+    .com-btn-primary:hover {
+      background:var(--brown-dark); transform:translateY(-1px);
+      box-shadow:0 4px 16px rgba(122,64,51,.25);
+    }
+    .com-btn-primary:active { transform:translateY(0); }
+    .com-btn-primary:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+    .com-btn-primary .btn-arrow { transition:transform .2s; }
+    .com-btn-primary:hover .btn-arrow { transform:translateX(3px); }
+    .com-consent {
+      font-size:12px; color:var(--text-3); line-height:1.6; display:flex;
+      align-items:flex-start; gap:10px; margin:4px 0 16px;
+    }
+    .com-consent input[type="checkbox"] {
+      margin-top:2px; flex-shrink:0; width:16px; height:16px; accent-color:var(--brown);
+    }
+    .com-trust {
+      text-align:center; font-size:11.5px; color:var(--text-3); margin-top:12px; line-height:1.5;
+    }
+    /* Step indicator */
+    .com-steps-indicator {
+      display:flex; justify-content:center; gap:8px; margin-bottom:20px;
+    }
+    .com-step-dot {
+      width:8px; height:8px; border-radius:50%; background:var(--border); transition:all .3s;
+    }
+    .com-step-dot.active { background:var(--brown); width:24px; border-radius:4px; }
+    /* Success state */
+    .community-success {
+      text-align:center; padding:40px 36px; display:none;
+      animation:comFadeIn .5s ease;
+    }
+    .community-success .success-icon {
+      width:56px; height:56px; border-radius:50%; background:var(--accent-bg);
+      margin:0 auto 16px; display:flex; align-items:center; justify-content:center;
+      animation:successPop .5s cubic-bezier(.175,.885,.32,1.275);
+    }
+    @keyframes successPop { 0%{transform:scale(0)} 60%{transform:scale(1.1)} 100%{transform:scale(1)} }
+    @keyframes spin { to{transform:rotate(360deg)} }
+    .community-success .success-icon svg { width:24px; height:24px; color:var(--brown); }
+    .community-success h4 {
+      font-family:'Noto Serif JP',Georgia,serif;
+      font-size:18px; color:var(--text); margin-bottom:10px; font-weight:600;
+    }
+    .community-success p { font-size:14px; color:var(--text-2); line-height:1.75; }
+    @media(max-width:640px) {
+      .community-hero { padding:28px 24px 0; }
+      .community-quote { margin:0 24px 20px; padding:16px; }
+      .community-lead { padding:0 24px; }
+      .community-form-wrap { padding:0 24px 28px; }
+      .community-form-wrap .com-row { flex-direction:column; }
+      .community-success { padding:28px 24px; }
+    }
+
+    /* Variant B: Compact Inline CTA */
+    .cta-inline {
+      display:flex; align-items:center; gap:20px; padding:18px 20px; margin:32px 0;
+      background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--brown);
+      border-radius:0 8px 8px 0; box-shadow:var(--shadow-sm);
+    }
+    .cta-inline-text { flex:1; min-width:0; }
+    .cta-inline-text .cta-il { display:block; font-size:10px; font-weight:700; color:var(--brown); letter-spacing:.10em; margin-bottom:3px; }
+    .cta-inline-text p { font-size:13.5px; color:var(--text-2); line-height:1.5; margin:0; }
+    .cta-inline-form { display:flex; gap:8px; flex-shrink:0; }
+    .cta-inline-form input[type="email"] {
+      width:200px; padding:9px 12px; border:1.5px solid var(--border); border-radius:7px;
+      font-size:13.5px; font-family:inherit; background:var(--bg); color:var(--text); transition:border-color .2s, box-shadow .2s;
+    }
+    .cta-inline-form input::placeholder { color:var(--text-3); }
+    .cta-inline-form input:focus { outline:none; border-color:var(--brown); box-shadow:0 0 0 3px rgba(122,64,51,.08); }
+    .cta-inline-form button {
+      padding:9px 16px; background:var(--brown); color:#fff; border:none; border-radius:7px;
+      font-size:13px; font-weight:600; font-family:inherit; cursor:pointer; white-space:nowrap;
+      transition:background .15s, transform .15s; letter-spacing:.02em;
+    }
+    .cta-inline-form button:hover { background:var(--brown-dark); transform:translateY(-1px); }
+    .cta-inline.registered { border-left-color:var(--gold); background:var(--brown-light); }
+    @media(max-width:640px) {
+      .cta-inline { flex-direction:column; align-items:stretch; gap:12px; }
+      .cta-inline-text p { white-space:normal; }
+      .cta-inline-form { width:100%; }
+      .cta-inline-form input[type="email"] { width:100%; flex:1; }
+    }
+
+    /* Variant C: Chat Sidebar Banner — collapsible */
+    .cta-banner-chat {
+      background:var(--accent-bg); border-bottom:1px solid var(--border); flex-shrink:0;
+    }
+    .cta-banner-header {
+      padding:10px 16px; display:flex; align-items:center; justify-content:space-between;
+      gap:12px; cursor:pointer; transition:background .15s;
+    }
+    .cta-banner-header:hover { background:rgba(122,64,51,.08); }
+    .cta-banner-header p { font-size:11.5px; color:var(--text-2); line-height:1.4; margin:0; font-weight:600; }
+    .cta-banner-header .lfn-arrow {
+      font-size:10px; color:var(--text-3); transition:transform .2s; flex-shrink:0;
+    }
+    .cta-banner-header .lfn-arrow.open { transform:rotate(90deg); }
+    .cta-banner-detail {
+      max-height:0; overflow:hidden; transition:max-height .3s ease;
+    }
+    .cta-banner-detail.open { max-height:200px; }
+    .cta-banner-detail-inner {
+      padding:0 16px 12px; font-size:11.5px; color:var(--text-2); line-height:1.65;
+    }
+    .cta-banner-detail-inner a {
+      color:var(--brown); text-decoration:underline; text-underline-offset:2px;
+    }
+    .cta-banner-detail-inner a:hover { color:var(--brown-dark); }
+    .cta-banner-actions {
+      display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;
+    }
+    .cta-banner-actions a {
+      font-size:11px; font-weight:600; padding:5px 12px; border-radius:5px;
+      text-decoration:none; transition:all .15s;
+    }
+    .cta-banner-actions .lfn-primary {
+      background:var(--brown); color:#fff;
+    }
+    .cta-banner-actions .lfn-primary:hover { background:var(--brown-dark); }
+    .cta-banner-actions .lfn-secondary {
+      background:var(--surface); color:var(--brown); border:1px solid var(--border);
+    }
+    .cta-banner-actions .lfn-secondary:hover { border-color:var(--brown); }
+
     /* Diagrams */
     .diagram { margin:24px 0; border-radius:10px; overflow:hidden; border:1px solid var(--border); background:var(--surface); }
     .diagram-title { background:var(--sidebar-bg); padding:10px 16px; font-size:12px; font-weight:600; color:var(--text-2); border-bottom:1px solid var(--border); letter-spacing:.03em; }
@@ -274,6 +517,37 @@
       .decision-branches { flex-direction:column; }
     }
 
+    /* Chapter navigation (prev/next) */
+    .chapter-nav {
+      display:flex; justify-content:space-between; gap:16px;
+      margin-top:48px; padding-top:24px; border-top:1px solid var(--border);
+    }
+    .chapter-nav-btn {
+      display:flex; flex-direction:column; gap:4px;
+      padding:14px 18px; border-radius:10px; border:1px solid var(--border);
+      background:var(--surface); text-decoration:none; color:inherit;
+      transition:all .18s; max-width:48%; cursor:pointer;
+      box-shadow:var(--shadow-sm);
+    }
+    .chapter-nav-btn:hover { border-color:var(--brown); box-shadow:var(--shadow-md); transform:translateY(-1px); text-decoration:none; }
+    .chapter-nav-btn .nav-dir { font-size:11px; color:var(--text-3); }
+    .chapter-nav-btn .nav-title { font-size:14px; font-weight:600; color:var(--brown); }
+    .chapter-nav-btn.next { margin-left:auto; text-align:right; }
+    @media(max-width:640px) {
+      .chapter-nav { flex-direction:column; }
+      .chapter-nav-btn { max-width:100%; }
+    }
+
+    /* Breadcrumb */
+    .main-breadcrumb {
+      font-size:12px; color:var(--text-3); margin-bottom:12px;
+      display:flex; align-items:center; gap:6px; flex-wrap:wrap;
+    }
+    .main-breadcrumb a { color:var(--brown); text-decoration:none; }
+    .main-breadcrumb a:hover { text-decoration:underline; }
+    .main-breadcrumb .sep { color:var(--border); }
+    .main-breadcrumb .ch-progress { margin-left:auto; font-size:11px; color:var(--text-3); }
+
     /* Search */
     .search-box { padding:12px 16px; border-bottom:1px solid var(--border); }
     .search-box input { width:100%; padding:7px 10px; border:1px solid var(--border); border-radius:6px; font-size:12.5px; background:var(--surface); font-family:inherit; }
@@ -294,6 +568,7 @@
     .term {
       border-bottom:1.5px dashed var(--terra); cursor:help; position:relative;
       color:inherit; font-weight:inherit;
+      background:rgba(168,107,80,.06); border-radius:2px; padding:0 2px;
     }
     .term-popup {
       display:none; position:absolute; bottom:calc(100% + 10px); left:50%; transform:translateX(-50%);
@@ -316,16 +591,16 @@
   </style>
 </head>
 <body>
-  <button class="hamburger" onclick="toggleSidebar()">
+  <button class="hamburger" onclick="toggleSidebar()" aria-label="メニューを開く" aria-expanded="false" aria-controls="sidebar">
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/></svg>
   </button>
   <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
   <div class="layout">
-    <nav class="sidebar" id="sidebar">
+    <nav class="sidebar" id="sidebar" role="navigation" aria-label="マニュアルナビゲーション">
       <div class="sidebar-header">
         <a href="index.html" style="font-size:11px;color:var(--accent);text-decoration:none;">&larr; 概要に戻る</a>
-        <h1 style="margin-top:6px;">Claude Code 実務マニュアル <span class="ver">完全版</span></h1>
+        <h1 style="margin-top:6px;">Claude Code 実務マニュアル <span class="ver">v3.0</span></h1>
         <p>2026年4月</p>
       </div>
       <div class="search-box"><input type="text" id="search" placeholder="検索..." oninput="filterNav(this.value)"></div>
@@ -335,17 +610,51 @@
   </div>
 
   <!-- Chat Side Panel (always visible on right) -->
-  <aside class="chat-side" id="chatSide">
+  <aside class="chat-side" id="chatSide" role="complementary" aria-label="AI質問チャット">
     <div class="chat-side-header">
-      <h3>わからないことがあれば</h3>
-      <p>読んでいるページの内容をもとに、AIが回答します</p>
+      <h3>AIに質問する <span class="chat-registered-badge" id="regBadge" style="display:none">登録済み</span></h3>
+      <p>今読んでいるページの内容をもとに回答します。技術用語も日本語で説明します。</p>
+    </div>
+    <!-- Variant C: Sidebar Banner — collapsible -->
+    <div class="cta-banner-chat">
+      <div class="cta-banner-header" onclick="toggleLfnBanner()">
+        <p>Living Futures Network</p>
+        <span class="lfn-arrow" id="lfnArrow">&#9654;</span>
+      </div>
+      <div class="cta-banner-detail" id="lfnDetail">
+        <div class="cta-banner-detail-inner">
+          このマニュアルの背景にある実践の記録 ── プログラミング未経験から3週間で126のプロジェクトが生まれた協働の場。その実践者が集まるネットワークです。
+          <div class="cta-banner-actions">
+            <a href="https://claude-code-documentary-report.vercel.app/" target="_blank" rel="noopener" class="lfn-secondary">元記事を読む</a>
+            <a href="javascript:void(0)" onclick="scrollToCommunity()" class="lfn-primary">メルマガ登録</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- FAQ Accumulation Section -->
+    <div class="chat-faq" id="chatFaq">
+      <div class="chat-faq-header" onclick="toggleFaqPanel()">
+        <span>みんなの質問 (<span id="faqCount">0</span>件)</span>
+        <span class="arrow" id="faqArrow" style="font-size:10px;transition:transform .2s;transform:rotate(90deg)">&#9654;</span>
+      </div>
+      <div class="chat-faq-list" id="faqList"></div>
     </div>
     <div class="chat-messages" id="chatMessages">
-      <div class="chat-msg system">ここに質問を入力すると、今読んでいるページの内容をふまえて回答します。</div>
+      <div class="chat-msg system">わからないことを気軽に聞いてください。技術的な言葉も分かりやすく説明します。</div>
     </div>
-    <div class="chat-input-row">
-      <textarea class="chat-input" id="chatInput" placeholder="ここに質問を入力..." rows="1"
-        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"
+    <!-- Rate Limit / Registration -->
+    <div class="chat-limit-box" id="chatLimitBox" style="display:none">
+      <p>今日の無料質問（3回）をお使いいただきました</p>
+      <p class="limit-sub">メールアドレスを登録すると、引き続き7回ご利用いただけます</p>
+      <div class="chat-reg-form">
+        <input type="email" id="regEmail" placeholder="メールアドレス">
+        <button onclick="registerUser()">登録</button>
+      </div>
+    </div>
+    <div class="chat-remaining" id="chatRemaining"></div>
+    <div class="chat-input-row" id="chatInputRow">
+      <textarea class="chat-input" id="chatInput" placeholder="例: Homebrewって何ですか？" rows="1"
+        onkeydown="if(event.key==='Enter'&&(event.metaKey||event.ctrlKey)){event.preventDefault();sendChat()}"
         oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,84)+'px'"></textarea>
       <button class="chat-send" id="chatSend" onclick="sendChat()" title="送信">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -420,12 +729,59 @@
       const main = document.getElementById('main-content');
       let contentHtml = renderMarkdown(chData.content);
       contentHtml = applyGlossary(contentHtml);
+
+      // Breadcrumb with chapter progress
+      const chIdx = partData.chapters.findIndex(c => c.id === chId);
+      const total = partData.chapters.length;
+      const breadcrumb = `<div class="main-breadcrumb">
+        <a href="index.html">トップ</a>
+        <span class="sep">/</span>
+        <span>${partData.title}</span>
+        <span class="sep">/</span>
+        <span>${chData.title}</span>
+        <span class="ch-progress">${chIdx+1} / ${total}</span>
+      </div>`;
+
       main.innerHTML = `<div class="chapter active">
+        ${breadcrumb}
         <div class="part-label">${partData.title}</div>
         ${contentHtml}
       </div>`;
+
+      // Prev/next navigation
+      let allChapters = [];
+      for (const p of MANUAL.parts) {
+        for (const c of p.chapters) allChapters.push({ ...c, partTitle: p.title });
+      }
+      const currentIdx = allChapters.findIndex(c => c.id === chId);
+      const prev = currentIdx > 0 ? allChapters[currentIdx - 1] : null;
+      const next = currentIdx < allChapters.length - 1 ? allChapters[currentIdx + 1] : null;
+      let navHtml = '<div class="chapter-nav">';
+      if (prev) {
+        navHtml += `<a class="chapter-nav-btn" href="#" onclick="showChapter('${prev.id}');return false;">
+          <span class="nav-dir">&larr; 前へ</span><span class="nav-title">${prev.title}</span></a>`;
+      } else { navHtml += '<div></div>'; }
+      if (next) {
+        navHtml += `<a class="chapter-nav-btn next" href="#" onclick="showChapter('${next.id}');return false;">
+          <span class="nav-dir">次へ &rarr;</span><span class="nav-title">${next.title}</span></a>`;
+      }
+      navHtml += '</div>';
+      document.querySelector('.chapter.active').insertAdjacentHTML('beforeend', navHtml);
+
       addCopyButtons();
+
+      // Glossary hint on first view
+      if (!sessionStorage.getItem('glossary_hint_shown') && document.querySelector('.term')) {
+        sessionStorage.setItem('glossary_hint_shown', '1');
+        const hint = document.createElement('div');
+        hint.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--text);color:#F5EFE8;padding:10px 18px;border-radius:8px;font-size:13px;z-index:9999;animation:fadeIn .3s ease;white-space:nowrap;pointer-events:none;';
+        hint.textContent = '下線のある単語をタップすると解説が表示されます';
+        document.body.appendChild(hint);
+        setTimeout(() => hint.remove(), 3500);
+      }
+
       window.scrollTo(0, 0);
+      history.pushState({ chId }, '', '#' + chId);
       currentChapter = chId;
 
       if (window.innerWidth <= 900) toggleSidebar();
@@ -543,6 +899,17 @@
       'ハルシネーション': 'AIが事実と異なることをもっともらしく生成してしまう現象。AIの出力は必ず確認が必要。',
       'CLAUDE.md': 'AIが毎回の会話で最初に読み込む設定ファイル。業務ルールや組織情報を書いておく場所。',
       'Cursor': 'AIと対話しながらファイルを作成・編集できるアプリ。ChatGPTのようなチャット画面がある。',
+      'Hook': 'ツール実行の前後に自動で走るシェルスクリプト。品質チェックや通知の自動化に使う。',
+      'Hooks': 'ツール実行の前後に自動で走るシェルスクリプト。品質チェックや通知の自動化に使う。',
+      'メモリ': 'セッション間で情報を持ち越すためのファイルベースの記憶システム。ユーザーの好みやプロジェクト状況を自動保存する。',
+      'サブエージェント': 'メインのAIが呼び出す専門AIのこと。調査・レビュー・セキュリティ監査など特定のタスクを委任できる。',
+      'コンテキストウィンドウ': 'AIが一度に扱える情報量の上限。作業デスクの広さに例えられる。長い会話では自動圧縮される。',
+      'Rules': 'CLAUDE.mdの拡張機能。~/.claude/rules/フォルダに条件付きルールファイルを配置できる。',
+      'Plan Mode': 'AIに「まず計画だけ立てて実行はまだしないで」と伝えるモード。Shift+Tabで切替。大きな変更前に方針確認に使う。',
+      'MCP': 'Model Context Protocol。AIに外部ツール（GitHub, Slack, Notion等）を使う能力を追加する仕組み。',
+      'settings.json': 'Claude Codeの設定ファイル。権限の許可リスト、Hooks、その他の動作設定を記述する。',
+      'コンパクト': '/compactコマンドで会話を圧縮（要約）すること。長いセッションでコンテキストを節約する。',
+      'MVP': 'Minimum Viable Product。最小限の機能で動くバージョン。まず公開して使いながら改善する手法。',
     };
 
     function applyGlossary(html) {
@@ -610,19 +977,49 @@
     }
 
     function filterNav(q) {
-      q = q.toLowerCase();
+      q = q.toLowerCase().trim();
+      if (!q) {
+        document.querySelectorAll('.nav-item').forEach(item => item.style.display = '');
+        return;
+      }
+      // Build content index on first search
+      if (!filterNav._index) {
+        filterNav._index = {};
+        for (const p of MANUAL.parts) {
+          for (const c of p.chapters) {
+            filterNav._index[c.id] = (c.title + ' ' + c.content).toLowerCase();
+          }
+        }
+      }
+      let visibleCount = 0;
       document.querySelectorAll('.nav-item').forEach(item => {
-        const title = item.dataset.title.toLowerCase();
-        item.style.display = !q || title.includes(q) ? '' : 'none';
+        const chId = item.id.replace('nav-', '');
+        const content = filterNav._index[chId] || item.dataset.title.toLowerCase();
+        const visible = content.includes(q);
+        item.style.display = visible ? '' : 'none';
+        if (visible) visibleCount++;
       });
-      if (q) {
-        MANUAL.parts.forEach(p => { if (!openParts.has(p.id)) togglePart(p.id); });
+      MANUAL.parts.forEach(p => { if (!openParts.has(p.id)) togglePart(p.id); });
+      // Empty state
+      const container = document.getElementById('nav-container');
+      const existing = container.querySelector('.search-empty');
+      if (existing) existing.remove();
+      if (q && visibleCount === 0) {
+        container.insertAdjacentHTML('beforeend',
+          '<div class="search-empty" style="padding:16px;font-size:12px;color:var(--text-3);text-align:center;line-height:1.6;">見つかりませんでした<br><span style="font-size:11px">別のキーワードをお試しください</span></div>');
       }
     }
 
     function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('open');
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('open');
       document.getElementById('overlay').classList.toggle('open');
+      const isOpen = sidebar.classList.contains('open');
+      const hamburger = document.querySelector('.hamburger');
+      if (hamburger) {
+        hamburger.setAttribute('aria-expanded', isOpen);
+        hamburger.setAttribute('aria-label', isOpen ? 'メニューを閉じる' : 'メニューを開く');
+      }
     }
 
     // Init
@@ -641,23 +1038,188 @@
     }
 
     // Handle hash navigation (back/forward, direct URL access)
-    window.addEventListener('hashchange', () => {
-      const chId = location.hash.replace('#', '');
-      if (chId) showChapter(chId);
+    window.addEventListener('popstate', (e) => {
+      const chId = (e.state && e.state.chId) || location.hash.replace('#', '');
+      if (chId && chId !== currentChapter) showChapter(chId);
     });
 
     // =========================================================
-    // Chat Bar
+    // Chat — FAQ Accumulation + Rate Limiting
     // =========================================================
     const chatHistory = [];
+    const FAQ_STORAGE_KEY = 'ccmanual_faq';
+    const USAGE_STORAGE_KEY = 'ccmanual_usage';
+    const REG_STORAGE_KEY = 'ccmanual_registered';
+    const LIMIT_ANONYMOUS = 3;
+    const LIMIT_REGISTERED = 10;
+
+    // --- FAQ Categories ---
+    const FAQ_CATEGORIES = [
+      { id: 'basic', label: '基本' },
+      { id: 'setup', label: '環境構築' },
+      { id: 'dev', label: 'アプリ開発' },
+      { id: 'publish', label: '公開・運用' },
+      { id: 'trouble', label: 'トラブル' },
+      { id: 'other', label: 'その他' },
+    ];
+    // Map part IDs to FAQ categories
+    const PART_TO_CATEGORY = {
+      'intro': 'basic', 'setup': 'setup', 'first-app': 'dev',
+      'publish': 'publish', 'trouble': 'trouble', 'expand': 'dev', 'advanced': 'other',
+    };
+
+    // --- Preset FAQs (always shown) ---
+    const PRESET_FAQS = [
+      { cat: 'basic', q: 'Claude Codeは無料で使えますか？', a: 'Claude Code本体はClaude Proプラン（月額約$20）またはAPI従量課金が必要です。GitHub、Vercelなどの周辺サービスは無料枠で始められます。' },
+      { cat: 'basic', q: 'プログラミングの知識がなくても使えますか？', a: 'はい。日本語で「こういうものが欲しい」と伝えるだけで、AIがコードを書いてくれます。コードの中身を理解する必要はありません。ただし「何を作りたいか」を具体的に伝える力は必要です。' },
+      { cat: 'setup', q: 'ターミナルとは何ですか？', a: 'ターミナルは、文字を入力してパソコンに指示を出すアプリです。MacにはじめからインストールされていてCommand+Spaceで「ターミナル」と検索すると開けます。Claude Codeはこの中で動きます。' },
+      { cat: 'setup', q: 'Homebrewとは何ですか？', a: 'Homebrewは、Macにソフトウェアを簡単にインストールするためのツールです。App Storeのターミナル版と考えてください。Claude Codeの環境構築で必要な他のソフトをインストールするために使います。' },
+      { cat: 'setup', q: 'APIキーとは何ですか？', a: 'APIキーは、外部サービスを使うための「鍵」です。パスワードのようなもので、これがないとアプリからAIやメール送信などのサービスを利用できません。漏洩すると悪用されるリスクがあるため、安全に保管する必要があります。' },
+      { cat: 'publish', q: 'GitHubとVercelの違いは？', a: 'GitHubは作ったファイルの「保管場所」です。パソコンが壊れてもファイルが残ります。Vercelはアプリを「インターネットに公開する場所」です。GitHubに保存したファイルを読み取り、URLを発行して誰でもアクセスできるようにしてくれます。' },
+      { cat: 'trouble', q: 'エラーが出たらどうすればいいですか？', a: 'エラーメッセージをそのままClaude Codeに貼り付けて「このエラーを修正してください」と伝えてください。多くの場合、AIが原因を特定して修正してくれます。赤い文字が出ても慌てる必要はありません。' },
+      { cat: 'publish', q: '作ったアプリが壊れたら戻せますか？', a: 'はい。GitHubに保存してあれば、いつでも前の状態に戻せます。Claude Codeに「前回のコミットに戻して」と伝えてください。' },
+      { cat: 'dev', q: 'どんなアプリが作れますか？', a: '経費管理、イベント参加者管理、アンケート集計、文献管理、ダッシュボードなど、データの入力・表示・検索を行うWebアプリが得意です。30分〜数時間で基本形が完成します。' },
+      { cat: 'dev', q: '「まず計画を見せて」とは？', a: '大きな変更をする前にAIに方針を確認するための言葉です。AIが「こう作ります」と計画を提示してくれるので、方向性が正しいか確認してからOKを出せます。手戻りが大幅に減ります。' },
+    ];
+
+    // --- FAQ Management ---
+    function loadFaqs() {
+      try { return JSON.parse(localStorage.getItem(FAQ_STORAGE_KEY) || '[]'); } catch { return []; }
+    }
+    function getCurrentCategory() {
+      if (!currentChapter) return 'other';
+      for (const p of MANUAL.parts) {
+        for (const c of p.chapters) {
+          if (c.id === currentChapter) return PART_TO_CATEGORY[p.id] || 'other';
+        }
+      }
+      return 'other';
+    }
+    function getAllFaqs() {
+      const userFaqs = loadFaqs();
+      return [...userFaqs, ...PRESET_FAQS];
+    }
+    function saveFaqEntry(q, a) {
+      const faqs = loadFaqs();
+      const isDuplicate = faqs.some(f => f.q.length > 10 && q.includes(f.q.slice(0, 20)));
+      if (!isDuplicate) {
+        faqs.unshift({ q, a, ts: Date.now(), cat: getCurrentCategory() });
+        if (faqs.length > 50) faqs.length = 50;
+        localStorage.setItem(FAQ_STORAGE_KEY, JSON.stringify(faqs));
+      }
+      renderFaqs();
+    }
+    function renderFaqs() {
+      const allFaqs = getAllFaqs();
+      const listEl = document.getElementById('faqList');
+      const countEl = document.getElementById('faqCount');
+      countEl.textContent = allFaqs.length;
+
+      // Group by category
+      const grouped = {};
+      for (const cat of FAQ_CATEGORIES) grouped[cat.id] = [];
+      for (const f of allFaqs) {
+        const catId = f.cat || 'other';
+        if (!grouped[catId]) grouped[catId] = [];
+        grouped[catId].push(f);
+      }
+
+      let html = '';
+      for (const cat of FAQ_CATEGORIES) {
+        const items = grouped[cat.id];
+        if (items.length === 0) continue;
+        html += `<div class="faq-category-label">${escapeHtml(cat.label)}</div>`;
+        html += items.map(f => `
+          <div class="chat-faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-q">Q. ${escapeHtml(f.q.slice(0, 80))}${f.q.length > 80 ? '...' : ''}</div>
+            <div class="faq-a">${escapeHtml(f.a).replace(/\n/g, '<br>')}</div>
+          </div>
+        `).join('');
+      }
+      listEl.innerHTML = html;
+    }
+    function toggleFaqPanel() {
+      const list = document.getElementById('faqList');
+      const arrow = document.getElementById('faqArrow');
+      const isOpen = !list.classList.contains('faq-closed');
+      if (isOpen) {
+        list.classList.add('faq-closed');
+        list.style.maxHeight = '0';
+        arrow.style.transform = 'rotate(0deg)';
+      } else {
+        list.classList.remove('faq-closed');
+        list.style.maxHeight = '240px';
+        arrow.style.transform = 'rotate(90deg)';
+      }
+    }
+
+    // --- Rate Limiting ---
+    function getUsageCount() {
+      return parseInt(localStorage.getItem(USAGE_STORAGE_KEY) || '0', 10);
+    }
+    function incrementUsage() {
+      const count = getUsageCount() + 1;
+      localStorage.setItem(USAGE_STORAGE_KEY, String(count));
+      return count;
+    }
+    function isRegistered() {
+      return !!localStorage.getItem(REG_STORAGE_KEY);
+    }
+    function getLimit() {
+      return isRegistered() ? LIMIT_REGISTERED : LIMIT_ANONYMOUS;
+    }
+    function updateRemainingDisplay() {
+      const remaining = getLimit() - getUsageCount();
+      const el = document.getElementById('chatRemaining');
+      if (remaining <= 0) {
+        el.textContent = '';
+        showLimitReached();
+      } else {
+        el.textContent = `残り${remaining}回`;
+      }
+    }
+    function showLimitReached() {
+      if (isRegistered()) {
+        // Registered user hit 10 limit
+        document.getElementById('chatLimitBox').style.display = 'block';
+        document.getElementById('chatLimitBox').innerHTML = '<p>本日の回答上限（10回）に達しました</p><p class="limit-sub">上のFAQもご活用ください。明日またご利用いただけます。</p>';
+        document.getElementById('chatInputRow').style.display = 'none';
+      } else {
+        // Anonymous user hit 3 limit
+        document.getElementById('chatLimitBox').style.display = 'block';
+        document.getElementById('chatInputRow').style.display = 'none';
+      }
+    }
+    function registerUser() {
+      const email = document.getElementById('regEmail').value.trim();
+      if (!email || !email.includes('@')) {
+        alert('有効なメールアドレスを入力してください');
+        return;
+      }
+      localStorage.setItem(REG_STORAGE_KEY, email);
+      document.getElementById('chatLimitBox').style.display = 'none';
+      document.getElementById('chatInputRow').style.display = 'flex';
+      document.getElementById('regBadge').style.display = 'inline-block';
+      updateRemainingDisplay();
+    }
+
+    // --- Init UI state ---
+    function initChatUI() {
+      renderFaqs();
+      if (isRegistered()) {
+        document.getElementById('regBadge').style.display = 'inline-block';
+      }
+      if (getUsageCount() >= getLimit()) {
+        showLimitReached();
+      }
+      updateRemainingDisplay();
+    }
 
     function getCurrentChapterContent() {
-      // Get the current chapter's raw markdown content for context
       if (!currentChapter) return '';
       for (const p of MANUAL.parts) {
         for (const c of p.chapters) {
           if (c.id === currentChapter) {
-            // Strip HTML tags from content, keep text
             return `[${p.title} > ${c.title}]\n` + c.content.replace(/<[^>]+>/g, '').trim();
           }
         }
@@ -670,6 +1232,25 @@
       const question = input.value.trim();
       if (!question) return;
 
+      // Check rate limit before sending
+      if (getUsageCount() >= getLimit()) {
+        showLimitReached();
+        return;
+      }
+
+      // Check if FAQ already has an answer
+      const faqs = getAllFaqs();
+      const qLower = question.toLowerCase();
+      const faqMatch = faqs.find(f => {
+        const fqLower = f.q.toLowerCase();
+        // Simple overlap check: if >60% of words match
+        const qWords = qLower.split(/\s+/).filter(w => w.length > 2);
+        const fWords = fqLower.split(/\s+/).filter(w => w.length > 2);
+        if (qWords.length === 0 || fWords.length === 0) return false;
+        const overlap = qWords.filter(w => fWords.some(fw => fw.includes(w) || w.includes(fw)));
+        return overlap.length / Math.max(qWords.length, 1) > 0.6;
+      });
+
       const messagesEl = document.getElementById('chatMessages');
       const sendBtn = document.getElementById('chatSend');
 
@@ -679,6 +1260,18 @@
       input.value = '';
       input.style.height = 'auto';
       sendBtn.disabled = true;
+
+      // If FAQ match found, show it without API call
+      if (faqMatch) {
+        let answerHtml = escapeHtml(faqMatch.a)
+          .replace(/`([^`]+)`/g, '<code>$1</code>')
+          .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+          .replace(/\n/g, '<br>');
+        messagesEl.innerHTML += `<div class="chat-msg ai">${answerHtml}<br><span style="font-size:11px;color:var(--text-3)">(FAQ より回答 / API未使用)</span></div>`;
+        sendBtn.disabled = false;
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+        return;
+      }
 
       // Add typing indicator
       messagesEl.innerHTML += `<div class="chat-typing" id="chatTyping"><span></span><span></span><span></span></div>`;
@@ -691,7 +1284,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             question,
-            context: context.slice(0, 4000), // Limit context size
+            context: context.slice(0, 4000),
             history: chatHistory.slice(-6),
           }),
         });
@@ -707,7 +1300,14 @@
         const data = await res.json();
         chatHistory.push({ role: 'assistant', content: data.answer });
 
-        // Render answer with basic formatting
+        // Save to FAQ
+        saveFaqEntry(question, data.answer);
+
+        // Increment usage
+        incrementUsage();
+        updateRemainingDisplay();
+
+        // Render answer
         let answerHtml = escapeHtml(data.answer)
           .replace(/`([^`]+)`/g, '<code>$1</code>')
           .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
@@ -716,11 +1316,116 @@
       } catch (e) {
         const typing = document.getElementById('chatTyping');
         if (typing) typing.remove();
-        messagesEl.innerHTML += `<div class="chat-msg system">回答を取得できませんでした: ${escapeHtml(e.message)}</div>`;
+        messagesEl.innerHTML += `<div class="chat-msg system">回答を取得できませんでした。時間をおいてもう一度お試しください。上のFAQもご活用ください。</div>`;
       }
 
       sendBtn.disabled = false;
       messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    // Init chat UI after page load
+    initChatUI();
+
+    // =========================================================
+    // Community Registration
+    // =========================================================
+    // --- Community Multi-step Form ---
+    function comNextStep(s) {
+      const email = document.getElementById('comEmail' + s).value.trim();
+      if (!email || !email.includes('@')) {
+        const input = document.getElementById('comEmail' + s);
+        input.style.borderColor = '#c0392b';
+        input.focus();
+        setTimeout(() => input.style.borderColor = '', 2000);
+        return;
+      }
+      // Transition to step 2
+      document.getElementById('comStep1' + s).classList.remove('active');
+      document.getElementById('comStep2' + s).classList.add('active');
+      document.getElementById('comDot1' + s).classList.remove('active');
+      document.getElementById('comDot2' + s).classList.add('active');
+      document.getElementById('comName' + s).focus();
+    }
+
+    async function submitCommunityForm(suffix) {
+      const s = suffix || '';
+      const name = document.getElementById('comName' + s).value.trim();
+      const org = document.getElementById('comOrg' + s).value.trim();
+      const email = document.getElementById('comEmail' + s).value.trim();
+      const consent = document.getElementById('comConsent' + s).checked;
+      const btn = document.getElementById('comSubmit' + s);
+
+      if (!name) { document.getElementById('comName' + s).focus(); return; }
+      if (!consent) { alert('メールマガジン配信への同意が必要です'); return; }
+
+      btn.disabled = true;
+      btn.innerHTML = '<span style="display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite"></span>';
+
+      try {
+        const res = await fetch('/api/community', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, org, email }),
+        });
+
+        if (!res.ok) throw new Error('registration failed');
+
+        document.getElementById('communityForm' + s).style.display = 'none';
+        document.getElementById('communitySuccess' + s).style.display = 'block';
+
+        localStorage.setItem(REG_STORAGE_KEY, email);
+        if (document.getElementById('regBadge')) {
+          document.getElementById('regBadge').style.display = 'inline-block';
+        }
+        updateRemainingDisplay();
+      } catch (e) {
+        alert('登録に失敗しました。しばらくしてから再度お試しください。');
+        btn.disabled = false;
+        btn.textContent = 'Living Futures Networkのメルマガに登録する';
+      }
+    }
+
+    function submitCommunity() { submitCommunityForm(''); }
+    function submitCommunity2() { submitCommunityForm('2'); }
+
+    // --- Variant B: Inline CTA ---
+    async function submitInlineCta(id) {
+      const wrap = document.getElementById(id);
+      const input = wrap.querySelector('input[type="email"]');
+      const email = input.value.trim();
+      if (!email || !email.includes('@')) {
+        input.style.borderColor = '#c0392b'; input.focus();
+        setTimeout(() => input.style.borderColor = '', 2000);
+        return;
+      }
+      const btn = wrap.querySelector('button');
+      btn.disabled = true; btn.textContent = '...';
+      try {
+        const res = await fetch('/api/community', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, name: '', org: '' }),
+        });
+        if (!res.ok) throw new Error();
+        wrap.innerHTML = `<div class="cta-inline-text"><span class="cta-il">登録完了</span><p style="color:var(--brown);font-weight:500">ありがとうございます。確認メールをお送りしました。</p></div>`;
+        wrap.classList.add('registered');
+        localStorage.setItem(REG_STORAGE_KEY, email);
+        updateRemainingDisplay();
+      } catch {
+        btn.disabled = false; btn.textContent = '登録';
+      }
+    }
+
+    // --- Variant C: LFN banner toggle ---
+    function toggleLfnBanner() {
+      const detail = document.getElementById('lfnDetail');
+      const arrow = document.getElementById('lfnArrow');
+      detail.classList.toggle('open');
+      arrow.classList.toggle('open');
+    }
+
+    function scrollToCommunity() {
+      const t = document.querySelector('.community-section');
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   </script>
 </body>

@@ -9,7 +9,7 @@
   <style>
     :root {
       --bg: #FDFAF7; --surface: #fff; --surface-2: #F5EFE8;
-      --text: #3D2E22; --text-2: #6B5445; --text-3: #7A7268;
+      --text: #3D2E22; --text-2: #5E4536; --text-3: #635A52;
       --border: #E6D5C4; --brown: #7A4033; --brown-dark: #5C2E24;
       --brown-light: #FAE8DC; --terra: #A86B50; --gold: #CEA26F;
       --accent: var(--brown); --accent-bg: var(--brown-light);
@@ -24,17 +24,35 @@
 
     /* Hero */
     .hero {
-      max-width:840px; margin:0 auto; padding:80px 32px 48px;
+      max-width:840px; margin:0 auto; padding:96px 32px 56px;
     }
     .hero-label {
       font-size:12px; font-weight:600; color:var(--brown); letter-spacing:.12em;
     }
     .hero h1 {
-      font-family:'Noto Serif JP','Hiragino Mincho ProN',Georgia,serif; font-size:34px; font-weight:600; line-height:1.35; margin:12px 0 24px; color:var(--text);
+      font-family:'Noto Serif JP','Hiragino Mincho ProN',Georgia,serif; font-size:42px; font-weight:600; line-height:1.3; margin:16px 0 28px; color:var(--text); letter-spacing:-.02em;
     }
     .hero-lead {
-      font-size:17px; color:var(--text-2); line-height:1.8; max-width:640px;
+      font-size:17px; color:var(--text-2); line-height:1.9; max-width:640px;
     }
+    .hero-actions { margin-top:32px; display:flex; gap:14px; flex-wrap:wrap; }
+    .hero-cta-primary {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:14px 32px; background:var(--brown); color:#fff;
+      border:1.5px solid var(--brown); border-radius:8px;
+      font-size:15px; font-weight:600; text-decoration:none;
+      box-shadow:0 2px 8px rgba(122,64,51,.25);
+      transition:all .2s;
+    }
+    .hero-cta-primary:hover { background:var(--brown-dark); transform:translateY(-1px); box-shadow:0 6px 20px rgba(122,64,51,.3); text-decoration:none; }
+    .hero-cta-secondary {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:14px 24px; background:transparent; color:var(--brown);
+      border:1.5px solid var(--border); border-radius:8px;
+      font-size:15px; font-weight:500; text-decoration:none;
+      transition:all .2s;
+    }
+    .hero-cta-secondary:hover { border-color:var(--brown); background:var(--brown-light); text-decoration:none; }
 
     /* Map */
     .map {
@@ -100,7 +118,11 @@
       text-decoration:none; color:inherit; display:block; box-shadow: var(--shadow-sm);
     }
     .card:hover { border-color:var(--brown); box-shadow:var(--shadow-md); text-decoration:none; transform:translateY(-2px); }
-    .card-icon { font-size:24px; margin-bottom:12px; }
+    .card-icon {
+      width:40px; height:40px; background:var(--surface-2); border-radius:10px;
+      display:flex; align-items:center; justify-content:center; margin-bottom:14px;
+    }
+    .card-icon svg { width:20px; height:20px; }
     .card h3 { font-size:15px; font-weight:600; margin-bottom:6px; }
     .card p { font-size:13px; color:var(--text-2); margin:0; line-height:1.7; }
 
@@ -112,13 +134,90 @@
       font-size:12px; font-weight:700; color:var(--text-3); letter-spacing:.1em; text-transform:uppercase; margin-bottom:20px;
     }
     table { width:100%; border-collapse:collapse; font-size:14.5px; }
-    th { background:var(--surface-2); font-weight:600; font-size:12px; letter-spacing:.04em; text-align:left; padding:10px 14px; border:1px solid var(--border); color:var(--text-2); }
-    td { padding:10px 14px; border:1px solid var(--border); }
-    tr:hover td { background:var(--bg); }
+    th { background:var(--surface-2); font-weight:600; font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; text-align:left; padding:12px 16px; border:1px solid var(--border); color:var(--text-2); }
+    td { padding:13px 16px; border:1px solid var(--border); }
+    tbody tr:nth-child(even) td { background:rgba(245,239,232,.5); }
+    tr:hover td { background:var(--surface-2); }
     .tag { display:inline-block; padding:3px 10px; border-radius:4px; font-size:11px; font-weight:600; letter-spacing:.03em; }
     .tag-required { background:var(--brown-light); color:var(--brown); }
     .tag-optional { background:#EDE8E2; color:var(--text-2); }
     .tag-free { background:#FFF4EC; color:#A86B50; }
+
+    /* Community — Premium Design */
+    .community { max-width:840px; margin:0 auto; padding:0 32px 64px; }
+    .community-box {
+      background:linear-gradient(180deg, var(--surface) 0%, #FAF6F1 100%);
+      border:1px solid var(--border); border-radius:16px;
+      padding:0; box-shadow:var(--shadow-md); overflow:hidden;
+    }
+    .community-box .c-hero { padding:40px 40px 0; text-align:center; }
+    .community-box .c-label { font-size:11px; font-weight:600; color:var(--brown); letter-spacing:.14em; display:block; margin-bottom:12px; }
+    .community-box h2 { font-family:'Noto Serif JP',Georgia,serif; font-size:22px; font-weight:600; margin-bottom:0; color:var(--text); line-height:1.45; }
+    .community-box .cq {
+      font-family:'Noto Serif JP',Georgia,serif; font-size:14.5px; color:var(--brown-dark);
+      line-height:1.75; padding:20px 24px; background:var(--accent-bg); border-radius:10px;
+      margin:20px 40px; font-style:italic; text-align:center;
+    }
+    .community-box .cd { font-size:14.5px; color:var(--text-2); line-height:1.85; padding:0 40px; text-align:center; margin-bottom:4px; }
+    .c-divider { width:40px; height:1.5px; background:var(--border); margin:24px auto; }
+    .c-form-wrap { padding:0 40px 40px; }
+    .c-step { display:none; animation:cFadeIn .4s ease; }
+    .c-step.active { display:block; }
+    @keyframes cFadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .c-dots { display:flex; justify-content:center; gap:8px; margin-bottom:20px; }
+    .c-dot { width:8px; height:8px; border-radius:50%; background:var(--border); transition:all .3s; }
+    .c-dot.active { background:var(--brown); width:24px; border-radius:4px; }
+    .c-field { position:relative; margin-bottom:16px; }
+    .c-input {
+      width:100%; padding:18px 16px 8px; border:1.5px solid var(--border); border-radius:10px;
+      font-size:15px; font-family:inherit; background:var(--surface); color:var(--text);
+      transition:border-color .2s, box-shadow .2s;
+    }
+    .c-input:focus { outline:none; border-color:var(--brown); box-shadow:0 0 0 3px rgba(122,64,51,.08); }
+    .c-lbl {
+      position:absolute; top:14px; left:16px; font-size:14px; color:var(--text-3);
+      transition:all .2s ease; pointer-events:none; transform-origin:left top;
+    }
+    .c-input:focus ~ .c-lbl, .c-input:not(:placeholder-shown) ~ .c-lbl {
+      transform:translateY(-10px) scale(.78); color:var(--brown); font-weight:500;
+    }
+    .c-row { display:flex; gap:12px; }
+    .c-row .c-field { flex:1; }
+    .c-btn {
+      width:100%; padding:14px 24px; border:none; border-radius:10px;
+      font-size:15px; font-weight:600; font-family:inherit; cursor:pointer;
+      transition:all .2s ease; letter-spacing:.02em;
+      display:flex; align-items:center; justify-content:center; gap:8px;
+      background:var(--brown); color:#fff; box-shadow:0 2px 8px rgba(122,64,51,.2);
+    }
+    .c-btn:hover { background:var(--brown-dark); transform:translateY(-1px); box-shadow:0 4px 16px rgba(122,64,51,.25); }
+    .c-btn:active { transform:translateY(0); }
+    .c-btn:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+    .c-btn .arr { transition:transform .2s; }
+    .c-btn:hover .arr { transform:translateX(3px); }
+    .c-consent { font-size:12px; color:var(--text-3); line-height:1.6; display:flex; align-items:flex-start; gap:10px; margin:4px 0 16px; }
+    .c-consent input[type="checkbox"] { margin-top:2px; flex-shrink:0; width:16px; height:16px; accent-color:var(--brown); }
+    .c-trust { text-align:center; font-size:11.5px; color:var(--text-3); margin-top:12px; line-height:1.5; }
+    .c-done { text-align:center; padding:40px; display:none; animation:cFadeIn .5s ease; }
+    .c-done .c-icon {
+      width:56px; height:56px; border-radius:50%; background:var(--accent-bg);
+      margin:0 auto 16px; display:flex; align-items:center; justify-content:center;
+      animation:cPop .5s cubic-bezier(.175,.885,.32,1.275);
+    }
+    @keyframes cPop { 0%{transform:scale(0)} 60%{transform:scale(1.1)} 100%{transform:scale(1)} }
+    @keyframes cSpin { to{transform:rotate(360deg)} }
+    .c-done .c-icon svg { width:24px; height:24px; color:var(--brown); }
+    .c-done h3 { font-family:'Noto Serif JP',Georgia,serif; font-size:18px; color:var(--text); margin-bottom:10px; font-weight:600; }
+    .c-done p { font-size:14px; color:var(--text-2); line-height:1.75; }
+    @media(max-width:640px) {
+      .community { padding-left:20px; padding-right:20px; }
+      .community-box .c-hero { padding:28px 24px 0; }
+      .community-box .cq { margin:16px 24px; padding:16px; }
+      .community-box .cd { padding:0 24px; }
+      .c-form-wrap { padding:0 24px 28px; }
+      .c-row { flex-direction:column; }
+      .c-done { padding:28px 24px; }
+    }
 
     /* Footer */
     .footer {
@@ -133,6 +232,11 @@
       .cards-grid { grid-template-columns:1fr 1fr; }
       .flow::before { left:19px; }
       .flow-num { width:40px; height:40px; font-size:14px; }
+      .hero h1 { font-size:30px; }
+      .hero { padding:56px 20px 36px; }
+    }
+    @media(max-width:480px) {
+      .cards-grid { grid-template-columns:1fr; gap:12px; }
     }
   </style>
 </head>
@@ -145,22 +249,26 @@
     <p class="hero-lead">
       Claude Codeは、日本語で「こういうものが欲しい」と伝えるだけで、実際に動くWebアプリを作れるAIツールです。このマニュアルでは、環境の準備からアプリの公開まで、すべての手順を解説します。
     </p>
+    <div class="hero-actions">
+      <a href="ops.html#setup-mac" class="hero-cta-primary">準備を始める <span style="opacity:.7">&#8594;</span></a>
+      <a href="ops.html#intro-what" class="hero-cta-secondary">Claude Codeとは何か <span>&#8594;</span></a>
+    </div>
   </div>
 
   <!-- Learning Map -->
   <div class="map">
-    <div class="map-title">学習マップ — ゼロから公開まで</div>
+    <div class="map-title">最短ルート — ゼロから公開まで約1時間半</div>
     <div class="flow">
 
       <div class="flow-step active">
         <div class="flow-num">1</div>
         <div class="flow-body">
-          <h3>環境を準備する</h3>
-          <p>Macに必要なソフトウェアをインストールし、外部サービスのアカウントを作成します。最初の1回だけの作業です。</p>
+          <h3>準備する（30分）</h3>
+          <p>Macにソフトをインストールし、3つのアカウントを作ります。最初の1回だけの作業です。</p>
           <div class="flow-chapters">
-            <a href="ops.html#env-mac" class="flow-chip" onclick="goTo('env','env-mac')">macOSの準備 <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#env-accounts" class="flow-chip" onclick="goTo('env','env-accounts')">アカウントを作る <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#env-cursor" class="flow-chip" onclick="goTo('env','env-cursor')">開発環境のセットアップ <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#setup-mac" class="flow-chip" onclick="goTo('setup','setup-mac')">Macの準備 <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#setup-accounts" class="flow-chip" onclick="goTo('setup','setup-accounts')">アカウントを作る <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#setup-install" class="flow-chip" onclick="goTo('setup','setup-install')">Claude Codeをインストール <span class="arrow">&#8599;</span></a>
           </div>
         </div>
       </div>
@@ -168,15 +276,11 @@
       <div class="flow-step">
         <div class="flow-num">2</div>
         <div class="flow-body">
-          <h3>サービスを接続する</h3>
-          <p>アプリに必要な外部サービス（データベース、メール送信、決済など）の設定を行います。必要になったときにその都度参照してください。</p>
+          <h3>最初のアプリを作る（30分〜1時間）</h3>
+          <p>日本語で「こういうものが欲しい」と伝えるだけ。AIがコードを書いてくれます。</p>
           <div class="flow-chapters">
-            <a href="ops.html#svc-github" class="flow-chip" onclick="goTo('services','svc-github')">GitHub <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#svc-vercel" class="flow-chip" onclick="goTo('services','svc-vercel')">Vercel <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#svc-database" class="flow-chip" onclick="goTo('services','svc-database')">データベース <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#svc-email" class="flow-chip" onclick="goTo('services','svc-email')">SendGrid <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#svc-stripe" class="flow-chip" onclick="goTo('services','svc-stripe')">Stripe <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#svc-other" class="flow-chip" onclick="goTo('services','svc-other')">その他 <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#app-walkthrough" class="flow-chip" onclick="goTo('first-app','app-walkthrough')">実例: 経費管理アプリを作る <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#app-templates" class="flow-chip" onclick="goTo('first-app','app-templates')">依頼テンプレート集 <span class="arrow">&#8599;</span></a>
           </div>
         </div>
       </div>
@@ -184,11 +288,11 @@
       <div class="flow-step">
         <div class="flow-num">3</div>
         <div class="flow-body">
-          <h3>認証情報を管理する</h3>
-          <p>APIキー（各サービスの「鍵」）を安全に保管・運用する方法を学びます。セキュリティの基礎です。</p>
+          <h3>公開する（10分）</h3>
+          <p>作ったアプリをインターネットに公開し、URLを共有できるようにします。</p>
           <div class="flow-chapters">
-            <a href="ops.html#cred-keychain" class="flow-chip" onclick="goTo('credentials','cred-keychain')">macOS Keychain <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#cred-env" class="flow-chip" onclick="goTo('credentials','cred-env')">環境変数の設定 <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#pub-github" class="flow-chip" onclick="goTo('publish','pub-github')">GitHubに保存 <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#pub-vercel" class="flow-chip" onclick="goTo('publish','pub-vercel')">インターネットに公開 <span class="arrow">&#8599;</span></a>
           </div>
         </div>
       </div>
@@ -196,12 +300,11 @@
       <div class="flow-step">
         <div class="flow-num">4</div>
         <div class="flow-body">
-          <h3>アプリを作る・公開する</h3>
-          <p>実際にClaude Codeでアプリを作り、インターネットに公開するまでの手順です。</p>
+          <h3>困ったときは</h3>
+          <p>エラーが出たとき、AIが思い通りに動かないときの対処法。</p>
           <div class="flow-chapters">
-            <a href="ops.html#wf-create" class="flow-chip" onclick="goTo('workflow','wf-create')">新しいアプリを作る <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#wf-maintain" class="flow-chip" onclick="goTo('workflow','wf-maintain')">修正・更新する <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#wf-local" class="flow-chip" onclick="goTo('workflow','wf-local')">ローカルサーバー <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#trouble-common" class="flow-chip" onclick="goTo('trouble','trouble-common')">よくあるエラーと対処法 <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#trouble-faq" class="flow-chip" onclick="goTo('trouble','trouble-faq')">FAQ <span class="arrow">&#8599;</span></a>
           </div>
         </div>
       </div>
@@ -209,10 +312,12 @@
       <div class="flow-step">
         <div class="flow-num">5</div>
         <div class="flow-body">
-          <h3>困ったときは</h3>
-          <p>よくあるエラーとその対処法をまとめています。</p>
+          <h3>もっと使いこなす</h3>
+          <p>データベース、メール送信、効果的な指示の出し方など。必要になったら参照。</p>
           <div class="flow-chapters">
-            <a href="ops.html#ts-common" class="flow-chip" onclick="goTo('troubleshoot','ts-common')">トラブルシューティング <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#exp-database" class="flow-chip" onclick="goTo('expand','exp-database')">データベース <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#exp-services" class="flow-chip" onclick="goTo('expand','exp-services')">外部サービス連携 <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#exp-tips" class="flow-chip" onclick="goTo('expand','exp-tips')">指示のコツ <span class="arrow">&#8599;</span></a>
           </div>
         </div>
       </div>
@@ -220,13 +325,14 @@
       <div class="flow-step">
         <div class="flow-num">6</div>
         <div class="flow-body">
-          <h3>もっと使いこなす</h3>
-          <p>CLAUDE.md、コマンド、MCPサーバー連携、効果的な指示の出し方など、実践で磨いた上級テクニック。</p>
+          <h3>上級テクニック</h3>
+          <p>CLAUDE.md、MCPサーバー、メモリ、サブエージェント、7段階開発ワークフロー。10個以上アプリを作った方向け。</p>
           <div class="flow-chapters">
             <a href="ops.html#adv-claudemd" class="flow-chip" onclick="goTo('advanced','adv-claudemd')">CLAUDE.md <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#adv-commands" class="flow-chip" onclick="goTo('advanced','adv-commands')">コマンドとモード <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#adv-mcp" class="flow-chip" onclick="goTo('advanced','adv-mcp')">MCPサーバー <span class="arrow">&#8599;</span></a>
-            <a href="ops.html#adv-tips" class="flow-chip" onclick="goTo('advanced','adv-tips')">効果的な指示の出し方 <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#adv-commands" class="flow-chip" onclick="goTo('advanced','adv-commands')">コマンド <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#adv-mcp" class="flow-chip" onclick="goTo('advanced','adv-mcp')">MCP連携 <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#adv-memory" class="flow-chip" onclick="goTo('advanced','adv-memory')">メモリ・エージェント <span class="arrow">&#8599;</span></a>
+            <a href="ops.html#adv-workflow" class="flow-chip" onclick="goTo('advanced','adv-workflow')">開発ワークフロー <span class="arrow">&#8599;</span></a>
           </div>
         </div>
       </div>
@@ -238,42 +344,42 @@
   <div class="cards">
     <div class="cards-title">あなたの状況から探す</div>
     <div class="cards-grid">
-      <a href="ops.html#env-mac" class="card">
-        <div class="card-icon">&#9654;</div>
+      <a href="ops.html#intro-what" class="card">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brown)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+        <h3>Claude Codeがはじめての方へ</h3>
+        <p>何ができるか、誰向けか、費用はいくらか。30秒で分かる概要。</p>
+      </a>
+      <a href="ops.html#setup-mac" class="card">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brown)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
         <h3>まだ何も始めていない</h3>
-        <p>環境構築の最初から順番に進めましょう。Macに必要なソフトを入れるところからスタート。</p>
+        <p>Macの準備からアカウント作成まで。最初の1回だけ、約30分の作業。</p>
       </a>
-      <a href="ops.html#wf-create" class="card">
-        <div class="card-icon">&#9633;</div>
+      <a href="ops.html#app-walkthrough" class="card">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brown)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
         <h3>環境は整った。アプリを作りたい</h3>
-        <p>フォルダの作り方からAIへの依頼テンプレート、公開までの一連の手順。</p>
+        <p>経費管理アプリを30分で作る実例。会話の全文付きで手順を解説。</p>
       </a>
-      <a href="ops.html#svc-database" class="card">
-        <div class="card-icon">&#9670;</div>
-        <h3>AIに「○○が必要」と言われた</h3>
-        <p>データベース、メール送信、決済など、各サービスの登録と接続手順。</p>
-      </a>
-      <a href="ops.html#ts-common" class="card">
-        <div class="card-icon">&#9651;</div>
+      <a href="ops.html#trouble-common" class="card">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brown)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
         <h3>エラーが出て困っている</h3>
-        <p>「Address already in use」「npm install失敗」等のよくある問題と解決方法。</p>
+        <p>よくあるエラーと対処法。エラーメッセージをAIに渡すだけで解決。</p>
       </a>
-      <a href="ops.html#adv-claudemd" class="card">
-        <div class="card-icon">&#9733;</div>
+      <a href="ops.html#exp-tips" class="card">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brown)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
         <h3>もっと使いこなしたい</h3>
-        <p>CLAUDE.md、Plan Mode、MCPサーバー連携など、生産性を上げる実践テクニック。</p>
+        <p>効果的な指示の出し方、データベース、外部サービス連携。</p>
       </a>
-      <a href="ops.html#adv-tips" class="card">
-        <div class="card-icon">&#9672;</div>
-        <h3>AIへの指示がうまくいかない</h3>
-        <p>「まず計画を見せて」で始める、スクリーンショットを活用するなど実践的なコツ。</p>
+      <a href="ops.html#adv-workflow" class="card">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brown)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg></div>
+        <h3>本格的に使い込みたい</h3>
+        <p>CLAUDE.md、メモリ、サブエージェント、7段階開発モデル。</p>
       </a>
     </div>
   </div>
 
   <!-- Services Overview -->
   <div class="status">
-    <div class="status-title">使用するサービス一覧</div>
+    <div class="status-title">使用するサービス</div>
     <table>
       <thead>
         <tr>
@@ -281,105 +387,132 @@
           <th>役割</th>
           <th>必要度</th>
           <th>費用</th>
-          <th>マニュアル</th>
         </tr>
       </thead>
       <tbody>
         <tr>
+          <td><strong>Anthropic</strong></td>
+          <td>AIの頭脳（Claude Code本体）</td>
+          <td><span class="tag tag-required">必須</span></td>
+          <td>月額$20〜</td>
+        </tr>
+        <tr>
           <td><strong>GitHub</strong></td>
-          <td>コードの保管・バックアップ</td>
+          <td>ファイルの保管・バックアップ</td>
           <td><span class="tag tag-required">必須</span></td>
           <td><span class="tag tag-free">無料</span></td>
-          <td><a href="ops.html#svc-github">設定手順</a></td>
         </tr>
         <tr>
           <td><strong>Vercel</strong></td>
           <td>アプリのインターネット公開</td>
           <td><span class="tag tag-required">必須</span></td>
           <td><span class="tag tag-free">無料</span></td>
-          <td><a href="ops.html#svc-vercel">設定手順</a></td>
         </tr>
         <tr>
-          <td><strong>Anthropic</strong></td>
-          <td>AIの頭脳（APIキー）</td>
-          <td><span class="tag tag-required">必須</span></td>
-          <td>従量課金</td>
-          <td><a href="ops.html#env-accounts">設定手順</a></td>
-        </tr>
-        <tr>
-          <td><strong>Turso</strong></td>
-          <td>軽量データベース</td>
+          <td><strong>Supabase / Turso</strong></td>
+          <td>データベース</td>
           <td><span class="tag tag-optional">必要時</span></td>
-          <td><span class="tag tag-free">無料</span></td>
-          <td><a href="ops.html#svc-database">設定手順</a></td>
-        </tr>
-        <tr>
-          <td><strong>Supabase</strong></td>
-          <td>データベース + ログイン機能</td>
-          <td><span class="tag tag-optional">必要時</span></td>
-          <td><span class="tag tag-free">無料</span></td>
-          <td><a href="ops.html#svc-database">設定手順</a></td>
-        </tr>
-        <tr>
-          <td><strong>Firebase</strong></td>
-          <td>リアルタイムDB + 認証</td>
-          <td><span class="tag tag-optional">必要時</span></td>
-          <td><span class="tag tag-free">無料</span></td>
-          <td><a href="ops.html#svc-database">設定手順</a></td>
+          <td><span class="tag tag-free">無料枠あり</span></td>
         </tr>
         <tr>
           <td><strong>SendGrid</strong></td>
           <td>メール送信</td>
           <td><span class="tag tag-optional">必要時</span></td>
           <td>月100通無料</td>
-          <td><a href="ops.html#svc-email">設定手順</a></td>
-        </tr>
-        <tr>
-          <td><strong>Stripe</strong></td>
-          <td>クレジットカード決済</td>
-          <td><span class="tag tag-optional">必要時</span></td>
-          <td>手数料のみ</td>
-          <td><a href="ops.html#svc-stripe">設定手順</a></td>
-        </tr>
-        <tr>
-          <td><strong>Brave Search</strong></td>
-          <td>Web検索API</td>
-          <td><span class="tag tag-optional">必要時</span></td>
-          <td>月2,000回無料</td>
-          <td><a href="ops.html#svc-other">設定手順</a></td>
-        </tr>
-        <tr>
-          <td><strong>Slack API</strong></td>
-          <td>Slack連携</td>
-          <td><span class="tag tag-optional">必要時</span></td>
-          <td><span class="tag tag-free">無料</span></td>
-          <td><a href="ops.html#svc-other">設定手順</a></td>
-        </tr>
-        <tr>
-          <td><strong>Notion API</strong></td>
-          <td>Notion連携</td>
-          <td><span class="tag tag-optional">必要時</span></td>
-          <td><span class="tag tag-free">無料</span></td>
-          <td><a href="ops.html#svc-other">設定手順</a></td>
-        </tr>
-        <tr>
-          <td><strong>Zoom API</strong></td>
-          <td>会議の自動作成</td>
-          <td><span class="tag tag-optional">必要時</span></td>
-          <td><span class="tag tag-free">無料</span></td>
-          <td><a href="ops.html#svc-other">設定手順</a></td>
         </tr>
       </tbody>
     </table>
   </div>
 
+  <!-- Community -->
+  <div class="community">
+    <div class="community-box">
+      <div class="c-hero">
+        <span class="c-label">NPO法人ミラツクが運営する共創ネットワーク</span>
+        <h2>Living Futures Network</h2>
+      </div>
+      <div class="cd">このマニュアルの背景にある実践の記録 ── <a href="https://claude-code-documentary-report.vercel.app/" target="_blank" rel="noopener" style="color:var(--brown);text-decoration:underline;text-underline-offset:3px;">「3週間で126のプロジェクトが生まれた場所」</a>を読む</div>
+      <div class="cd" style="margin-top:8px;">AIとの共創で「まだ形になっていない未来」をつくる。<br>その実践者が集まる場を運営しています。<br>※Living Futures Networkは招待制です。まずは、メルマガに登録してください。</div>
+      <div class="c-divider"></div>
+      <div class="c-form-wrap" id="idxForm">
+        <div class="c-dots"><div class="c-dot active" id="idxDot1"></div><div class="c-dot" id="idxDot2"></div></div>
+        <div class="c-step active" id="idxStep1">
+          <div class="c-field">
+            <input type="email" class="c-input" id="idxEmail" placeholder=" " autocomplete="email">
+            <label class="c-lbl">メールアドレス</label>
+          </div>
+          <button class="c-btn" onclick="idxNext()">次へ <span class="arr">&rarr;</span></button>
+          <div class="c-trust">マニュアル更新、実践事例、AI共創の最新事例をお届けします</div>
+        </div>
+        <div class="c-step" id="idxStep2">
+          <div class="c-row">
+            <div class="c-field">
+              <input type="text" class="c-input" id="idxName" placeholder=" " autocomplete="name">
+              <label class="c-lbl">氏名</label>
+            </div>
+            <div class="c-field">
+              <input type="text" class="c-input" id="idxOrg" placeholder=" " autocomplete="organization">
+              <label class="c-lbl">所属（任意）</label>
+            </div>
+          </div>
+          <label class="c-consent"><input type="checkbox" id="idxConsent" checked> メールマガジン配信に同意します。配信停止はいつでも可能です。</label>
+          <button class="c-btn" id="idxBtn" onclick="submitIdx()">Living Futures Networkのメルマガに登録する</button>
+        </div>
+      </div>
+      <div class="c-done" id="idxDone">
+        <div class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <h3>ようこそ、コミュニティへ</h3>
+        <p>確認メールをお送りしました。<br>一緒に未来を作っていきましょう。</p>
+      </div>
+    </div>
+  </div>
+
   <!-- Footer -->
   <div class="footer">
-    <p>Claude Code 活用マニュアル | 第1.1版 2026年4月</p>
-    <p style="margin-top:4px;">ベストプラクティス調査と実運用経験に基づいて設計。</p>
+    <p>Claude Code 活用マニュアル | 第3.0版 2026年4月</p>
+    <p style="margin-top:4px;">60以上のアプリを自ら作り・運用した経験をもとに執筆。西村勇哉 + Claude Code</p>
   </div>
 
   <script>
+    function idxNext() {
+      const email = document.getElementById('idxEmail').value.trim();
+      if (!email || !email.includes('@')) {
+        document.getElementById('idxEmail').style.borderColor = '#c0392b';
+        document.getElementById('idxEmail').focus();
+        setTimeout(() => document.getElementById('idxEmail').style.borderColor = '', 2000);
+        return;
+      }
+      document.getElementById('idxStep1').classList.remove('active');
+      document.getElementById('idxStep2').classList.add('active');
+      document.getElementById('idxDot1').classList.remove('active');
+      document.getElementById('idxDot2').classList.add('active');
+      document.getElementById('idxName').focus();
+    }
+    async function submitIdx() {
+      const name = document.getElementById('idxName').value.trim();
+      const org = document.getElementById('idxOrg').value.trim();
+      const email = document.getElementById('idxEmail').value.trim();
+      const consent = document.getElementById('idxConsent').checked;
+      const btn = document.getElementById('idxBtn');
+      if (!name) { document.getElementById('idxName').focus(); return; }
+      if (!consent) { alert('メールマガジン配信への同意が必要です'); return; }
+      btn.disabled = true;
+      btn.innerHTML = '<span style="display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:cSpin .6s linear infinite"></span>';
+      try {
+        const res = await fetch('/api/community', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, org, email }),
+        });
+        if (!res.ok) throw new Error('registration failed');
+        document.getElementById('idxForm').style.display = 'none';
+        document.getElementById('idxDone').style.display = 'block';
+      } catch (e) {
+        alert('登録に失敗しました。しばらくしてから再度お試しください。');
+        btn.disabled = false; btn.textContent = 'Living Futures Networkのメルマガに登録する';
+      }
+    }
+
     // Navigate to ops.html with the right chapter open
     function goTo(partId, chapterId) {
       // Store target in sessionStorage so ops.html can pick it up
