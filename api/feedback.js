@@ -20,13 +20,13 @@ export default async function handler(req, res) {
 
   const safe = (s) => String(s || '').replace(/[<>&"']/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[c]));
 
-  const subject = `【記事修正案】${safe(source || 'henka-no-katachi')} ${safe(episode || '')} `.trim();
+  const subject = `【記事コメント】${safe(source || 'henka-no-katachi')} ${safe(episode || '')} `.trim();
 
   const html = `
 <div style="font-family:'Hiragino Kaku Gothic ProN',sans-serif;max-width:600px;margin:0 auto;color:#3D2E22;">
   <div style="padding:32px 24px;background:#FDFAF7;">
-    <p style="font-size:11px;color:#7A4033;letter-spacing:.12em;font-weight:600;">EDITORIAL FEEDBACK</p>
-    <h1 style="font-size:18px;font-weight:600;margin:12px 0 24px;line-height:1.5;">記事への修正案・コメントが届きました</h1>
+    <p style="font-size:11px;color:#7A4033;letter-spacing:.12em;font-weight:600;">READER COMMENT</p>
+    <h1 style="font-size:18px;font-weight:600;margin:12px 0 24px;line-height:1.5;">記事へのコメントが届きました</h1>
     <table style="width:100%;font-size:13px;line-height:1.8;border-collapse:collapse;margin-bottom:18px;">
       <tr><td style="padding:6px 0;color:#7A4033;width:80px;">連載</td><td style="padding:6px 0;">${safe(source || '-')}</td></tr>
       <tr><td style="padding:6px 0;color:#7A4033;">話数</td><td style="padding:6px 0;">${safe(episode || '-')}</td></tr>
